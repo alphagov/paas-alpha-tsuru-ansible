@@ -1,0 +1,15 @@
+---
+# tasks file for hipach
+
+- name: Add tsuru repositories.
+  apt_repository: repo='ppa:tsuru/ppa' update_cache=yes
+
+
+- name: Install packages.
+  apt: update_cache=true name="{{ item }}"
+  with_items: packages
+
+- name: Copy configuration file.
+  template: src=hipache.conf.j2 dest=/etc/hipache.conf
+  notify:
+    - restart hipache

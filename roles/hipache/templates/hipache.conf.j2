@@ -1,0 +1,16 @@
+{
+    "server": {
+        "debug": true,
+        "accessLog": "/var/log/hipache/access.log",
+        "port": 80,
+        "workers": 5,
+        "maxSockets": 100,
+        "deadBackendTTL": 30,
+        "tcpTimeout": 5,
+        "retryOnError": 0,
+        "deadBackendOn500": true,
+        "httpKeepAlive": false
+    },
+    "redisHost": "{{redis_host}}"
+    "redisPort": "{{redis_port}}"
+}

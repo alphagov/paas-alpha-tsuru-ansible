@@ -1,0 +1,15 @@
+---
+# tasks file for docker_server
+
+- name: Install packages
+  apt: name="{{ item }}" update_cache=yes
+  with_items: packages
+
+- name: Install docker docker_server
+  shell: >
+    wget -qO- https://get.docker.com/ | sh
+
+- name: Allow ecternal access
+  lineinfile: dest=/etc/default/docker line='export DOCKER_OPTS="-H 0.0.0.0:4243"'
+  notify:
+    - restart docker

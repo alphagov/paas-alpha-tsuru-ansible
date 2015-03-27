@@ -1,0 +1,28 @@
+---
+# tasks file for gandalf
+
+- name: Add tsuru repositories.
+  apt_repository: repo='ppa:tsuru/ppa' update_cache=yes
+
+- name: Install packages.
+  apt: update_cache=true name="{{ item }}"
+  with_items: packages
+
+- name: Configure git hook.
+  shell: >
+    mkdir -p /home/git/bare-template/hooks;
+    curl https://raw.githubusercontent.com/tsuru/tsuru/master/misc/git-hooks/pre-receive.archive-server -o /home/git/bare-template/hooks/pre-receive;
+    chmod +x /home/git/bare-template/hooks/pre-receive;
+    chown -R git:git /home/git/bare-template;
+
+- name: Add archive server to bash profile.
+  lineinfile: 'dest=/home/git/.bash_profile line="export ARCHIVE_SERVER_READ=http://{{external_ip}}:3232 ARCHIVE_SERVER_WRITE=http://127.0.0.1:3131"'
+  notify:
+    - restart gandalf
+    - restart archive-server
+
+- name: Update gandalf.conf
+  template: dest=/etc/gandalf.conf src=gandalf.conf.j2
+  notify:
+    - restart gandalf
+    - restart archive-server

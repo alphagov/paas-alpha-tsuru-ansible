@@ -1,0 +1,21 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: Sergei Antipov
+  company: 2GIS
+  description: Manage MongoDB (MMS) with authentication and replica sets
+  license: GPLv2
+  min_ansible_version: 1.8
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  - name: Debian
+    versions:
+    - wheezy
+    - jessie
+  categories:
+  - database
+  - database:nosql

@@ -1,0 +1,6 @@
+---
+# vars file for docker_server
+
+packages:
+  - wget
+  - lxc-docker

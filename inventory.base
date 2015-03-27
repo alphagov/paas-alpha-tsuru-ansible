@@ -1,0 +1,4 @@
+146.148.82.5	internal_ip=10.240.248.41	external_ip=146.148.82.5	name=tsuru-i3
+130.211.164.170	internal_ip=10.240.7.37	external_ip=130.211.164.170	name=tsuru-i2
+130.211.145.117	internal_ip=10.240.240.131	external_ip=130.211.145.117	name=tsuru-i1
+130.211.112.155	internal_ip=10.240.196.158	external_ip=130.211.112.155	name=tsuru-i4

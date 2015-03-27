@@ -1,0 +1,31 @@
+---
+- hosts: gandalf
+  sudo: yes
+  sudo_user: root
+  roles:
+     - gandalf
+     - bennojoy.redis
+
+- hosts: api
+  sudo: yes
+  sudo_user: root
+  roles:
+      - {role: tsuru_api,
+         mongodb_host: "{{ hostvars[groups['mongodb'][0]].internal_ip }}",
+         gandalf_host: "{{ hostvars[groups['gandalf'][0]].external_ip }}",
+         redis_host: "{{ hostvars[groups['redis-master'][0]].internal_ip }}",
+         hipache_host: "{{ hostvars[groups['hipache'][0]].external_ip }}" }
+      - { role: greendayonfire.mongodb, mongodb_conf_bind_ip: "0.0.0.0" }
+
+- hosts: hipache
+  sudo: yes
+  sudo_user: root
+  roles:
+      - {role: hipache, redis_host: "{{ hostvars[groups['redis-master'][0]].internal_ip }}" }
+
+- hosts: nodes
+  sudo: yes
+  sudo_user: root
+  roles:
+      - docker_server
+
