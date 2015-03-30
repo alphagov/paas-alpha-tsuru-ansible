@@ -5,3 +5,5 @@ packages:
   - python-software-properties
   - tsuru-server
   - tsuru-admin
+  - tsuru-client
+  - jq

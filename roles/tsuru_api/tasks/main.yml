@@ -23,4 +23,21 @@
 - name: Configure tsuru-admin command.
   shell: >
     tsuru-admin target-remove local;
-    tsuru-admin target-add local http://120.0.0.1:{{api_port}} -s
+    tsuru-admin target-add local http://127.0.0.1:{{api_port}} -s
+
+# TODO: handle the case where the user already exists
+- name: Add admin user.
+  shell: >
+    mongo tsuru --eval 'db.teams.update({_id: "admin"}, {_id: "admin"}, {upsert: true})';
+    mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
+    curl -sS -XPOST -d"{\"email\":\"{{admin_user}}\",\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users"
+
+- name: Login with the admon user.
+  shell: >
+    token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
+    echo "${token}" > ~/.tsuru_token
+
+- name: Install python platform
+  command: tsuru-admin platform-add python --dockerfile https://raw.githubusercontent.com/tsuru/basebuilder/master/python/Dockerfile
+  register: command_result
+  failed_when: "command_result.stderr and 'Duplicate platform' not in command_result.stderr"
