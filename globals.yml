@@ -3,8 +3,19 @@
 redis_host: "{{ hostvars[groups['redis-master'][0]].internal_ip }}"
 redis_port: 6379
 
+tsuru_api_host: "{{ hostvars[groups['api'][0]].external_ip }}"
+
+docker_registry_host: "{{ hostvars[groups['hipache'][0]].internal_ip }}"
+
+# need to be 5000 when no nginx is used.
+docker_registry_port: 5000
+docker_port: 4243
+
 gandalf_host: "{{ hostvars[groups['gandalf'][0]].external_ip }}"
 gandalf_port: 8080
 
 mongodb_host: "{{ hostvars[groups['mongodb'][0]].internal_ip }}"
 mongodb_port: 27017
+
+admin_user: administrator@gds.tsuru.gov
+admin_password: admin123
