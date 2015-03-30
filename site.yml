@@ -11,22 +11,21 @@
   sudo_user: root
   roles:
     - hipache
+    - {role: aalda.docker-registry,
+        registry_port: "{{ docker_registry_port }}",
+        use_redis: false,
+        use_ssl: false,
+        use_nginx: false}
 
 - hosts: api
   sudo: yes
   sudo_user: root
-  pre_tasks:
-    - debug: msg="{{ groups['mongodb'] | to_nice_json }}"
   roles:
     - greendayonfire.mongodb
     - {role: tsuru_api,
        gandalf_host: "{{ hostvars[groups['gandalf'][0]].external_ip }}",
-       hipache_host: "{{ hostvars[groups['hipache'][0]].external_ip }}" }
-
-  post_tasks:
-    - name: generate tsuru token
-      shell: tsr token
-      register: tsr_token
+       hipache_host: "{{ hostvars[groups['hipache'][0]].external_ip }}",
+       tags: tsuru_api }
 
 - hosts: gandalf
   sudo: yes
