@@ -1,15 +1,17 @@
 ---
 # tasks file for docker_server
 
+- name: Add docker apt key.
+  apt_key: keyserver=keyserver.ubuntu.com id=36A1D7869245C8950F966E92D8576A8BA88D21E9
+
+- name: Add Docker repository.
+  apt_repository: repo='deb https://get.docker.io/ubuntu docker main' state=present
+
 - name: Install packages
   apt: name="{{ item }}" update_cache=yes
   with_items: packages
 
-- name: Install docker docker_server
-  shell: >
-    wget -qO- https://get.docker.com/ | sh
-
-- name: Allow ecternal access
-  lineinfile: dest=/etc/default/docker line='export DOCKER_OPTS="-H 0.0.0.0:4243"'
+- name: Allow external access
+  lineinfile: dest=/etc/default/docker line='export DOCKER_OPTS="-H 0.0.0.0:{{ docker_port }} --insecure-registry={{docker_registry_host}}:{{docker_registry_port}}"'
   notify:
     - restart docker

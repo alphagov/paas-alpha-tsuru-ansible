@@ -158,7 +158,7 @@ hipache:
    domain: {{hipache_host}}.xip.io
    redis-server: {{redis_host}}:{{redis_port}}
 docker:
-#   registry: docker-registry.company.com
+   registry: {{ docker_registry_host }}:{{ docker_registry_port }}
    collection: docker
    repository-namespace: tsuru
    router: hipache
