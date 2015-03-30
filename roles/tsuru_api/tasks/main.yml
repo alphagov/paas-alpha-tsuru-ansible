@@ -18,3 +18,9 @@
   notify:
     - restart tsuru_api
 
+# Remove target first otherwise add will fail.
+# Note that remove target does not fail if target exists
+- name: Configure tsuru-admin command.
+  shell: >
+    tsuru-admin target-remove local;
+    tsuru-admin target-add local http://120.0.0.1:{{api_port}} -s

@@ -3,29 +3,58 @@
   sudo: yes
   sudo_user: root
   roles:
-     - gandalf
-     - bennojoy.redis
-
-- hosts: api
-  sudo: yes
-  sudo_user: root
-  roles:
-      - {role: tsuru_api,
-         mongodb_host: "{{ hostvars[groups['mongodb'][0]].internal_ip }}",
-         gandalf_host: "{{ hostvars[groups['gandalf'][0]].external_ip }}",
-         redis_host: "{{ hostvars[groups['redis-master'][0]].internal_ip }}",
-         hipache_host: "{{ hostvars[groups['hipache'][0]].external_ip }}" }
-      - { role: greendayonfire.mongodb, mongodb_conf_bind_ip: "0.0.0.0" }
+    - bennojoy.redis
+    - gandalf
 
 - hosts: hipache
   sudo: yes
   sudo_user: root
   roles:
-      - {role: hipache, redis_host: "{{ hostvars[groups['redis-master'][0]].internal_ip }}" }
+    - hipache
+
+- hosts: api
+  sudo: yes
+  sudo_user: root
+  pre_tasks:
+    - debug: msg="{{ groups['mongodb'] | to_nice_json }}"
+  roles:
+    - greendayonfire.mongodb
+    - {role: tsuru_api,
+       gandalf_host: "{{ hostvars[groups['gandalf'][0]].external_ip }}",
+       hipache_host: "{{ hostvars[groups['hipache'][0]].external_ip }}" }
+
+  post_tasks:
+    - name: generate tsuru token
+      shell: tsr token
+      register: tsr_token
+
+- hosts: gandalf
+  sudo: yes
+  sudo_user: root
+  tasks:
+    - name: generate tsuru token
+      shell: tsr token
+      delegate_to: "{{ hostvars[groups['api'][0]].external_ip }}"
+      register: tsr_token
+
+    - name: write tsuru token to .bash_profile
+      lineinfile:
+        state: present
+        dest: /home/git/.bash_profile
+        regexp: export TSURU_TOKEN=
+        line: export TSURU_TOKEN={{ tsr_token.stdout }}
+
+    - name: restart gandalf
+      service: name=gandalf-server state=restarted
 
 - hosts: nodes
   sudo: yes
   sudo_user: root
   roles:
-      - docker_server
+    - docker_server
 
+  post_tasks:
+    - name: Register node.
+      shell: >
+        tsuru-admin docker-node-add --register address=http://{{external_ip}}
+      delegate_to: "{{ hostvars[groups['api'][0]].external_ip }}"

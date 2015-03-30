@@ -4,10 +4,17 @@
 - name: Add tsuru repositories.
   apt_repository: repo='ppa:tsuru/ppa' update_cache=yes
 
-
-- name: Install packages.
+- name: Install system packages.
   apt: update_cache=true name="{{ item }}"
   with_items: packages
+
+- name: Install Hipache packages with npm
+  npm: global=yes name=hipache state=present
+
+- name: copy hipache upstart script
+  copy: src=hipache.upstart dest=/etc/init/hipache.conf owner=root group=root mode=0644
+  notify:
+    - restart hipache
 
 - name: Copy configuration file.
   template: src=hipache.conf.j2 dest=/etc/hipache.conf

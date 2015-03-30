@@ -3,4 +3,4 @@
 
 packages:
   - python-software-properties
-  - node-hipache
+  - nodejs

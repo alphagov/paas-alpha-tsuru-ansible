@@ -1,6 +1,7 @@
 ---
 # defaults file for tsuru_api
 
+api_port: 8080
 mongodb_port: 27017
 gandalf_port: 8080
 redis_port: 6379

@@ -1,5 +1,6 @@
 ---
 
+mongodb_port: 27017
 mongodb_package: mongodb-org
 
 mongodb_additional_packages:
@@ -23,7 +24,7 @@ mongodb_conf_noprealloc: false                    # Disable data file preallocat
 mongodb_conf_smallfiles: false                    # Disable smallfiles option
 mongodb_conf_noscripting: false                   # Disable scripting engine
 mongodb_conf_notablescan: false                   # Do not allow table scans
-mongodb_conf_port: 27017                          # Specify port number
+mongodb_conf_port: "{{ mongodb_port }}"           # Specify port number
 mongodb_conf_quota: false                         # Limits each database to a certain number of files
 mongodb_conf_quotaFiles: 8                        # Number of quota files
 mongodb_conf_syslog: false                        # Log to system's syslog facility instead of file

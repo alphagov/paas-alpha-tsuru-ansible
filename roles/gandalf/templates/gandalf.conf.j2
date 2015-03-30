@@ -3,9 +3,9 @@ bin-path: /usr/bin/gandalf-ssh
 # MongoDB connection settings. By default, Gandalf will connect on localhost
 # using the "gandalf" database. Uncomment and change to customize.
 #
-# database:
-#   url: 127.0.0.1:27017
-#   name: gandalf
+database:
+  url: {{mongodb_host}}:{{mongodb_port}}
+  name: gandalf
 
 # Git configuration.
 #
@@ -31,7 +31,7 @@ host: localhost
 # readonly-host: localhost
 
 # Address that the Gandalf API server will bind.
-bind: localhost:8000
+bind: 0.0.0.0:{{ gandalf_port }}
 
 # User that manages repositories in the file system.
 uid: git
