@@ -21,8 +21,20 @@
     - restart gandalf
     - restart archive-server
 
+- name: Add api endpoint to bash_profile
+  lineinfile: 'create=yes dest=/home/git/.bash_profile line="export TSURU_HOST=http://{{tsuru_api_host}}:8080"'
+  notify:
+    - restart gandalf
+    - restart archive-server
+
 - name: Update gandalf.conf
   template: dest=/etc/gandalf.conf src=gandalf.conf.j2
+  notify:
+    - restart gandalf
+    - restart archive-server
+
+- name: Update archive server conf.
+  template: dest=/etc/default/archive-server src=archive-server.j2
   notify:
     - restart gandalf
     - restart archive-server
