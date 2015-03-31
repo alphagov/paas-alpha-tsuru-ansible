@@ -18,6 +18,9 @@
   notify:
     - restart tsuru_api
 
+- name: Start tsuru_api
+  service: name=tsuru-server-api state=started
+
 # Remove target first otherwise add will fail.
 # Note that remove target does not fail if target exists
 - name: Configure tsuru-admin command.

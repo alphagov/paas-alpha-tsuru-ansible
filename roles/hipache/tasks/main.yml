@@ -25,3 +25,6 @@
   template: src=hipache.conf.j2 dest=/etc/hipache.conf
   notify:
     - restart hipache
+
+- name: Start hipache
+  service: name=hipache state=started

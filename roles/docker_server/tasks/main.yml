@@ -15,3 +15,6 @@
   lineinfile: dest=/etc/default/docker line='export DOCKER_OPTS="-H 0.0.0.0:{{ docker_port }} --insecure-registry={{docker_registry_host}}:{{docker_registry_port}}"'
   notify:
     - restart docker
+
+- name: Start docker
+  service: name=docker state=started
