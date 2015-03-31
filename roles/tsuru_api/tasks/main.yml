@@ -39,8 +39,3 @@
   shell: >
     token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
     echo "${token}" > ~/.tsuru_token
-
-- name: Install python platform
-  command: tsuru-admin platform-add python --dockerfile https://raw.githubusercontent.com/tsuru/basebuilder/master/python/Dockerfile
-  register: command_result
-  failed_when: "command_result.stderr and 'Duplicate platform' not in command_result.stderr"
