@@ -33,8 +33,14 @@
     - restart gandalf
     - restart archive-server
 
+- name: Start gandalf
+  service: name=gandalf-server state=started
+
 - name: Update archive server conf.
   template: dest=/etc/default/archive-server src=archive-server.j2
   notify:
     - restart gandalf
     - restart archive-server
+
+- name: Start archive-server
+  service: name=archive-server state=started
