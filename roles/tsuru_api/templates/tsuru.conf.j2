@@ -155,7 +155,7 @@ auth:
 #
 provisioner: docker
 hipache:
-   domain: {{hipache_host}}.xip.io
+   domain: {{hipache_host}}
    redis-server: {{redis_host}}:{{redis_port}}
 docker:
    registry: {{ docker_registry_host }}:{{ docker_registry_port }}
