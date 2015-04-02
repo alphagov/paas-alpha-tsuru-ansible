@@ -59,6 +59,8 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "ansible" do |ansible|
+    ansible.raw_arguments = "--private-key=~/.vagrant.d/insecure_private_key"
+    ansible.verbose = "vv"
     ansible.playbook = "site.yml"
     ansible.extra_vars = "globals.yml"
     ansible.inventory_path = INVENTORY_FILE
