@@ -28,6 +28,10 @@
     tsuru-admin target-remove local;
     tsuru-admin target-add local http://127.0.0.1:{{api_port}} -s
 
+# Wait until the tsuru-server-api is up
+- name: Wait for tsuru-server to be up
+  wait_for: port={{api_port}} timeout=60
+
 # TODO: handle the case where the user already exists
 - name: Add admin user.
   shell: >
