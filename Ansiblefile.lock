@@ -1,16 +1,16 @@
 GIT
+  remote: https://github.com/DavidWittman/ansible-redis
+  ref: master
+  sha: 69b350207ebc98459c32dfc9c9e8f503836af311
+  specs:
+    DavidWittman.redis (0.0.0)
+
+GIT
   remote: https://github.com/UnderGreen/ansible-role-mongodb
   ref: master
   sha: 8f1bb3f3ed23388ca5709449cbc8820dd66014d8
   specs:
     greendayonfire.mongodb (1.2.1)
-
-GIT
-  remote: https://github.com/bennojoy/redis
-  ref: master
-  sha: b185fea68432aa91f88114107029f61f5fb34996
-  specs:
-    bennojoy.redis (0.0.0)
 
 GIT
   remote: https://github.com/codingbunch/ansible-docker-registry
@@ -40,8 +40,8 @@ PATH
     tsuru_api (0.0.0)
 
 DEPENDENCIES
+  DavidWittman.redis (= 0.0.0)
   aalda.docker-registry (= 1.0.3)
-  bennojoy.redis (= 0.0.0)
   docker_server (>= 0)
   gandalf (>= 0)
   greendayonfire.mongodb (= 1.2.1)
