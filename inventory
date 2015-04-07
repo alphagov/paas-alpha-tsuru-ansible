@@ -15,6 +15,9 @@
 [redis-master]
 146.148.58.71	internal_ip=10.240.47.232	external_ip=146.148.58.71	name=tsuru-i2
 
+[docker-registry]
+23.251.152.248	internal_ip=10.240.60.183	external_ip=23.251.152.248	name=tsuru-i3
+
 [hipache]
 23.251.152.248	internal_ip=10.240.60.183	external_ip=23.251.152.248	name=tsuru-i3
 
