@@ -1,2 +1,5 @@
 inventory.vagrant
 .vagrant/
+.idea
+roles/*
+tmp

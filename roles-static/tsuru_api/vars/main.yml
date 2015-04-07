@@ -1,0 +1,9 @@
+---
+# vars file for tsuru_api
+
+packages:
+  - python-software-properties
+  - tsuru-server
+  - tsuru-admin
+  - tsuru-client
+  - jq

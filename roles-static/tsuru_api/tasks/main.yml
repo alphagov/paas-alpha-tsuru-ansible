@@ -1,0 +1,44 @@
+---
+# tasks file for tsuru_api
+
+- name: Add tsuru repositories.
+  apt_repository: repo='ppa:tsuru/ppa' update_cache=yes
+
+- name: Install packages.
+  apt: update_cache=true name="{{ item }}"
+  with_items: packages
+
+- name: Copy configuration file.
+  template: src=tsuru.conf.j2 dest=/etc/tsuru/tsuru.conf
+  notify:
+    - restart tsuru_api
+
+- name: Copy tsuru-server file.
+  template: src=tsuru-server.j2 dest=/etc/default/tsuru-server
+  notify:
+    - restart tsuru_api
+
+- name: Start tsuru_api
+  service: name=tsuru-server-api state=started
+
+# Remove target first otherwise add will fail.
+# Note that remove target does not fail if target exists
+- name: Configure tsuru-admin command.
+  shell: >
+    tsuru-admin target-remove local;
+    tsuru-admin target-add local http://127.0.0.1:{{api_port}} -s
+
+- name: Wait for tsuru-server to be up
+  wait_for: port={{api_port}} timeout=60
+
+# TODO: handle the case where the user already exists
+- name: Add admin user.
+  shell: >
+    mongo tsuru --eval 'db.teams.update({_id: "admin"}, {_id: "admin"}, {upsert: true})';
+    mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
+    curl -sS -XPOST -d"{\"email\":\"{{admin_user}}\",\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users"
+
+- name: Login with the admon user.
+  shell: >
+    token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
+    echo "${token}" > ~/.tsuru_token

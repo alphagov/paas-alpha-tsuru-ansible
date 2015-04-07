@@ -1,0 +1,30 @@
+---
+# tasks file for hipach
+
+- name: Add tsuru repositories.
+  apt_repository: repo='ppa:tsuru/ppa' update_cache=yes
+
+- name: Install system packages.
+  apt: update_cache=true name="{{ item }}"
+  with_items: packages
+
+# hipache package shipped with ubuntu does not allow
+# to specify an external redis server.
+- name: Install Hipache packages with npm
+  npm: global=yes name=hipache state=present
+
+- name: copy hipache upstart script
+  copy: src=hipache.upstart dest=/etc/init/hipache.conf owner=root group=root mode=0644
+  notify:
+    - restart hipache
+
+- name: Create hipache log directory.
+  file: dest=/var/log/hipache state=directory
+
+- name: Copy configuration file.
+  template: src=hipache.conf.j2 dest=/etc/hipache.conf
+  notify:
+    - restart hipache
+
+- name: Start hipache
+  service: name=hipache state=started
