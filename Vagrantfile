@@ -58,11 +58,14 @@ Vagrant.configure(2) do |config|
     v.vmx["memsize"] = MEMORY
   end
 
-  config.vm.provision "ansible" do |ansible|
-    ansible.raw_arguments = "--private-key=~/.vagrant.d/insecure_private_key"
-    ansible.verbose = "vv"
-    ansible.playbook = "site.yml"
-    ansible.extra_vars = "globals.yml"
-    ansible.inventory_path = INVENTORY_FILE
+  config.vm.define HOSTS.last[:name] do |host|
+	host.vm.provision :ansible do |ansible|
+ 	  ansible.raw_arguments = "--private-key=~/.vagrant.d/insecure_private_key"
+	  ansible.verbose = "vv"
+	  ansible.playbook = "site.yml"
+	  ansible.extra_vars = "globals.yml"
+	  ansible.inventory_path = INVENTORY_FILE
+	  ansible.limit = "all"
+    end
   end
 end
