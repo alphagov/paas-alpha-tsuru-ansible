@@ -1,0 +1,8 @@
+---
+# handlers file for gandalf
+
+- name: restart gandalf
+  service: name=gandalf-server state=restarted
+
+- name: restart archive-server
+  service: name=archive-server state=restarted

@@ -1,0 +1,4 @@
+---
+# defaults file for hipach
+
+redis_port: 6379
