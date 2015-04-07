@@ -1,5 +1,0 @@
----
-# handlers file for tsuru_api
-
-- name: restart tsuru_api
-  service: name=tsuru-server-api state=restarted
