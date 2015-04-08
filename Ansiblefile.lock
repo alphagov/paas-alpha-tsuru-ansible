@@ -1,0 +1,50 @@
+GIT
+  remote: https://github.com/DavidWittman/ansible-redis
+  ref: master
+  sha: fa99c66aa9a2b976c8a762f23681d78825921f02
+  specs:
+    DavidWittman.redis (1.0.3)
+
+GIT
+  remote: https://github.com/UnderGreen/ansible-role-mongodb
+  ref: master
+  sha: 8f1bb3f3ed23388ca5709449cbc8820dd66014d8
+  specs:
+    greendayonfire.mongodb (1.2.1)
+
+GIT
+  remote: https://github.com/codingbunch/ansible-docker-registry
+  ref: master
+  sha: 33ff3ce7acd57f22b9b6bda67856be78d1e7930e
+  specs:
+    aalda.docker-registry (1.0.3)
+
+PATH
+  remote: ./roles-static/docker_server
+  specs:
+    docker_server (0.0.0)
+
+PATH
+  remote: ./roles-static/gandalf
+  specs:
+    gandalf (0.0.0)
+
+PATH
+  remote: ./roles-static/hipache
+  specs:
+    hipache (0.0.0)
+
+PATH
+  remote: ./roles-static/tsuru_api
+  specs:
+    tsuru_api (0.0.0)
+
+DEPENDENCIES
+  DavidWittman.redis (= 1.0.3)
+  aalda.docker-registry (= 1.0.3)
+  docker_server (>= 0)
+  gandalf (>= 0)
+  greendayonfire.mongodb (= 1.2.1)
+  hipache (>= 0)
+  tsuru_api (>= 0)
+

@@ -3,7 +3,7 @@
   sudo: yes
   sudo_user: root
   roles:
-    - bennojoy.redis
+    - DavidWittman.redis
     - gandalf
 
 - hosts: hipache
