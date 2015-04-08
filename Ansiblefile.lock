@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/DavidWittman/ansible-redis
   ref: master
-  sha: 69b350207ebc98459c32dfc9c9e8f503836af311
+  sha: fa99c66aa9a2b976c8a762f23681d78825921f02
   specs:
-    DavidWittman.redis (0.0.0)
+    DavidWittman.redis (1.0.3)
 
 GIT
   remote: https://github.com/UnderGreen/ansible-role-mongodb
@@ -40,7 +40,7 @@ PATH
     tsuru_api (0.0.0)
 
 DEPENDENCIES
-  DavidWittman.redis (= 0.0.0)
+  DavidWittman.redis (= 1.0.3)
   aalda.docker-registry (= 1.0.3)
   docker_server (>= 0)
   gandalf (>= 0)

@@ -3,8 +3,8 @@
 
 site "https://galaxy.ansible.com/api/v1"
 
-role "aalda.docker-registry", "1.0.3", github: "codingbunch/ansible-docker-registry"
-role "DavidWittman.redis", "0.0.0"
+role "aalda.docker-registry", "1.0.3"
+role "DavidWittman.redis", "1.0.3"
 role "docker_server", path: "./roles-static/docker_server"
 role "gandalf", path: "./roles-static/gandalf"
 role "greendayonfire.mongodb", "1.2.1"
