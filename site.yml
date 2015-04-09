@@ -43,8 +43,9 @@
   sudo: yes
   tasks:
     - name: generate tsuru token
+      run_once: true
       shell: tsr token
-      delegate_to: "{{ hostvars[groups['api'][0]].external_ip }}"
+      delegate_to: "{{ groups['api'][0] }}"
       register: tsr_token
 
     - name: write tsuru token to .bash_profile
@@ -66,4 +67,4 @@
     - name: Register node.
       shell: >
         tsuru-admin docker-node-add --register address=http://{{ internal_ip }}:{{ docker_port }}
-      delegate_to: "{{ hostvars[groups['api'][0]].external_ip }}"
+      delegate_to: "{{ groups['api'][0] }}"
