@@ -16,7 +16,7 @@
     chown -R git:git /home/git/bare-template;
 
 - name: Add archive server to bash profile.
-  lineinfile: 'create=yes dest=/home/git/.bash_profile line="export ARCHIVE_SERVER_READ=http://{{external_ip}}:3232 ARCHIVE_SERVER_WRITE=http://127.0.0.1:3131"'
+  lineinfile: 'create=yes dest=/home/git/.bash_profile line="export ARCHIVE_SERVER_READ=http://{{gandalf_host_internal}}:3232 ARCHIVE_SERVER_WRITE=http://127.0.0.1:3131"'
   notify:
     - restart gandalf
     - restart archive-server
