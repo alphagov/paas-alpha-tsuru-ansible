@@ -1,25 +1,28 @@
-52.17.23.132    internal_ip=10.128.1.77    external_ip=52.17.23.132    name=tsuru-api
-52.17.154.17    internal_ip=10.128.1.166    external_ip=52.17.154.17    name=tsuru-gandalf
-52.17.55.99     internal_ip=10.128.1.224     external_ip=52.17.55.99     name=tsuru-docker
-52.17.30.246    internal_ip=10.128.3.191    external_ip=52.17.30.246    name=tsuru-router
-52.16.80.142    internal_ip=10.128.1.157    external_ip=52.16.80.142    name=tsuru-router
+10.128.1.16     internal_ip=10.128.1.16    external_ip=api.tsuru.paas.alphagov.co.uk    name=tsuru-api
+10.128.0.192    internal_ip=10.128.0.192    external_ip=gandalf.tsuru.paas.alphagov.co.uk    name=tsuru-gandalf
+10.128.1.101     internal_ip=10.128.1.101     name=tsuru-docker
+10.128.1.127    internal_ip=10.128.1.127    external_ip=hipache.tsuru.paas.alphagov.co.uk    name=tsuru-router
+10.128.3.65     internal_ip=10.128.3.65	external_ip=hipache.tsuru.paas.alphagov.co.uk	name=tsuru-router
 
 [api]
-52.17.23.132	internal_ip=10.128.1.77	external_ip=52.17.23.132	name=tsuru-api
+10.128.1.16     internal_ip=internal.api.tsuru.paas.alphagov.co.uk	name=tsuru-api
 
 [mongodb]
-52.17.23.132	internal_ip=10.128.1.77	external_ip=52.17.23.132	name=tsuru-api
+10.128.1.16     internal_ip=10.128.1.16     name=tsuru-api
 
 [gandalf]
-52.17.154.17	internal_ip=10.128.1.166	external_ip=52.17.154.17	name=tsuru-gandalf
+10.128.0.192	internal_ip=10.128.0.192     external_ip=gandalf.tsuru.paas.alphagov.co.uk	name=tsuru-gandalf
 
 [redis-master]
-52.17.23.132	internal_ip=10.128.1.77	external_ip=52.17.23.132	name=tsuru-api
+10.128.1.16	    internal_ip=10.128.1.16     name=tsuru-api
+
+[docker-registry]
+10.128.1.101    internal_ip=10.128.1.101 	name=tsuru-docker
 
 [hipache]
-52.17.30.246	internal_ip=10.128.3.191	external_ip=hipache.tsuru.paas.alphagov.co.uk	name=tsuru-router
-52.16.80.142	internal_ip=10.128.1.157	external_ip=hipache.tsuru.paas.alphagov.co.uk	name=tsuru-router
+10.128.1.127	internal_ip=10.128.1.127	external_ip=hipache.tsuru.paas.alphagov.co.uk	name=tsuru-router
+10.128.3.65     internal_ip=10.128.3.65     external_ip=hipache.tsuru.paas.alphagov.co.uk	name=tsuru-router
 
 [nodes]
-52.17.55.99	    internal_ip=10.128.1.224	    external_ip=52.17.55.99 	name=tsuru-docker
+10.128.1.101    internal_ip=10.128.1.101 	name=tsuru-docker
 
