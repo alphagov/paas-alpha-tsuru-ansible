@@ -1,27 +1,39 @@
 ---
-- hosts: gandalf
+# Bring up db tier (redis, mongodb).
+- hosts: redis-master
   sudo: yes
-  sudo_user: root
   roles:
     - bennojoy.redis
-    - gandalf
 
-- hosts: hipache
-  sudo: yes
-  sudo_user: root
-  roles:
-    - hipache
-    - {role: aalda.docker-registry,
-        registry_port: "{{ docker_registry_port }}",
-        use_redis: false,
-        use_ssl: false,
-        use_nginx: false}
-
-- hosts: api
+- hosts: mongodb
   sudo: yes
   sudo_user: root
   roles:
     - greendayonfire.mongodb
+
+- hosts: docker-registry
+  sudo: yes
+  roles:
+    - {role: aalda.docker-registry,
+       registry_port: "{{ docker_registry_port }}",
+       use_redis: false,
+       use_ssl: false,
+       use_nginx: false}
+
+# tsuru core components.
+- hosts: gandalf
+  sudo: yes
+  roles:
+    - gandalf
+
+- hosts: hipache
+  sudo: yes
+  roles:
+    - hipache
+
+- hosts: api
+  sudo: yes
+  roles:
     - {role: tsuru_api,
        gandalf_host: "{{ hostvars[groups['gandalf'][0]].external_ip }}",
        hipache_host: "{{ hostvars[groups['hipache'][0]].external_ip }}",
@@ -29,7 +41,6 @@
 
 - hosts: gandalf
   sudo: yes
-  sudo_user: root
   tasks:
     - name: generate tsuru token
       shell: tsr token
@@ -48,7 +59,6 @@
 
 - hosts: nodes
   sudo: yes
-  sudo_user: root
   roles:
     - docker_server
 

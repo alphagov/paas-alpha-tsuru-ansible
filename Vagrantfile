@@ -9,7 +9,7 @@ HOSTS = [
   { name: 'tsuru-i2', ip: '172.18.10.12',
     roles: %w{gandalf redis-master} },
   { name: 'tsuru-i3', ip: '172.18.10.13',
-    roles: %w{hipache nodes} },
+    roles: %w{hipache nodes docker-registry} },
   { name: 'tsuru-i4', ip: '172.18.10.14',
     roles: %w{nodes} },
 ]
