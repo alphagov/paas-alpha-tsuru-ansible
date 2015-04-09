@@ -22,7 +22,7 @@
     - restart archive-server
 
 - name: Add api endpoint to bash_profile
-  lineinfile: 'create=yes dest=/home/git/.bash_profile line="export TSURU_HOST=http://{{tsuru_api_host}}:8080"'
+  lineinfile: 'create=yes dest=/home/git/.bash_profile line="export TSURU_HOST=http://{{tsuru_api_internal_lb}}:8080"'
   notify:
     - restart gandalf
     - restart archive-server
