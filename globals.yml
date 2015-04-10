@@ -18,6 +18,7 @@ gandalf_host_internal: "{{ hostvars[groups['gandalf'][0]].internal_ip }}"
 gandalf_host_external: "{{ hostvars[groups['gandalf'][0]].external_ip }}"
 gandalf_port: 8080
 
+mongodb_conf_bind_ip: 0.0.0.0
 mongodb_host: "{{ hostvars[groups['mongodb'][0]].internal_ip }}"
 mongodb_port: 27017
 
