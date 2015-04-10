@@ -6,18 +6,16 @@ GIT
     greendayonfire.mongodb (1.2.1)
 
 GIT
-  remote: https://github.com/bennojoy/redis
-  ref: master
-  sha: b185fea68432aa91f88114107029f61f5fb34996
-  specs:
-    bennojoy.redis (0.0.0)
-
-GIT
   remote: https://github.com/codingbunch/ansible-docker-registry
   ref: master
   sha: 33ff3ce7acd57f22b9b6bda67856be78d1e7930e
   specs:
     aalda.docker-registry (1.0.3)
+
+PATH
+  remote: ./roles-static/bennojoy.redis
+  specs:
+    bennojoy.redis (0.0.0)
 
 PATH
   remote: ./roles-static/docker_server
@@ -41,7 +39,7 @@ PATH
 
 DEPENDENCIES
   aalda.docker-registry (= 1.0.3)
-  bennojoy.redis (= 0.0.0)
+  bennojoy.redis (>= 0)
   docker_server (>= 0)
   gandalf (>= 0)
   greendayonfire.mongodb (= 1.2.1)
