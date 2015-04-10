@@ -11,6 +11,11 @@ Ansible based project to configure a multi-node tsuru cluster.
 > Note: can be any number of nodes, but every section in the inventory file has to have at least one node. 
 > (it is possible to use a node in more that one section). 
 
+* Install or update ansible playbooks using [librarian-ansible](https://github.com/bcoe/librarian-ansible):
+```
+librarian-ansible install
+```
+
 * Configure the ssh key used to access the nodes:
 ```{r, engine='bash'}
 ssh-add <the-public-ssh-key-file>
