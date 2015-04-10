@@ -156,7 +156,7 @@ auth:
 #
 provisioner: docker
 hipache:
-   domain: {{hipache_host}}
+   domain: {{hipache_host_external_lb}}
    redis-server: {{redis_host}}:{{redis_port}}
 docker:
    registry: {{ docker_registry_host }}:{{ docker_registry_port }}

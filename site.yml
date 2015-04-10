@@ -34,10 +34,8 @@
 - hosts: api
   sudo: yes
   roles:
-    - {role: tsuru_api,
-       gandalf_host: "{{ hostvars[groups['gandalf'][0]].external_ip }}",
-       hipache_host: "{{ hostvars[groups['hipache'][0]].external_ip }}",
-       tags: tsuru_api }
+    - role: tsuru_api
+      tags: tsuru_api
 
 - hosts: gandalf
   sudo: yes
