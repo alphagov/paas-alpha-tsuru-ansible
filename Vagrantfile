@@ -21,7 +21,7 @@ def generate_inventory(hosts, file)
     hosts.each do |host|
       host_string = "#{host[:name]} \
 internal_ip=#{host[:ip]} \
-external_ip=#{host[:ip]} \
+external_ip=#{host[:ip]}.xip.io \
 ansible_ssh_host=#{host[:ip]}\n"
 
       f.write(host_string)

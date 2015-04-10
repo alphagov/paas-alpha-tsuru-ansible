@@ -1,7 +1,7 @@
 listen: "0.0.0.0:{{api_port}}"
 admin-listen: "0.0.0.0:8081"
 
-host: http://{{external_ip}}:{{api_port}}
+host: http://{{tsuru_api_internal_lb}}:{{api_port}}
 
 # Uncomment the following lines to enable HTTPS on Tsuru. You will need the
 # paths to the certificate and key files.
@@ -35,7 +35,8 @@ database:
 #              units. You may use the private IP of the Gandalf host.
 git:
   unit-repo: /home/application/current
-  api-server: http://{{gandalf_host}}:{{ gandalf_port }}
+  rw-host: http://{{ gandalf_host_external }}:{{ gandalf_port }}
+  api-server: http://{{ gandalf_host_internal }}:{{ gandalf_port }}
 
 # S3 Bucket support. When this flag is defined as true, Tsuru will create a S3
 # bucket per application. Bucket creation depends on AWS settings (next
@@ -155,7 +156,7 @@ auth:
 #
 provisioner: docker
 hipache:
-   domain: {{hipache_host}}.xip.io
+   domain: {{hipache_host_external_lb}}
    redis-server: {{redis_host}}:{{redis_port}}
 docker:
    registry: {{ docker_registry_host }}:{{ docker_registry_port }}
