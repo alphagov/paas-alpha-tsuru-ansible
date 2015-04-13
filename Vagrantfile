@@ -41,7 +41,10 @@ end
 generate_inventory(HOSTS, INVENTORY_FILE) if %w{up provision}.include?(ARGV[0])
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
+  config.vm.box = "ubuntu/trusty64"
+  config.ssh.private_key_path = File.expand_path('~/.vagrant.d/insecure_private_key')
+  config.ssh.insert_key = false
+
 
   HOSTS.each do |host|
     config.vm.define host[:name] do |c|
