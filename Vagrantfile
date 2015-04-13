@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 INVENTORY_FILE = "inventory.vagrant"
-MEMORY = 384
+MEMORY = 1024
 HOSTS = [
   { name: 'tsuru-i1', ip: '172.18.10.11',
     roles: %w{api mongodb} },
