@@ -8,7 +8,7 @@ tsuru_api_internal_lb: "{{ hostvars[groups['api'][0]].internal_ip }}"
 docker_registry_host: "{{ hostvars[groups['docker-registry'][0]].internal_ip }}"
 
 # need to be 5000 when no nginx is used.
-docker_registry_port: 5000
+docker_registry_port: 6000
 docker_port: 4243
 
 hipache_host_external_lb: "{{ hostvars[groups['hipache'][0]].external_ip }}"
@@ -18,6 +18,7 @@ gandalf_host_internal: "{{ hostvars[groups['gandalf'][0]].internal_ip }}"
 gandalf_host_external: "{{ hostvars[groups['gandalf'][0]].external_ip }}"
 gandalf_port: 8080
 
+mongodb_conf_bind_ip: 0.0.0.0
 mongodb_host: "{{ hostvars[groups['mongodb'][0]].internal_ip }}"
 mongodb_port: 27017
 
