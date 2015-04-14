@@ -16,9 +16,9 @@
   roles:
     - {role: aalda.docker-registry,
        registry_port: "{{ docker_registry_port }}",
-       use_nginx: true,
        use_redis: false,
-       registry_ssl: false}
+       use_ssl: false,
+       use_nginx: false}
 
 # tsuru core components.
 - hosts: gandalf
