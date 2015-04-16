@@ -6,8 +6,6 @@ redis_port: 6379
 tsuru_api_internal_lb: "{{ hostvars[groups['api'][0]].internal_ip }}"
 
 docker_registry_host: "{{ hostvars[groups['docker-registry'][0]].internal_ip }}"
-
-# need to be 5000 when no nginx is used.
 docker_registry_port: 6000
 docker_port: 4243
 
