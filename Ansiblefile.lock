@@ -8,9 +8,9 @@ GIT
 GIT
   remote: https://github.com/codingbunch/ansible-docker-registry
   ref: master
-  sha: 33ff3ce7acd57f22b9b6bda67856be78d1e7930e
+  sha: 432e989ca0365500f40eacace3a66a8acdfe3c14
   specs:
-    aalda.docker-registry (1.0.3)
+    aalda.docker-registry (1.0.4)
 
 PATH
   remote: ./roles-static/bennojoy.redis
@@ -38,7 +38,7 @@ PATH
     tsuru_api (0.0.0)
 
 DEPENDENCIES
-  aalda.docker-registry (= 1.0.3)
+  aalda.docker-registry (= 1.0.4)
   bennojoy.redis (>= 0)
   docker_server (>= 0)
   gandalf (>= 0)
