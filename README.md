@@ -6,7 +6,7 @@ Ansible based project to configure a multi-node tsuru cluster.
 
 * Python things (you may wish to use [virtualenv](https://virtualenv.pypa.io/en/latest/)):
 ```
-pip install -r requirements.txt
+pip install -Ur requirements.txt
 ```
 * Ruby things:
 ```
