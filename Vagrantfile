@@ -2,10 +2,11 @@
 # vi: set ft=ruby :
 
 INVENTORY_FILE = "inventory.vagrant"
+MEMORY_DEFAULT = 384
 HOSTS = [
-  { name: 'tsuru-i1', ip: '172.18.10.11', memory: 384,
+  { name: 'tsuru-i1', ip: '172.18.10.11',
     roles: %w{api mongodb} },
-  { name: 'tsuru-i2', ip: '172.18.10.12', memory: 384,
+  { name: 'tsuru-i2', ip: '172.18.10.12',
     roles: %w{gandalf redis-master} },
   { name: 'tsuru-i3', ip: '172.18.10.13', memory: 1024,
     roles: %w{hipache nodes docker-registry} },
@@ -51,11 +52,11 @@ Vagrant.configure(2) do |config|
       c.vm.network :private_network, ip: host[:ip]
 
       c.vm.provider :virtualbox do |v|
-        v.memory = host[:memory]
+        v.memory = host[:memory] || MEMORY_DEFAULT
       end
 
       c.vm.provider :vmware_fusion do |v|
-        v.vmx["memsize"] = host[:memory]
+        v.vmx["memsize"] = host[:memory] || MEMORY_DEFAULT
       end
     end
   end
