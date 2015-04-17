@@ -61,6 +61,8 @@ Vagrant.configure(2) do |config|
     v.vmx["memsize"] = MEMORY
   end
 
+  config.vm.provision :shell, inline: "apt-get purge -qq -y --auto-remove chef puppet"
+
   config.vm.define HOSTS.last[:name] do |host|
 	host.vm.provision :ansible do |ansible|
  	  ansible.raw_arguments = "--private-key=~/.vagrant.d/insecure_private_key"
