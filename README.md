@@ -26,3 +26,4 @@ ssh-add <the-public-ssh-key-file>
 ```{r, engine='bash'}
 ansible-playbook -i inventory site.yml -e "@globals.yml"
 ```
+
