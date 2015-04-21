@@ -19,6 +19,3 @@ gandalf_port: 8080
 mongodb_conf_bind_ip: 0.0.0.0
 mongodb_host: "{{ hostvars[groups['mongodb'][0]].internal_ip }}"
 mongodb_port: 27017
-
-admin_user: administrator@gds.tsuru.gov
-admin_password: admin123

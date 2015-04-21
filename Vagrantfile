@@ -12,6 +12,8 @@ HOSTS = [
     roles: %w{hipache nodes docker-registry} },
   { name: 'tsuru-i4', ip: '172.18.10.14',
     roles: %w{nodes} },
+  { name: 'tsuru-i5', ip: '172.18.10.15',
+    roles: %w{postgres} },  
 ]
 
 def generate_inventory(hosts, file)
@@ -68,6 +70,7 @@ Vagrant.configure(2) do |config|
 	  ansible.playbook = "site.yml"
 	  ansible.extra_vars = "globals.yml"
 	  ansible.inventory_path = INVENTORY_FILE
+    ansible.ask_vault_pass = true
 	  ansible.limit = "all"
     end
   end
