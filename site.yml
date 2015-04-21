@@ -62,3 +62,5 @@
       shell: >
         tsuru-admin docker-node-add --register address=http://{{ internal_ip }}:{{ docker_port }}
       delegate_to: "{{ groups['api'][0] }}"
+
+- include: postgres.yml

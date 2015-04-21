@@ -70,6 +70,7 @@ Vagrant.configure(2) do |config|
 	  ansible.playbook = "site.yml"
 	  ansible.extra_vars = "globals.yml"
 	  ansible.inventory_path = INVENTORY_FILE
+    ansible.ask_vault_pass = true
 	  ansible.limit = "all"
     end
   end
