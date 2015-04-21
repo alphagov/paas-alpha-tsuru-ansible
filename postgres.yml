@@ -1,0 +1,53 @@
+---
+
+- hosts: postgres
+  sudo: yes
+  sudo_user: root
+  roles:
+    - ANXS.postgresql
+  vars:
+    #Basic settings
+    postgresql_version: 9.3
+    postgresql_encoding: 'UTF-8'
+    postgresql_locale: 'en_US.UTF-8'
+
+    postgresql_pg_hba_default:
+      - { type: host,  database: all, user: all, address: '0.0.0.0/0',    method: '{{ postgresql_default_auth_method }}', comment: 'Allow all IPv4 remote connections:' }
+      - { type: local, database: all, user: '{{ postgresql_admin_user }}', address: '', method: '{{ postgresql_default_auth_method }}', comment: '' }
+      - { type: local, database: all, user: all, address: '',             method: '{{ postgresql_default_auth_method }}', comment: '"local" is for Unix domain socket connections only' }
+      - { type: host,  database: all, user: all, address: '127.0.0.1/32', method: '{{ postgresql_default_auth_method }}', comment: 'IPv4 local connections:' }
+      - { type: host,  database: all, user: all, address: '::1/128',      method: '{{ postgresql_default_auth_method }}', comment: 'IPv6 local connections:' }
+
+    postgresql_listen_addresses:
+      - '*'
+
+    postgresql_admin_user: "postgres"
+    postgresql_default_auth_method: "trust"
+
+    postgresql_cluster_name: "main"
+    postgresql_cluster_reset: false
+
+    # List of databases to be created (optional)
+    postgresql_databases:
+      - name: postgresapi
+        hstore: yes         # flag to install the hstore extension on this database (yes/no)
+        uuid_ossp: yes      # flag to install the uuid-ossp extension on this database (yes/no)
+
+    # List of users to be created (optional)
+    postgresql_users:
+      - name: postgresapi
+        pass: "{{ pg_apiuser_pass }}"
+        encrypted: no       # denotes if the password is already encrypted.
+      - name: postgresadmin
+        pass: "{{ pg_admin_pass }}"
+        encrypted: no       # denotes if the password is already encrypted.
+
+    # List of user privileges to be applied (optional)
+    postgresql_user_privileges:
+      - name: postgresapi                   # user name
+        db: postgresapi                  # database
+        priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+        role_attr_flags: "CREATEDB" # role attribute flags
+      - name: postgresadmin                   # user name
+        db: postgres
+        role_attr_flags: "SUPERUSER" # role attribute flags
