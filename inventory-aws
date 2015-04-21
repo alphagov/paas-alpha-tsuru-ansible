@@ -26,3 +26,5 @@
 [nodes]
 10.128.1.207    internal_ip=10.128.1.207  name=tsuru-docker
 
+[postgres]
+10.128.0.55     internal_ip=10.128.0.55 external_ip=52.17.185.245 name=tsuru-postgres
