@@ -6,6 +6,7 @@ site "https://galaxy.ansible.com/api/v1"
 role "aalda.docker-registry", "1.0.4"
 role "ANXS.postgresql", "0.0.0"
 role "greendayonfire.mongodb", "1.2.1", github: "UnderGreen/ansible-role-mongodb"
+role "jdauphant.nginx", "0.0.0"
 
 # Playbooks that are not currently in ansible-galaxy
 role "docker_server", path: "./roles-static/docker_server"

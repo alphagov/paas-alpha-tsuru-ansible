@@ -19,6 +19,13 @@ GIT
   specs:
     aalda.docker-registry (1.0.4)
 
+GIT
+  remote: https://github.com/jdauphant/ansible-role-nginx
+  ref: master
+  sha: be56e911ad67ec58526899cc371d971c13c8517e
+  specs:
+    jdauphant.nginx (0.0.0)
+
 PATH
   remote: ./roles-static/bennojoy.redis
   specs:
@@ -52,5 +59,6 @@ DEPENDENCIES
   gandalf (>= 0)
   greendayonfire.mongodb (= 1.2.1)
   hipache (>= 0)
+  jdauphant.nginx (= 0.0.0)
   tsuru_api (>= 0)
 
