@@ -28,3 +28,7 @@
 
 [postgres]
 10.128.0.55     internal_ip=10.128.0.55 external_ip=52.17.185.245 name=tsuru-postgres
+
+[ssl-proxy]
+10.128.5.24     internal_ip=10.128.5.24 name=tsuru-ssl-proxy
+10.128.7.14     internal_ip=10.128.7.14 name=tsuru-ssl-proxy
