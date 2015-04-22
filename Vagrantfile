@@ -14,6 +14,8 @@ HOSTS = [
     roles: %w{nodes} },
   { name: 'tsuru-i5', ip: '172.18.10.15',
     roles: %w{postgres} },  
+  { name: 'tsuru-i6', ip: '172.18.10.16',
+    roles: %w{ssl-proxy} },
 ]
 
 def generate_inventory(hosts, file)
