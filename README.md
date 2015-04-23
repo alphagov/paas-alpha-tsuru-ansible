@@ -2,9 +2,16 @@
 
 Ansible based project to configure a multi-node tsuru cluster.
 
-### Requirement:
-* ansible 1.9 or higher.
-* librarian-ansible 1.0.6 or higher
+### Requirements:
+
+* Python things (you may wish to use [virtualenv](https://virtualenv.pypa.io/en/latest/)):
+```
+pip install -Ur requirements.txt
+```
+* Ruby things:
+```
+bundle install
+```
 
 ### Instructions:
 
@@ -29,7 +36,7 @@ admin_password: <tsuru admin password to create>
 
 * Install or update ansible playbooks using [librarian-ansible](https://github.com/bcoe/librarian-ansible):
 ```
-librarian-ansible install
+bundle exec librarian-ansible install
 ```
 
 * Configure the ssh key used to access the nodes:
