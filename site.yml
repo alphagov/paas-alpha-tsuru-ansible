@@ -64,3 +64,4 @@
       delegate_to: "{{ groups['api'][0] }}"
 
 - include: postgres.yml
+- include: ssl-proxy.yml

@@ -27,6 +27,14 @@ pg_admin_pass: <your postgres admin password>
 pg_apiuser_pass: <password for postgresapi database>
 admin_user: <tsuru admin account to create>
 admin_password: <tsuru admin password to create>
+ssl_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  < private key content >
+  -----END RSA PRIVATE KEY-----
+ssl_crt: |
+  -----BEGIN CERTIFICATE-----
+  < ssl certificate content >
+  -----END CERTIFICATE-----    
 ```
 
 * Update the inventory file to reflect the infrastructure that you want to use for your tsuru cluster.

@@ -1,0 +1,35 @@
+- hosts: ssl-proxy
+  sudo: yes
+  roles:
+    - jdauphant.nginx
+  pre_tasks:
+   - name: Create Nginx Directory
+     file: dest=/etc/nginx mode=755 owner=root group=root state=directory
+   - name: Upload Unencrypted Key File
+     copy: content="{{ ssl_key }}" dest=/etc/nginx/wildcard.tsuru.paas.alphagov.co.uk.key owner=root group=root
+   - name: Upload Unencrypted Cert File
+     copy: content="{{ ssl_crt }}" dest=/etc/nginx/wildcard.tsuru.paas.alphagov.co.uk.site.chain.crt owner=root group=root 
+  vars:
+    - nginx_sites:
+        ssl_reverse_proxy:
+          - listen 443 ssl
+          - ssl_certificate wildcard.tsuru.paas.alphagov.co.uk.site.chain.crt
+          - ssl_certificate_key wildcard.tsuru.paas.alphagov.co.uk.key
+          - server_name tsuru.paas.alphagov.co.uk
+          - location / {
+            proxy_pass http://{{hipache_host_internal_lb}}/;
+            proxy_redirect default;
+            proxy_redirect http://$host/ https://$host/;
+            proxy_redirect http://$hostname/ https://$host/;
+            proxy_read_timeout 15s;
+            proxy_connect_timeout 15s;
+            }
+        default:
+          - listen 80
+          - return 301 https://$host$request_uri
+    - nginx_configs:
+        proxy:
+          - proxy_set_header Host $http_host
+          - proxy_set_header X-Real-IP  $remote_addr
+          - proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
+          - proxy_set_header X-Forwarded-Proto https
