@@ -2,15 +2,15 @@
 # vi: set ft=ruby :
 
 INVENTORY_FILE = "inventory.vagrant"
-MEMORY = 1024
+MEMORY_DEFAULT = 384
 HOSTS = [
   { name: 'tsuru-i1', ip: '172.18.10.11',
     roles: %w{api mongodb} },
   { name: 'tsuru-i2', ip: '172.18.10.12',
     roles: %w{gandalf redis-master} },
-  { name: 'tsuru-i3', ip: '172.18.10.13',
+  { name: 'tsuru-i3', ip: '172.18.10.13', memory: 1024,
     roles: %w{hipache nodes docker-registry} },
-  { name: 'tsuru-i4', ip: '172.18.10.14',
+  { name: 'tsuru-i4', ip: '172.18.10.14', memory: 1024,
     roles: %w{nodes} },
   { name: 'tsuru-i5', ip: '172.18.10.15',
     roles: %w{postgres} },  
@@ -52,16 +52,18 @@ Vagrant.configure(2) do |config|
     config.vm.define host[:name] do |c|
       c.vm.hostname = host[:name]
       c.vm.network :private_network, ip: host[:ip]
+
+      c.vm.provider :virtualbox do |v|
+        v.memory = host[:memory] || MEMORY_DEFAULT
+      end
+
+      c.vm.provider :vmware_fusion do |v|
+        v.vmx["memsize"] = host[:memory] || MEMORY_DEFAULT
+      end
     end
   end
 
-  config.vm.provider :virtualbox do |v|
-    v.memory = MEMORY
-  end
-
-  config.vm.provider :vmware_fusion do |v|
-    v.vmx["memsize"] = MEMORY
-  end
+  config.vm.provision :shell, inline: "apt-get purge -qq -y --auto-remove chef puppet"
 
   config.vm.define HOSTS.last[:name] do |host|
 	host.vm.provision :ansible do |ansible|
