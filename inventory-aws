@@ -16,18 +16,18 @@
 10.128.1.22     internal_ip=10.128.1.22     name=tsuru-api
 
 [docker-registry]
-10.128.1.207    internal_ip=10.128.1.207  name=tsuru-docker
+10.128.1.142    internal_ip=10.128.1.142  name=tsuru-docker-registry
 
 [hipache]
 10.128.1.43    internal_ip=hipache-int.tsuru.paas.alphagov.co.uk  external_ip=hipache.tsuru.paas.alphagov.co.uk name=tsuru-router
 10.128.3.238     internal_ip=hipache-int.tsuru.paas.alphagov.co.uk  external_ip=hipache.tsuru.paas.alphagov.co.uk name=tsuru-router
 
 [nodes]
-10.128.1.207    internal_ip=10.128.1.207  name=tsuru-docker
+10.128.1.190    internal_ip=10.128.1.190  name=tsuru-docker-node
 
 [postgres]
 10.128.0.55     internal_ip=10.128.0.55 name=tsuru-postgres
 
 [ssl-proxy]
 10.128.5.24     internal_ip=10.128.5.24 name=tsuru-ssl-proxy
-10.128.7.14     internal_ip=10.128.7.14 name=tsuru-ssl-proxy
+10.128.7.86     internal_ip=10.128.7.86 name=tsuru-ssl-proxy
