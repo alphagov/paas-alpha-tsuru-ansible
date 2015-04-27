@@ -1,10 +1,13 @@
-10.128.1.22     internal_ip=10.128.1.22    external_ip=api.tsuru.paas.alphagov.co.uk    name=tsuru-api
+10.128.1.22      internal_ip=10.128.1.22   external_ip=api.tsuru.paas.alphagov.co.uk    name=tsuru-api
+10.128.1.200     internal_ip=10.128.1.200  external_ip=api.tsuru.paas.alphagov.co.uk    name=tsuru-api
+10.128.3.7       internal_ip=10.128.3.7    external_ip=api.tsuru.paas.alphagov.co.uk    name=tsuru-api
 10.128.0.127    internal_ip=10.128.0.127    external_ip=gandalf.tsuru.paas.alphagov.co.uk    name=tsuru-gandalf
 10.128.1.43    internal_ip=10.128.1.43    external_ip=hipache.tsuru.paas.alphagov.co.uk    name=tsuru-router
 10.128.3.238     internal_ip=10.128.3.238     external_ip=hipache.tsuru.paas.alphagov.co.uk name=tsuru-router
 
 [api]
-10.128.1.22     internal_ip=internal.api.tsuru.paas.alphagov.co.uk  name=tsuru-api
+10.128.1.200     internal_ip=10.128.1.200  name=tsuru-api
+10.128.3.7       internal_ip=10.128.3.7  name=tsuru-api
 
 [mongodb]
 10.128.1.22     internal_ip=10.128.1.22     name=tsuru-api
