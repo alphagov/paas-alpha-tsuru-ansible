@@ -3,6 +3,9 @@
   roles:
     - jdauphant.nginx
   pre_tasks:
+   - name: Update APT cache
+     apt: >
+        update_cache=yes
    - name: Create Nginx Directory
      file: dest=/etc/nginx mode=755 owner=root group=root state=directory
    - name: Upload Unencrypted Key File
