@@ -33,6 +33,33 @@
     - role: tsuru_api
       tags: tsuru_api
 
+- hosts: api
+  sudo: yes
+  tasks:
+    - name: add admin team
+      run_once: true
+      shell: >
+        mongo tsuru --eval 'db.teams.update({_id: "admin"}, {_id: "admin"}, {upsert: true})';
+      delegate_to: "{{ groups['mongodb'][0] }}"
+
+    - name: add admin user to admin team
+      run_once: true
+      shell: >
+        mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
+      delegate_to: "{{ groups['mongodb'][0] }}"
+
+# TODO : handle the case where the user already exists
+    - name: add admin user
+      run_once: true
+      shell: >
+        curl -sS -XPOST -d"{\"email\":\"{{admin_user}}\",\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users"
+
+    - name: login with the admin user
+      run_once: true
+      shell: >
+        token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
+        echo "${token}" > ~/.tsuru_token
+
 - hosts: gandalf
   sudo: yes
   tasks:
