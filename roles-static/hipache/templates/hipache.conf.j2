@@ -2,6 +2,9 @@
     "server": {
         "debug": true,
         "accessLog": "/var/log/hipache/access.log",
+{% if ansible_all_ipv6_addresses == [] %}
+        "address6": [],
+{% endif %}
         "port": 80,
         "workers": 5,
         "maxSockets": 100,
