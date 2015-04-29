@@ -4,6 +4,7 @@ redis_host: "{{ hostvars[groups['redis-master'][0]].internal_ip }}"
 redis_port: 6379
 
 tsuru_api_internal_lb: "{{ hostvars[groups['api'][0]].internal_ip }}"
+api_port: 8080
 
 docker_registry_host: "{{ hostvars[groups['docker-registry'][0]].internal_ip }}"
 docker_registry_port: 6000

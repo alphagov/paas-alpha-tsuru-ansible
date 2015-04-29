@@ -30,19 +30,3 @@
 
 - name: Wait for tsuru-server to be up
   wait_for: port={{api_port}} timeout=60
-
-# TODO: handle the case where the user already exists
-- name: Add admin user team
-  shell: >
-    mongo tsuru --eval 'db.teams.update({_id: "admin"}, {_id: "admin"}, {upsert: true})';
-    mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
-  delegate_to: "{{ groups['mongodb'][0] }}"
-  
-- name: Add admin user.
-  shell: >
-    curl -sS -XPOST -d"{\"email\":\"{{admin_user}}\",\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users"
-
-- name: Login with the admin user.
-  shell: >
-    token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
-    echo "${token}" > ~/.tsuru_token
