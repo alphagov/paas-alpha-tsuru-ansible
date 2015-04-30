@@ -1,0 +1,11 @@
+---
+
+# AWS-Specific variables and steps.
+- hosts: docker-registry
+  sudo: yes
+  vars:
+    storage_type: "local"
+  roles:
+    - aalda.docker-registry
+
+- include: common.yml

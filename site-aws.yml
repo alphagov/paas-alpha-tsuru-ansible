@@ -1,0 +1,15 @@
+---
+
+# AWS-Specific variables and steps.
+- hosts: docker-registry
+  sudo: yes
+  vars:
+    storage_type: "s3"
+    s3_region: "eu-west-1"
+    s3_bucket: "mcp.registry.storage"
+    s3_storage_path: "/"
+
+  roles:
+    - aalda.docker-registry
+
+- include: common.yml

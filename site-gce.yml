@@ -1,0 +1,18 @@
+---
+
+# AWS-Specific variables and steps.
+- hosts: docker-registry
+  sudo: yes
+  vars:
+    storage_type: "local"
+    # Settings below for when we enable gcs backend
+    # storage_type: "gcs"
+    #gcs_bucket: "gds-docker-registry"
+    #gcs_storage_path: "/"
+    #gcs_oauth2: false
+    #gcs_access_key: "{{ lookup('env', 'GCS_ACCESS_KEY') }}"
+    #gcs_secret_key: "{{ lookup('env', 'GCS_SECRET_KEY') }}"
+  roles:
+    - aalda.docker-registry
+
+- include: common.yml
