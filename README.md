@@ -34,7 +34,7 @@ ssl_key: |
 ssl_crt: |
   -----BEGIN CERTIFICATE-----
   < ssl certificate content >
-  -----END CERTIFICATE-----    
+  -----END CERTIFICATE-----
 ```
 
 * Update the inventory file to reflect the infrastructure that you want to use for your tsuru cluster.
@@ -51,8 +51,8 @@ bundle exec librarian-ansible install
 ```{r, engine='bash'}
 ssh-add <the-public-ssh-key-file>
 ```
-* Tune any global configuration needed to run your cluster in globals.yml.
+* Tune any global configuration needed to run your cluster in group_vars/all/globals.yml
 * Run ansible to deploy your configuration.
 ```{r, engine='bash'}
-ansible-playbook -i inventory site.yml -e "@globals.yml" --ask-vault-pass
+ansible-playbook -i inventory site.yml --ask-vault-pass
 ```
