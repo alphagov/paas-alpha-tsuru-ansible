@@ -57,7 +57,7 @@ ssh-add <the-public-ssh-key-file>
 
 Run:
 ```{r, engine='bash'}
-ansible-playbook -i inventory-<PROVIDER_NAME> site-<PROVIDER_NAME>.yml --ask-vault-pass
+ansible-playbook -i inventory-<PROVIDER_NAME> site-<PROVIDER_NAME>.yml --vault-password-file vault_password.sh
 ```
 
 Where:
