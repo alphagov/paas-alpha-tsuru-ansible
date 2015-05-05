@@ -52,19 +52,13 @@ bundle exec librarian-ansible install
 ssh-add <the-public-ssh-key-file>
 ```
 * Tune any global configuration needed to run your cluster in group_vars/all/globals.yml
-* Run ansible to deploy your configuration.
 
-For AWS deployment:
+### Deploying
+
+Run:
 ```{r, engine='bash'}
-ansible-playbook -i inventory site-aws.yml --ask-vault-pass
-```
-For GCE deployment:
-```{r, engine='bash'}
-ansible-playbook -i inventory site-gce.yml --ask-vault-pass
+ansible-playbook -i inventory-<PROVIDER_NAME> site-<PROVIDER_NAME>.yml --vault-password-file vault_password.sh
 ```
 
-For Vagrant deployment:
-```{r, engine='bash'}
-ansible-playbook -i inventory site-vagrant.yml --ask-vault-pass
-```
-
+Where:
+  - `<PROVIDER_NAME>` is: `aws`, `gce` or `vagrant`
