@@ -1,3 +1,5 @@
+# This is an example inventory file, we no longer use it
+# instead we have local inventories for dynamically deployed environments
 [api]
 10.128.1.200     internal_ip=internal.api.tsuru.paas.alphagov.co.uk  name=tsuru-api
 10.128.3.7       internal_ip=internal.api.tsuru.paas.alphagov.co.uk  name=tsuru-api
@@ -11,8 +13,9 @@
 [redis-master]
 10.128.1.22     internal_ip=10.128.1.22     name=tsuru-api
 
+# internal_ip can also take DNS names, this ensures you can connect to registry even when it changes IP (after server failover)
 [docker-registry]
-10.128.1.142    internal_ip=10.128.1.142  name=tsuru-docker-registry
+10.128.1.142    internal_ip=docker-registry.tsuru.paas.alphagov.co.uk  name=tsuru-docker-registry
 
 [hipache]
 10.128.1.43    internal_ip=hipache-int.tsuru.paas.alphagov.co.uk  external_ip=hipache.tsuru.paas.alphagov.co.uk name=tsuru-router
