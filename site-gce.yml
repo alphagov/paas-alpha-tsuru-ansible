@@ -1,7 +1,7 @@
 ---
 
 # AWS-Specific variables and steps.
-- hosts: docker-registry
+- hosts: "{{ deploy_env }}-tsuru-registry"
   sudo: yes
   vars:
     storage_type: "local"
