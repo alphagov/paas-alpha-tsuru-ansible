@@ -1,4 +1,6 @@
 ansible==1.9.0.1
+apache-libcloud==0.17.0
+backports.ssl-match-hostname==3.4.0.2
 ecdsa==0.13
 Jinja2==2.7.3
 MarkupSafe==0.23
