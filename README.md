@@ -57,7 +57,10 @@ ssh-add <the-public-ssh-key-file>
 
 Run:
 ```{r, engine='bash'}
-ansible-playbook -i inventory-<PROVIDER_NAME> site-<PROVIDER_NAME>.yml --vault-password-file vault_password.sh
+#ansible-playbook -i inventory-<PROVIDER_NAME> site-<PROVIDER_NAME>.yml --vault-password-file vault_password.sh
+
+New format - will update readme properly soon
+ansible-playbook -i gce.py --vault-password-file=~/.vault_pass.txt site-gce.yml -e "deploy_env=jmtest" -e "domain_name=tsuru2.paas.alphagov.co.uk" -e "ip_field=gce_private_ip"
 ```
 
 Where:
