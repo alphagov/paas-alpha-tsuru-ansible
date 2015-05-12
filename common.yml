@@ -84,6 +84,12 @@
       shell: >
         tsuru-admin docker-node-add --register address=http://{{ gce_private_ip }}:{{ docker_port }}
       delegate_to: "{{ tsuru_api_internal_lb }}"
+      when: ip_field == "gce_private_ip"
+    - name: Register node.
+      shell: >
+        tsuru-admin docker-node-add --register address=http://{{ gce_private_ip }}:{{ docker_port }}
+      delegate_to: "{{ tsuru_api_internal_lb }}"
+      when: ip_field == "ec2_private_ip_address"
 
 - include: postgres.yml
 - include: ssl-proxy.yml
