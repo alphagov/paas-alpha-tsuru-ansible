@@ -14,7 +14,7 @@ database:
 git:
   bare:
     location: /var/lib/gandalf/repositories
-    template: /home/git/bare-template
+    template: {{ gandalf_git_template_dir }}
 
 # Path to the authorized_keys file.
 #

@@ -9,10 +9,10 @@
   with_items: packages
 
 - name: Create git hook directory.
-  file: path=/home/git/bare-template/hooks state=directory owner=git group=git recurse=yes
+  file: path={{ gandalf_git_template_dir }}/hooks state=directory owner=git group=git recurse=yes
 
 - name: Install git hook.
-  copy: src=pre-receive.archive-server dest=/home/git/bare-template/hooks/pre-receive owner=git group=git mode=0755
+  copy: src=pre-receive.archive-server dest={{ gandalf_git_template_dir }}/hooks/pre-receive owner=git group=git mode=0755
 
 - name: Add archive server to bash profile.
   lineinfile: 'create=yes dest=/home/git/.bash_profile line="export ARCHIVE_SERVER_READ=http://{{gandalf_host_internal}}:3232 ARCHIVE_SERVER_WRITE=http://127.0.0.1:3131"'
