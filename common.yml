@@ -1,34 +1,33 @@
----
 # Bring up db tier (redis, mongodb).
-- hosts: "{{ deploy_env }}-tsuru-db"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-db
   sudo: yes
   roles:
     - bennojoy.redis
 
-- hosts: "{{ deploy_env }}-tsuru-db"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-db
   sudo: yes
   sudo_user: root
   roles:
     - greendayonfire.mongodb
 
 # tsuru core components.
-- hosts: "{{ deploy_env }}-tsuru-gandalf*"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-gandalf*
   sudo: yes
   roles:
     - gandalf
 
-- hosts: "{{ deploy_env }}-tsuru-router*"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-router*
   sudo: yes
   roles:
     - hipache
 
-- hosts: "{{ deploy_env }}-tsuru-api*"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-api*
   sudo: yes
   roles:
     - role: tsuru_api
       tags: tsuru_api
 
-- hosts: "{{ deploy_env }}-tsuru-api*"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-api*
   sudo: yes
   tasks:
     - name: add admin team
@@ -55,7 +54,7 @@
         token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
         echo "${token}" > ~/.tsuru_token
 
-- hosts: "{{ deploy_env }}-tsuru-gandalf*"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-gandalf*
   sudo: yes
   tasks:
     - name: generate tsuru token
@@ -74,7 +73,7 @@
     - name: restart gandalf
       service: name=gandalf-server state=restarted
 
-- hosts: "{{ deploy_env }}-tsuru-docker*"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-docker*
   sudo: yes
   roles:
     - docker_server
@@ -84,12 +83,12 @@
       shell: >
         tsuru-admin docker-node-add --register address=http://{{ gce_private_ip }}:{{ docker_port }}
       delegate_to: "{{ tsuru_api_internal_lb }}"
-      when: ip_field == "gce_private_ip"
+      when: gce_private_ip is defined
     - name: Register node.
       shell: >
-        tsuru-admin docker-node-add --register address=http://{{ gce_private_ip }}:{{ docker_port }}
+        tsuru-admin docker-node-add --register address=http://{{ ec2_private_ip_address }}:{{ docker_port }}
       delegate_to: "{{ tsuru_api_internal_lb }}"
-      when: ip_field == "ec2_private_ip_address"
+      when: ec2_private_ip_address is defined
 
 - include: postgres.yml
 - include: ssl-proxy.yml
