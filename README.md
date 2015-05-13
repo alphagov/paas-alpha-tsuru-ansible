@@ -69,6 +69,7 @@ ansible-playbook -i ec2.py --vault-password-file=~/.vault_pass.txt site-aws.yml 
 ansible-playbook -i gce.py --vault-password-file=~/.vault_pass.txt site-gce.yml -e "deploy_env=jmtest" -e "domain_name=tsuru2.paas.alphagov.co.uk" -e "@platform-gce.yml"
 ```
 
+- AWS environment variables
 - Something something `~/secrets.py` file for libcloud?
 - CA CERT file on OSX?
     RuntimeError: No CA Certificates were found in CA_CERTS_PATH. For information on how to get required certificate files, please visit https://libcloud.readthedocs.org/en/latest/other/ssl-certificate-validation.html
