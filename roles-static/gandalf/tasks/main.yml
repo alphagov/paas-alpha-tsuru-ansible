@@ -8,12 +8,11 @@
   apt: update_cache=true name="{{ item }}"
   with_items: packages
 
-- name: Configure git hook.
-  shell: >
-    mkdir -p /home/git/bare-template/hooks;
-    curl https://raw.githubusercontent.com/tsuru/tsuru/master/misc/git-hooks/pre-receive.archive-server -o /home/git/bare-template/hooks/pre-receive;
-    chmod +x /home/git/bare-template/hooks/pre-receive;
-    chown -R git:git /home/git/bare-template;
+- name: Create git hook directory.
+  file: path={{ gandalf_git_template_dir }}/hooks state=directory owner=git group=git recurse=yes
+
+- name: Install git hook.
+  copy: src=pre-receive.archive-server dest={{ gandalf_git_template_dir }}/hooks/pre-receive owner=git group=git mode=0755
 
 - name: Add archive server to bash profile.
   lineinfile: 'create=yes dest=/home/git/.bash_profile line="export ARCHIVE_SERVER_READ=http://{{gandalf_host_internal}}:3232 ARCHIVE_SERVER_WRITE=http://127.0.0.1:3131"'
