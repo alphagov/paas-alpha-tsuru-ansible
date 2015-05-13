@@ -67,7 +67,9 @@ New format - will update readme properly soon
 ansible-playbook -i gce.py --vault-password-file=~/.vault_pass.txt site-gce.yml -e "deploy_env=jmtest" -e "domain_name=tsuru2.paas.alphagov.co.uk" -e "ip_field=gce_private_ip"
 ```
 
-Something something `~/secrets.py` file for libcloud?
+- Something something `~/secrets.py` file for libcloud?
+- CA CERT file on OSX?
+    RuntimeError: No CA Certificates were found in CA_CERTS_PATH. For information on how to get required certificate files, please visit https://libcloud.readthedocs.org/en/latest/other/ssl-certificate-validation.html
 
 Where:
   - `<PROVIDER_NAME>` is: `aws`, `gce` or `vagrant`
