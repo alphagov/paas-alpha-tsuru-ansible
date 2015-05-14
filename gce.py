@@ -215,6 +215,9 @@ class GceInventory(object):
                 md[entry['key']] = entry['value']
 
         net = inst.extra['networkInterfaces'][0]['network'].split('/')[-1]
+        if inst.public_ips.__len__() == 0:
+          inst.public_ips=[None]
+
         return {
             'gce_uuid': inst.uuid,
             'gce_id': inst.id,
