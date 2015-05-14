@@ -69,10 +69,5 @@ ansible-playbook -i ec2.py --vault-password-file vault_password.sh site-aws.yml 
 ```
 For GCE:
 ```
-ansible-playbook -i gce.py --vault-password-file vault_password.sh site-gce.yml -e "deploy_env=<DEPLOYMENT_PREFIX>" -e "@platform-gce.yml"
+SSL_CERT_FILE=$(python -m certifi) ansible-playbook -i gce.py --vault-password-file vault_password.sh site-gce.yml -e "deploy_env=<DEPLOYMENT_PREFIX>" -e "@platform-gce.yml"
 ```
-
-
-- CA CERT file on OSX?
-    RuntimeError: No CA Certificates were found in CA_CERTS_PATH. For information on how to get required certificate files, please visit https://libcloud.readthedocs.org/en/latest/other/ssl-certificate-validation.html
-
