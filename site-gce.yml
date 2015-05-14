@@ -1,7 +1,11 @@
 ---
 
+- hosts: {{ deploy_env }}*
+  vars_files:
+    - platform-gce.yml
+
 # AWS-Specific variables and steps.
-- hosts: "{{ deploy_env }}-tsuru-registry"
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-registry
   sudo: yes
   vars:
     storage_type: "local"
@@ -12,7 +16,7 @@
 
     # Settings below for when we enable gcs backend
     # storage_type: "gcs"
-    #gcs_bucket: "gds-docker-registry"
+    #gcs_bucket: "{{ deploy_env }}.registry.storage"
     #gcs_storage_path: "/"
     #gcs_oauth2: false
     #gcs_access_key: "{{ lookup('env', 'GCS_ACCESS_KEY') }}"
