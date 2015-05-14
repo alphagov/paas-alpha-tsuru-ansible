@@ -1,5 +1,6 @@
 ---
 ip_field_name: "gce_private_ip"
+domain_name: "tsuru2.paas.alphagov.co.uk"
 
 redis_host_name: "{{ deploy_env }}-tsuru-db"
 redis_host: "{{ hostvars[redis_host_name][ip_field_name] }}"
