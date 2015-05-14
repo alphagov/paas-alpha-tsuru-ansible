@@ -27,6 +27,9 @@ pg_admin_pass: <your postgres admin password>
 pg_apiuser_pass: <password for postgresapi database>
 admin_user: <tsuru admin account to create>
 admin_password: <tsuru admin password to create>
+s3_access_key: <docker-registry s3 bucket access key id>
+s3_secret_key: <docker-registry s3 bucket access secret>
+
 ssl_key: |
   -----BEGIN RSA PRIVATE KEY-----
   < private key content >
