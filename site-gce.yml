@@ -1,9 +1,5 @@
 ---
 
-- hosts: {{ deploy_env }}*
-  vars_files:
-    - platform-gce.yml
-
 # AWS-Specific variables and steps.
 - hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-registry
   sudo: yes
