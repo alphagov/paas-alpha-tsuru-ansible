@@ -18,7 +18,7 @@ hipache_host_name: "{{ deploy_env }}-tsuru-api-1"
 hipache_host_external_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 hipache_host_internal_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 
-gandalf_host_name: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-gandalf
+gandalf_host_name: "{{ deploy_env }}-tsuru-gandalf"
 gandalf_host_internal: "{{ hostvars[gandalf_host_name][ip_field_name] }}"
 gandalf_host_external: "{{ deploy_env }}-gandalf.{{ domain_name }}"
 gandalf_port: 8080
