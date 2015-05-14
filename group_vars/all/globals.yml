@@ -1,0 +1,16 @@
+---
+
+redis_port: 6379
+
+api_port: 8080
+
+docker_registry_port: 6000
+docker_port: 4243
+
+hipache_host_external_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
+
+gandalf_host_external: "{{ deploy_env }}-gandalf.{{ domain_name }}"
+gandalf_port: 8080
+
+mongodb_conf_bind_ip: 0.0.0.0
+mongodb_port: 27017
