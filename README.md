@@ -64,9 +64,11 @@ Run:
 
 New format - will update readme properly soon
 ```
-ansible-playbook -i ec2.py --vault-password-file=~/.vault_pass.txt site-aws.yml -e "deploy_env=jmtest" -e "domain_name=tsuru.paas.alphagov.co.uk" -e "@platform-aws.yml"
+For AWS:
+ansible-playbook -i ec2.py --vault-password-file vault_password.sh site-aws.yml -e "deploy_env=<DEPLOYMENT_PREFIX>" -e "@platform-aws.yml"
 
-ansible-playbook -i gce.py --vault-password-file=~/.vault_pass.txt site-gce.yml -e "deploy_env=jmtest" -e "domain_name=tsuru2.paas.alphagov.co.uk" -e "@platform-gce.yml"
+For GCE:
+ansible-playbook -i gce.py --vault-password-file vault_password.sh site-gce.yml -e "deploy_env=<DEPLOYMENT_PREFIX>" -e "@platform-gce.yml"
 ```
 
 - AWS environment variables
