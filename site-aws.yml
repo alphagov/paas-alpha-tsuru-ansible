@@ -1,12 +1,17 @@
 ---
 
 # AWS-Specific variables and steps.
-- hosts: docker-registry
+- hosts: "tag_Name_{{ deploy_env }}-tsuru-registry*"
   sudo: yes
   vars:
+    registry_port: "{{ docker_registry_port }}"
+    use_nginx: true
+    use_redis: false
+    registry_ssl: false
+
     storage_type: "s3"
     s3_region: "eu-west-1"
-    s3_bucket: "mcp.registry.storage"
+    s3_bucket: "{{ deploy_env }}-mcp.registry.storage"
     storage_path: "/"
 
   roles:

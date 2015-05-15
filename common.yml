@@ -1,47 +1,46 @@
----
 # Bring up db tier (redis, mongodb).
-- hosts: redis-master
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-db
   sudo: yes
   roles:
     - bennojoy.redis
 
-- hosts: mongodb
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-db
   sudo: yes
   sudo_user: root
   roles:
     - greendayonfire.mongodb
 
 # tsuru core components.
-- hosts: gandalf
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-gandalf*
   sudo: yes
   roles:
     - gandalf
 
-- hosts: hipache
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-router*
   sudo: yes
   roles:
     - hipache
 
-- hosts: api
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-api*
   sudo: yes
   roles:
     - role: tsuru_api
       tags: tsuru_api
 
-- hosts: api
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-api*
   sudo: yes
   tasks:
     - name: add admin team
       run_once: true
       shell: >
         mongo tsuru --eval 'db.teams.update({_id: "admin"}, {_id: "admin"}, {upsert: true})';
-      delegate_to: "{{ groups['mongodb'][0] }}"
+      delegate_to: "{{ mongodb_host }}"
 
     - name: add admin user to admin team
       run_once: true
       shell: >
         mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
-      delegate_to: "{{ groups['mongodb'][0] }}"
+      delegate_to: "{{ mongodb_host }}"
 
 # TODO : handle the case where the user already exists
     - name: add admin user
@@ -55,13 +54,13 @@
         token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
         echo "${token}" > ~/.tsuru_token
 
-- hosts: gandalf
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-gandalf*
   sudo: yes
   tasks:
     - name: generate tsuru token
       run_once: true
       shell: tsr token
-      delegate_to: "{{ groups['api'][0] }}"
+      delegate_to: "{{ tsuru_api_internal_lb }}"
       register: tsr_token
 
     - name: write tsuru token to .bash_profile
@@ -74,7 +73,7 @@
     - name: restart gandalf
       service: name=gandalf-server state=restarted
 
-- hosts: nodes
+- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-docker*
   sudo: yes
   roles:
     - docker_server
@@ -82,8 +81,14 @@
   post_tasks:
     - name: Register node.
       shell: >
-        tsuru-admin docker-node-add --register address=http://{{ internal_ip }}:{{ docker_port }}
-      delegate_to: "{{ groups['api'][0] }}"
+        tsuru-admin docker-node-add --register address=http://{{ gce_private_ip }}:{{ docker_port }}
+      delegate_to: "{{ tsuru_api_internal_lb }}"
+      when: gce_private_ip is defined
+    - name: Register node.
+      shell: >
+        tsuru-admin docker-node-add --register address=http://{{ ec2_private_ip_address }}:{{ docker_port }}
+      delegate_to: "{{ tsuru_api_internal_lb }}"
+      when: ec2_private_ip_address is defined
 
 - include: postgres.yml
 - include: ssl-proxy.yml

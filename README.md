@@ -13,6 +13,19 @@ pip install -Ur requirements.txt
 bundle install
 ```
 
+* For provisioning on AWS you will need to have your AWS access credentials exported as environment variables for ansible to pick up.
+```
+export AWS_SECRET_ACCESS_KEY=<your secret access key>
+export AWS_ACCESS_KEY_ID=<your access key id>
+```
+
+* For provisioning on GCE you will need to create a ~/.secrets.py file in your home directory.
+The contents of ~/.secrets.py are as follows:
+```
+GCE_PARAMS = ('...@developer.gserviceaccount.com', '/path/to/gce_account.pem')
+GCE_KEYWORD_PARAMS = {'project': 'project_id'}
+```
+
 ### Instructions:
 
 This repository is using [ansible-vault](https://docs.ansible.com/playbooks_vault.html) to secure sensitive information - If you already know the password you do not need to recreate the 'secure' file.
@@ -40,11 +53,6 @@ ssl_crt: |
   -----END CERTIFICATE-----
 ```
 
-* Update the inventory file to reflect the infrastructure that you want to use for your tsuru cluster.
-
-> Note: can be any number of nodes, but every section in the inventory file has to have at least one node.
-> (it is possible to use a node in more that one section).
-
 * Install or update ansible playbooks using [librarian-ansible](https://github.com/bcoe/librarian-ansible):
 ```
 bundle exec librarian-ansible install
@@ -58,10 +66,11 @@ ssh-add <the-public-ssh-key-file>
 
 ### Deploying
 
-Run:
-```{r, engine='bash'}
-ansible-playbook -i inventory-<PROVIDER_NAME> site-<PROVIDER_NAME>.yml --vault-password-file vault_password.sh
+For AWS:
 ```
-
-Where:
-  - `<PROVIDER_NAME>` is: `aws`, `gce` or `vagrant`
+ansible-playbook -i ec2.py --vault-password-file vault_password.sh site-aws.yml -e "deploy_env=<DEPLOYMENT_PREFIX>" -e "@platform-aws.yml"
+```
+For GCE:
+```
+SSL_CERT_FILE=$(python -m certifi) ansible-playbook -i gce.py --vault-password-file vault_password.sh site-gce.yml -e "deploy_env=<DEPLOYMENT_PREFIX>" -e "@platform-gce.yml"
+```
