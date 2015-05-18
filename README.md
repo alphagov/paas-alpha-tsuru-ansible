@@ -19,8 +19,8 @@ export AWS_SECRET_ACCESS_KEY=<your secret access key>
 export AWS_ACCESS_KEY_ID=<your access key id>
 ```
 
-* For provisioning on GCE you will need to create a ~/.secrets.py file in your home directory.
-The contents of ~/.secrets.py are as follows:
+* For provisioning on GCE you will need to create a `secrets.py` file in the
+root directory of this repo. The contents are as follows:
 ```
 GCE_PARAMS = ('...@developer.gserviceaccount.com', '/path/to/gce_account.json')
 GCE_KEYWORD_PARAMS = {'project': 'project_id'}
