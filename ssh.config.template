@@ -1,6 +1,6 @@
-Host nat.tsuru.paas.alphagov.co.uk 
+Host DEPLOY_ENV-nat.tsuru.paas.alphagov.co.uk
     User                   ec2-user
-    HostName               nat.tsuru.paas.alphagov.co.uk
+    HostName               DEPLOY_ENV-nat.tsuru.paas.alphagov.co.uk
     ProxyCommand           none
     StrictHostKeyChecking  no
     BatchMode              yes
@@ -12,15 +12,15 @@ Host nat.tsuru.paas.alphagov.co.uk
 Host 10.128.*.*
     ServerAliveInterval    60
     TCPKeepAlive           yes
-    ProxyCommand           ssh -q -A ec2-user@nat.tsuru.paas.alphagov.co.uk nc %h %p
+    ProxyCommand           ssh -q -A ec2-user@DEPLOY_ENV-nat.tsuru.paas.alphagov.co.uk nc %h %p
     ControlMaster          auto
     ControlPath            ~/.ssh/mux-%r@%h:%p
     ControlPersist         8h
     User                   ubuntu
 
-Host nat.tsuru2.paas.alphagov.co.uk
+Host DEPLOY_ENV-nat.tsuru2.paas.alphagov.co.uk
     User                   ubuntu
-    HostName               nat.tsuru2.paas.alphagov.co.uk
+    HostName               DEPLOY_ENV-nat.tsuru2.paas.alphagov.co.uk
     ProxyCommand           none
     StrictHostKeyChecking  no
     BatchMode              yes
@@ -32,7 +32,7 @@ Host nat.tsuru2.paas.alphagov.co.uk
 Host 10.129.*.*
     ServerAliveInterval    60
     TCPKeepAlive           yes
-    ProxyCommand           ssh -q -A ubuntu@nat.tsuru2.paas.alphagov.co.uk nc %h %p
+    ProxyCommand           ssh -q -A ubuntu@DEPLOY_ENV-nat.tsuru2.paas.alphagov.co.uk nc %h %p
     ControlMaster          auto
     ControlPath            ~/.ssh/mux-%r@%h:%p
     ControlPersist         8h
