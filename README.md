@@ -66,11 +66,7 @@ ssh-add <the-public-ssh-key-file>
 
 ### Deploying
 
-For AWS:
+Use the `Makefile`. Run without any arguments for more information:
 ```
-ansible-playbook -i ec2.py --vault-password-file vault_password.sh site-aws.yml -e "deploy_env=<DEPLOYMENT_PREFIX>" -e "@platform-aws.yml"
-```
-For GCE:
-```
-SSL_CERT_FILE=$(python -m certifi) ansible-playbook -i gce.py --vault-password-file vault_password.sh site-gce.yml -e "deploy_env=<DEPLOYMENT_PREFIX>" -e "@platform-gce.yml"
+make
 ```
