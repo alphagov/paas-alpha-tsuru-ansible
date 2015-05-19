@@ -3,3 +3,4 @@ inventory.vagrant
 .vagrant/
 roles
 tmp
+ssh.config
