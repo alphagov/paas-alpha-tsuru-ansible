@@ -4,6 +4,12 @@ all:
 	$(error Usage: make <aws|gce> DEPLOY_ENV=name [ARGS=extra_args])
 
 aws: check-env-var render-ssh-config
+ifndef AWS_SECRET_ACCESS_KEY
+	$(error Environment variable AWS_SECRET_ACCESS_KEY must be set)
+endif
+ifndef AWS_ACCESS_KEY_ID
+	$(error Environment variable AWS_ACCESS_KEY_ID must be set)
+endif
 	ansible-playbook -i ec2.py --vault-password-file vault_password.sh site-aws.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-aws.yml" ${ARGS}
 
 gce: check-env-var render-ssh-config
