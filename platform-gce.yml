@@ -5,8 +5,9 @@ domain_name: "tsuru2.paas.alphagov.co.uk"
 redis_host_name: "{{ deploy_env }}-tsuru-db"
 redis_host: "{{ hostvars[redis_host_name][ip_field_name] }}"
 
-tsuru_api_name: "{{ deploy_env }}-tsuru-api-0"
-tsuru_api_internal_lb: "{{ hostvars[tsuru_api_name][ip_field_name] }}"
+tsuru_api_host_name: "{{ deploy_env }}-tsuru-api-0"
+tsuru_api_host: "{{ hostvars[tsuru_api_host_name][ip_field_name] }}"
+tsuru_api_internal_lb: "{{ deploy_env }}-api.{{ domain_name }}"
 
 hipache_host_internal_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 

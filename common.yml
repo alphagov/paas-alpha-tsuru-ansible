@@ -60,7 +60,7 @@
     - name: generate tsuru token
       run_once: true
       shell: tsr token
-      delegate_to: "{{ tsuru_api_internal_lb }}"
+      delegate_to: "{{ tsuru_api_host }}"
       register: tsr_token
 
     - name: write tsuru token to .bash_profile
@@ -82,12 +82,12 @@
     - name: Register node.
       shell: >
         tsuru-admin docker-node-add --register address=http://{{ gce_private_ip }}:{{ docker_port }}
-      delegate_to: "{{ tsuru_api_internal_lb }}"
+      delegate_to: "{{ tsuru_api_host }}"
       when: gce_private_ip is defined
     - name: Register node.
       shell: >
         tsuru-admin docker-node-add --register address=http://{{ ec2_private_ip_address }}:{{ docker_port }}
-      delegate_to: "{{ tsuru_api_internal_lb }}"
+      delegate_to: "{{ tsuru_api_host }}"
       when: ec2_private_ip_address is defined
 
 - include: postgres.yml
