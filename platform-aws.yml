@@ -8,9 +8,6 @@ redis_host: "{{ hostvars[groups[redis_host_name][0]][ip_field_name] }}"
 tsuru_api_name: "tag_Name_{{ deploy_env }}-tsuru-api"
 tsuru_api_internal_lb: "{{ hostvars[groups[tsuru_api_name][0]][ip_field_name] }}"
 
-docker_registry_name: "tag_Name_{{ deploy_env }}-tsuru-registry"
-docker_registry_host: "{{ hostvars[groups[docker_registry_name][0]][ip_field_name] }}"
-
 hipache_host_internal_lb: "{{ deploy_env }}-hipache-int.{{ domain_name }}"
 
 gandalf_host_name: "tag_Name_{{ deploy_env }}-tsuru-gandalf"
