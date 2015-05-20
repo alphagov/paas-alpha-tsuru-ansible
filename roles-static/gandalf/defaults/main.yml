@@ -1,5 +1,0 @@
----
-# defaults file for gandalf
-
-gandalf_port: 8080
-gandalf_git_template_dir: /home/git/bare-template
