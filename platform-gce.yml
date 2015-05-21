@@ -11,10 +11,6 @@ tsuru_api_internal_lb: "{{ deploy_env }}-api.{{ domain_name }}"
 
 hipache_host_internal_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 
-docker_registry_name: "{{ deploy_env }}-tsuru-registry"
-docker_registry_host: "{{ hostvars[docker_registry_name][ip_field_name] }}"
-docker_registry_port: 6000
-
 gandalf_host_name: "{{ deploy_env }}-tsuru-gandalf"
 gandalf_host_internal: "{{ hostvars[gandalf_host_name][ip_field_name] }}"
 gandalf_host_external: "{{ deploy_env }}-gandalf.{{ domain_name }}"
