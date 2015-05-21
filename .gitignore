@@ -1,6 +1,4 @@
 secrets.py*
-inventory.vagrant
-.vagrant/
 roles
 tmp
 ssh.config
