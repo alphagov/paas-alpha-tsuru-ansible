@@ -1,6 +1,0 @@
-READ_HTTP=0.0.0.0:3232
-WRITE_HTTP=127.0.0.1:3131
-ARCHIVE_DIR=/var/lib/archive-server/archives
-MONGODB_SERVER={{ mongodb_host }}:{{ mongodb_port }}
-MONGODB_DB_NAME=archives
-export ARCHIVE_SERVER_OPTS="-dir=${ARCHIVE_DIR} -read-http=${READ_HTTP} -write-http=${WRITE_HTTP} -mongodb=${MONGODB_SERVER} -dbname=${MONGODB_DB_NAME}"

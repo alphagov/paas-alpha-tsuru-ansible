@@ -1,5 +1,0 @@
----
-# handlers file for hipache
-
-- name: restart hipache
-  service: name=hipache state=restarted

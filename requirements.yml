@@ -1,0 +1,30 @@
+# vim:ft=ansible:
+
+- src: aalda.docker-registry
+  version: v1.0.4
+- src: jdauphant.nginx
+  version: v1.3.4
+- src: ANXS.postgresql
+  version: v1.1.2
+- src: greendayonfire.mongodb
+  version: v1.2.2
+
+# GDS created and maintained playbooks
+- name: docker_server
+  src: https://github.com/alphagov/ansible-playbook-docker_server.git
+  version: v0.0.1
+- name: hipache
+  src: https://github.com/alphagov/ansible-playbook-hipache.git
+  version: v0.0.1
+- name: tsuru_api
+  src: https://github.com/alphagov/ansible-playbook-tsuru_api.git
+  version: v0.0.1
+- name: gandalf
+  src: https://github.com/alphagov/ansible-playbook-gandalf.git
+  version: v0.0.1
+
+# GDS Forked, pull-request sent upstream awaiting merge.
+- name: bennojoy.redis
+  src: https://github.com/alphagov/ansible-playbook-redis.git
+  version: v0.0.1
+

@@ -1,4 +1,4 @@
-.PHONY: all aws gce check-env-var render-ssh-config
+.PHONY: all aws gce check-env-var render-ssh-config clean-roles ansible-galaxy
 
 all:
 	$(error Usage: make <aws|gce> DEPLOY_ENV=name [ARGS=extra_args])
@@ -16,3 +16,9 @@ endif
 
 render-ssh-config: check-env-var
 	sed "s/DEPLOY_ENV/${DEPLOY_ENV}/g" ssh.config.template > ssh.config
+
+clean-roles:
+	rm -rf -- roles/*
+
+ansible-galaxy:
+	ansible-galaxy install -r requirements.yml --force

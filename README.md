@@ -8,10 +8,6 @@ Ansible based project to configure a multi-node tsuru cluster.
 ```
 pip install -Ur requirements.txt
 ```
-* Ruby things:
-```
-bundle install
-```
 
 * For provisioning on AWS you will need to have your AWS access credentials exported as environment variables for ansible to pick up.
 ```
@@ -51,11 +47,6 @@ ssl_crt: |
   -----BEGIN CERTIFICATE-----
   < ssl certificate content >
   -----END CERTIFICATE-----
-```
-
-* Install or update ansible playbooks using [librarian-ansible](https://github.com/bcoe/librarian-ansible):
-```
-bundle exec librarian-ansible install
 ```
 
 * Configure the ssh key used to access the nodes:

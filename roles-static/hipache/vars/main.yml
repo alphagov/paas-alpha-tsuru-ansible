@@ -1,7 +1,0 @@
----
-# vars file for hipach
-
-packages:
-  - python-software-properties
-  - nodejs
-  - node-hipache
