@@ -1,13 +1,13 @@
 .PHONY: all aws gce check-env-var render-ssh-config
 
 all:
-	$(error Usage: make <aws|gce> DEPLOY_ENV=NAME)
+	$(error Usage: make <aws|gce> DEPLOY_ENV=name [ARGS=extra_args])
 
 aws: check-env-var render-ssh-config
-	ansible-playbook -i ec2.py --vault-password-file vault_password.sh site-aws.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-aws.yml"
+	ansible-playbook -i ec2.py --vault-password-file vault_password.sh site-aws.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-aws.yml" ${ARGS}
 
 gce: check-env-var render-ssh-config
-	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py --vault-password-file vault_password.sh site-gce.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-gce.yml"
+	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py --vault-password-file vault_password.sh site-gce.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-gce.yml" ${ARGS}
 
 check-env-var:
 ifndef DEPLOY_ENV
