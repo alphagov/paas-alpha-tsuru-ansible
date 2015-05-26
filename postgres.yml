@@ -1,6 +1,6 @@
 ---
 
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-postgres
+- hosts: "{{ hosts_prefix }}-tsuru-postgres"
   sudo: yes
   sudo_user: root
   roles:

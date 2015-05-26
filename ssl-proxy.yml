@@ -1,4 +1,4 @@
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-sslproxy*
+- hosts: "{{ hosts_prefix }}-tsuru-sslproxy*"
   sudo: yes
   roles:
     - jdauphant.nginx

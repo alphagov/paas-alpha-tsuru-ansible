@@ -1,7 +1,7 @@
 ---
 
 # AWS-Specific variables and steps.
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-registry
+- hosts: "{{ hosts_prefix }}-tsuru-registry"
   sudo: yes
   vars:
     storage_type: "local"

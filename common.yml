@@ -1,33 +1,33 @@
 # Bring up db tier (redis, mongodb).
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-db
+- hosts: "{{ hosts_prefix }}-tsuru-db"
   sudo: yes
   roles:
     - bennojoy.redis
 
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-db
+- hosts: "{{ hosts_prefix }}-tsuru-db"
   sudo: yes
   sudo_user: root
   roles:
     - greendayonfire.mongodb
 
 # tsuru core components.
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-gandalf*
+- hosts: "{{ hosts_prefix }}-tsuru-gandalf*"
   sudo: yes
   roles:
     - gandalf
 
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-router*
+- hosts: "{{ hosts_prefix }}-tsuru-router*"
   sudo: yes
   roles:
     - hipache
 
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-api*
+- hosts: "{{ hosts_prefix }}-tsuru-api*"
   sudo: yes
   roles:
     - role: tsuru_api
       tags: tsuru_api
 
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-api*
+- hosts: "{{ hosts_prefix }}-tsuru-api*"
   sudo: yes
   tasks:
     - name: add admin team
@@ -54,7 +54,7 @@
         token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
         echo "${token}" > ~/.tsuru_token
 
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-gandalf*
+- hosts: "{{ hosts_prefix }}-tsuru-gandalf*"
   sudo: yes
   tasks:
     - name: generate tsuru token
@@ -73,7 +73,7 @@
     - name: restart gandalf
       service: name=gandalf-server state=restarted
 
-- hosts: ~({{ deploy_env }}|tag_Name_{{ deploy_env }})-tsuru-docker*
+- hosts: "{{ hosts_prefix }}-tsuru-docker*"
   sudo: yes
   roles:
     - docker_server
