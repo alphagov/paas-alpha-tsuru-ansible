@@ -45,14 +45,13 @@
         mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
       delegate_to: "{{ mongodb_host }}"
 
-# TODO : handle the case where the user already exists
     - name: add admin user
       run_once: true
       uri:
         method=POST body_format=json
         body="{\"email\":\"{{ admin_user }}\",\"password\":\"{{ admin_password }}\"}"
         url=http://127.0.0.1:{{ api_port }}/users
-        status_code=201
+        status_code=201,409
 
     - name: login with the admin user
       run_once: true
