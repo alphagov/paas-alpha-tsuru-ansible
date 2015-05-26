@@ -13,7 +13,6 @@ hipache_host_internal_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 
 gandalf_host_name: "{{ deploy_env }}-tsuru-gandalf"
 gandalf_host_internal: "{{ hostvars[gandalf_host_name][ip_field_name] }}"
-gandalf_host_external: "{{ deploy_env }}-gandalf.{{ domain_name }}"
 
 mongodb_host_name: "{{ deploy_env }}-tsuru-db"
 mongodb_host: "{{ hostvars[mongodb_host_name][ip_field_name] }}"
