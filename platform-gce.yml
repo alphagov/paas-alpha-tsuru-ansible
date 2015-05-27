@@ -1,18 +1,19 @@
 ---
 ip_field_name: "gce_private_ip"
 domain_name: "tsuru2.paas.alphagov.co.uk"
+hosts_prefix: "{{ deploy_env }}"
 
-redis_host_name: "{{ deploy_env }}-tsuru-db"
+redis_host_name: "{{ hosts_prefix }}-tsuru-db"
 redis_host: "{{ hostvars[redis_host_name][ip_field_name] }}"
 
-tsuru_api_host_name: "{{ deploy_env }}-tsuru-api-0"
+tsuru_api_host_name: "{{ hosts_prefix }}-tsuru-api-0"
 tsuru_api_host: "{{ hostvars[tsuru_api_host_name][ip_field_name] }}"
-tsuru_api_internal_lb: "{{ deploy_env }}-api.{{ domain_name }}"
+tsuru_api_internal_lb: "{{ hosts_prefix }}-api.{{ domain_name }}"
 
-hipache_host_internal_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
+hipache_host_internal_lb: "{{ hosts_prefix }}-hipache.{{ domain_name }}"
 
-gandalf_host_name: "{{ deploy_env }}-tsuru-gandalf"
+gandalf_host_name: "{{ hosts_prefix }}-tsuru-gandalf"
 gandalf_host_internal: "{{ hostvars[gandalf_host_name][ip_field_name] }}"
 
-mongodb_host_name: "{{ deploy_env }}-tsuru-db"
+mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
 mongodb_host: "{{ hostvars[mongodb_host_name][ip_field_name] }}"
