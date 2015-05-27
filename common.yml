@@ -30,6 +30,9 @@
 - hosts: "{{ hosts_prefix }}-tsuru-api*"
   sudo: yes
   tasks:
+    - name: Install httplib2 for Ansible uri module
+      apt: name=python-httplib2 state=present
+
     - name: add admin team
       run_once: true
       shell: >
@@ -42,17 +45,26 @@
         mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
       delegate_to: "{{ mongodb_host }}"
 
-# TODO : handle the case where the user already exists
     - name: add admin user
       run_once: true
-      shell: >
-        curl -sS -XPOST -d"{\"email\":\"{{admin_user}}\",\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users"
+      uri:
+        method=POST body_format=json
+        body="{\"email\":\"{{ admin_user }}\",\"password\":\"{{ admin_password }}\"}"
+        url=http://127.0.0.1:{{ api_port }}/users
+        status_code=201,409
 
     - name: login with the admin user
       run_once: true
-      shell: >
-        token=$(curl -sS -XPOST -d"{\"password\":\"{{admin_password}}\"}" "http://127.0.0.1:{{api_port}}/users/{{admin_user}}/tokens" | jq -r .token);
-        echo "${token}" > ~/.tsuru_token
+      uri:
+        method=POST body_format=json
+        body="{\"password\":\"{{ admin_password }}\"}"
+        url=http://127.0.0.1:{{ api_port }}/users/{{ admin_user }}/tokens
+        return_content=yes
+      register: login_response
+
+    - name: write admin token
+      run_once: true
+      copy: dest=~/.tsuru_token mode=0600 content="{{ (login_response.content|from_json).token }}"
 
 - hosts: "{{ hosts_prefix }}-tsuru-gandalf*"
   sudo: yes
