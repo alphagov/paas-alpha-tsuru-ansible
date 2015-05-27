@@ -215,11 +215,12 @@ class GceInventory(object):
                 md[entry['key']] = entry['value']
 
         net = inst.extra['networkInterfaces'][0]['network'].split('/')[-1]
+
+        # Workaround for bug in gce.py fixes errors when no public IP present.
         if inst.public_ips.__len__() == 0:
           inst.public_ips=[None]
-          ansible_ssh_host=inst.private_ips[0]
-        else:
-          ansible_ssh_host=inst.public_ips[0]
+        # Use private IP for ssh access.
+        ansible_ssh_host=inst.private_ips[0]
 
         return {
             'gce_uuid': inst.uuid,
