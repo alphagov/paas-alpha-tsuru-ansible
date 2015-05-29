@@ -22,6 +22,96 @@ GCE_PARAMS = ('...@developer.gserviceaccount.com', '/path/to/gce_account.json')
 GCE_KEYWORD_PARAMS = {'project': 'project_id'}
 ```
 
+* [GnuPG](#setting-up-gpg-encrypted-vault-password-support)
+
+#### Setting up GPG-encrypted vault-password support
+
+You will need to have setup [gpg-agent](https://www.gnupg.org/) on your computer before you start.
+
+##### Apple specific
+
+Install the latest [GPG Tools Suite for MacOX](https://gpgtools.org/)
+
+```
+brew install pwgen
+brew install gpg
+brew install gpg-agent
+```
+
+##### Ubuntu specific
+
+Install the [GNU Privacy Guard encryption suite](https://www.gnupg.org/):
+
+```
+sudo apt-get update
+sudo apt-get install pwgen
+sudo apt-get install gnupg2
+sudo apt-get install gnupg-agent
+sudo apt-get install pinentry-curses
+```
+
+##### Common
+
+If you haven't already generated your pgp key (it's ok to accept the default options if you never done this before):
+
+```
+gpg --gen-key
+```
+
+Get your KEYID from your keyring:
+
+```
+gpg --list-secret-keys | grep sec
+```
+
+This will probably be pre-fixed with 2048R/ and look something like 93B1CD02
+
+Send your public key to pgp key server :
+
+```
+gpg --keyserver pgp.mit.edu --send-keys KEYID
+```
+
+
+Create ~/.bash_gpg:
+
+```
+envfile="${HOME}/.gnupg/gpg-agent.env"
+
+if test -f "$envfile" && kill -0 $(grep GPG_AGENT_INFO "$envfile" | cut -d: -f 2) 2>/dev/null; then
+    eval "$(cat "$envfile")"
+else
+    eval "$(gpg-agent --daemon --log-file=~/.gpg/gpg.log --write-env-file "$envfile")"
+fi
+export GPG_AGENT_INFO  # the env file does not contain the export statement
+```
+
+Add to ~/.bashrc
+
+```
+GPG_AGENT=$(which gpg-agent)
+GPG_TTY=`tty`
+export GPG_TTY
+
+if [ -f ${GPG_AGENT} ]; then
+    . ~/.bash_gpg
+fi
+```
+
+##### Ubuntu specific
+
+Create ~/.gnupg/gpg-agent.conf
+
+```
+default-cache-ttl 600
+pinentry-program /usr/bin/pinentry
+max-cache-ttl 172800
+```
+
+##### Final step
+
+Start a new shell or source your bashrc i.e. `. ~/.bashrc`
+
 ### Instructions:
 
 This repository is using [ansible-vault](https://docs.ansible.com/playbooks_vault.html) to secure sensitive information - If you already know the password you do not need to recreate the 'secure' file.
