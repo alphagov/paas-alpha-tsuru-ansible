@@ -32,6 +32,6 @@ ansible-galaxy:
 import-gpg-keys:
 	$(foreach var,$(shell cat gpg.recipients | awk -F: '{print $$1}'),gpg --keyserver hkp://pgp.mit.edu --search-keys $(var);)
 
-recrypt:
+recrypt: import-gpg-keys
 	ansible-vault decrypt group_vars/all/secure && pwgen -cynC1 15 | gpg --batch --yes --trust-model always -e -o vault_passphrase.gpg $(shell cat gpg.recipients | awk -F: {'printf "-r "$$1" "'}) && ansible-vault encrypt group_vars/all/secure
 
