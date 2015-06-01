@@ -1,4 +1,8 @@
-.PHONY: all aws gce check-env-var render-ssh-config clean-roles ansible-galaxy import-gpg-keys recrypt
+.PHONY: all \
+	aws gce \
+	check-env-var render-ssh-config \
+	clean-roles ansible-galaxy \
+	import-gpg-keys recrypt
 
 all:
 	$(error Usage: make <aws|gce> DEPLOY_ENV=name [ARGS=extra_args])
@@ -30,8 +34,13 @@ ansible-galaxy:
 	ansible-galaxy install -r requirements.yml --force
 
 import-gpg-keys:
-	$(foreach var,$(shell cat gpg.recipients | awk -F: '{print $$1}'),gpg --list-public-key $(var) || gpg --keyserver hkp://keyserver.ubuntu.com --search-keys $(var);)
+	$(foreach var, \
+		$(shell cat gpg.recipients | awk -F: '{print $$1}'), \
+		gpg --list-public-key $(var) || gpg --keyserver hkp://keyserver.ubuntu.com --search-keys $(var); \
+	)
 
 recrypt: import-gpg-keys
-	ansible-vault decrypt group_vars/all/secure && pwgen -cynC1 15 | gpg --batch --yes --trust-model always -e -o vault_passphrase.gpg $(shell cat gpg.recipients | awk -F: {'printf "-r "$$1" "'}) && ansible-vault encrypt group_vars/all/secure
-
+	ansible-vault decrypt group_vars/all/secure && pwgen -cynC1 15 | \
+		gpg --batch --yes --trust-model always -e -o vault_passphrase.gpg \
+			$(shell cat gpg.recipients | awk -F: {'printf "-r "$$1" "'}) && \
+		ansible-vault encrypt group_vars/all/secure
