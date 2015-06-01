@@ -4,14 +4,20 @@
 	clean-roles ansible-galaxy \
 	import-gpg-keys recrypt
 
+ANSIBLE_PLAYBOOK_CMD = ansible-playbook \
+	-i $(1) \
+	site-$(2).yml \
+	-e "@platform-$(2).yml" \
+	-e "deploy_env=${DEPLOY_ENV}" ${ARGS}
+
 all:
 	$(error Usage: make <aws|gce> DEPLOY_ENV=name [ARGS=extra_args])
 
 aws: preflight check-env-aws
-	ansible-playbook -i ec2.py site-aws.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-aws.yml" ${ARGS}
+	$(call ANSIBLE_PLAYBOOK_CMD,ec2.py,aws)
 
 gce: preflight
-	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py site-gce.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-gce.yml" ${ARGS}
+	SSL_CERT_FILE=$(shell python -m certifi) $(call ANSIBLE_PLAYBOOK_CMD,gce.py,gce)
 
 preflight: check-env-var render-ssh-config
 
