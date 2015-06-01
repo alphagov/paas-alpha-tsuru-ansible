@@ -1,25 +1,27 @@
 .PHONY: all \
 	aws gce \
-	preflight check-env-var render-ssh-config \
+	preflight check-env-var check-env-aws render-ssh-config \
 	clean-roles ansible-galaxy \
 	import-gpg-keys recrypt
 
 all:
 	$(error Usage: make <aws|gce> DEPLOY_ENV=name [ARGS=extra_args])
 
-aws: preflight
-ifndef AWS_SECRET_ACCESS_KEY
-	$(error Environment variable AWS_SECRET_ACCESS_KEY must be set)
-endif
-ifndef AWS_ACCESS_KEY_ID
-	$(error Environment variable AWS_ACCESS_KEY_ID must be set)
-endif
+aws: preflight check-env-aws
 	ansible-playbook -i ec2.py site-aws.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-aws.yml" ${ARGS}
 
 gce: preflight
 	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py site-gce.yml -e "deploy_env=${DEPLOY_ENV}" -e "@platform-gce.yml" ${ARGS}
 
 preflight: check-env-var render-ssh-config
+
+check-env-aws:
+ifndef AWS_SECRET_ACCESS_KEY
+	$(error Environment variable AWS_SECRET_ACCESS_KEY must be set)
+endif
+ifndef AWS_ACCESS_KEY_ID
+	$(error Environment variable AWS_ACCESS_KEY_ID must be set)
+endif
 
 check-env-var:
 ifndef DEPLOY_ENV
