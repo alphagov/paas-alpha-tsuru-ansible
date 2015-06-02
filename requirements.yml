@@ -18,7 +18,7 @@
   version: v0.0.1
 - name: tsuru_api
   src: https://github.com/alphagov/ansible-playbook-tsuru_api.git
-  version: v0.0.1
+  version: v0.0.2
 - name: gandalf
   src: https://github.com/alphagov/ansible-playbook-gandalf.git
   version: v0.0.1
