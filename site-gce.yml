@@ -1,6 +1,5 @@
 ---
 
-# AWS-Specific variables and steps.
 - hosts: "{{ hosts_prefix }}-tsuru-registry"
   sudo: yes
   vars:
