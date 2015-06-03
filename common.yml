@@ -104,3 +104,4 @@
 
 - include: postgres.yml
 - include: ssl-proxy.yml
+- include: post-install.yml
