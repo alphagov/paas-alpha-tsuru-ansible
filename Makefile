@@ -19,7 +19,7 @@ aws: preflight check-env-aws
 gce: preflight
 	SSL_CERT_FILE=$(shell python -m certifi) $(call ANSIBLE_PLAYBOOK_CMD,gce.py,gce)
 
-preflight: check-env-var render-ssh-config
+preflight: check-env-var render-ssh-config clean-roles ansible-galaxy
 
 check-env-aws:
 ifndef AWS_SECRET_ACCESS_KEY
