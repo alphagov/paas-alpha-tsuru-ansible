@@ -1,8 +1,6 @@
 ---
 ip_field_name: "ec2_private_ip_address"
 domain_name: "tsuru.paas.alphagov.co.uk"
-api_protocol: "https"
-api_port_external: "443"
 hosts_prefix: "tag_Name_{{ deploy_env }}"
 
 redis_host_name: "{{ hosts_prefix }}-tsuru-db"
@@ -19,6 +17,3 @@ gandalf_host_internal: "{{ hostvars[groups[gandalf_host_name][0]][ip_field_name]
 
 mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
 mongodb_host: "{{ hostvars[groups[mongodb_host_name][0]][ip_field_name] }}"
-
-postgres_host_name: "{{ hosts_prefix }}-tsuru-postgres"
-postgres_host: "{{ hostvars[groups[postgres_host_name][0]][ip_field_name] }}"
