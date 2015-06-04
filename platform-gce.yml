@@ -1,6 +1,8 @@
 ---
 ip_field_name: "gce_private_ip"
 domain_name: "tsuru2.paas.alphagov.co.uk"
+api_protocol: "http"
+api_port_external: "8080"
 hosts_prefix: "{{ deploy_env }}"
 
 redis_host_name: "{{ hosts_prefix }}-tsuru-db"
@@ -17,3 +19,6 @@ gandalf_host_internal: "{{ hostvars[gandalf_host_name][ip_field_name] }}"
 
 mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
 mongodb_host: "{{ hostvars[mongodb_host_name][ip_field_name] }}"
+
+postgres_host_name: "{{ hosts_prefix }}-tsuru-postgres"
+postgres_host: "{{ hostvars[postgres_host_name][ip_field_name] }}"
