@@ -103,4 +103,4 @@
       when: ec2_private_ip_address is defined
 
 - include: postgres.yml
-- include: ssl-proxy.yml
+- include: router.yml
