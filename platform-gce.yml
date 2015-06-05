@@ -10,8 +10,6 @@ tsuru_api_host_name: "{{ hosts_prefix }}-tsuru-api-0"
 tsuru_api_host: "{{ hostvars[tsuru_api_host_name][ip_field_name] }}"
 tsuru_api_internal_lb: "{{ hosts_prefix }}-api.{{ domain_name }}"
 
-hipache_host_internal_lb: "{{ hosts_prefix }}-hipache.{{ domain_name }}"
-
 gandalf_host_name: "{{ hosts_prefix }}-tsuru-gandalf"
 gandalf_host_internal: "{{ hostvars[gandalf_host_name][ip_field_name] }}"
 

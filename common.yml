@@ -16,11 +16,6 @@
   roles:
     - gandalf
 
-- hosts: "{{ hosts_prefix }}-tsuru-router*"
-  sudo: yes
-  roles:
-    - hipache
-
 - hosts: "{{ hosts_prefix }}-tsuru-api*"
   sudo: yes
   roles:
@@ -103,4 +98,4 @@
       when: ec2_private_ip_address is defined
 
 - include: postgres.yml
-- include: ssl-proxy.yml
+- include: router.yml
