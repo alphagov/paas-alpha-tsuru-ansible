@@ -93,15 +93,14 @@
   post_tasks:
     - name: Register node.
       shell: >
-        tsuru-admin docker-node-add --register address=http://{{ gce_private_ip }}:{{ docker_port }} pool=default
+        tsuru-admin docker-node-add --register address=http://{{ gce_private_ip }}:{{ docker_port }}
       delegate_to: "{{ tsuru_api_host }}"
       when: gce_private_ip is defined
     - name: Register node.
       shell: >
-        tsuru-admin docker-node-add --register address=http://{{ ec2_private_ip_address }}:{{ docker_port }} pool=default
+        tsuru-admin docker-node-add --register address=http://{{ ec2_private_ip_address }}:{{ docker_port }}
       delegate_to: "{{ tsuru_api_host }}"
       when: ec2_private_ip_address is defined
 
 - include: postgres.yml
 - include: ssl-proxy.yml
-- include: post-install.yml
