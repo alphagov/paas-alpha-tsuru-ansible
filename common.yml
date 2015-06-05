@@ -16,11 +16,6 @@
   roles:
     - gandalf
 
-- hosts: "{{ hosts_prefix }}-tsuru-router*"
-  sudo: yes
-  roles:
-    - hipache
-
 - hosts: "{{ hosts_prefix }}-tsuru-api*"
   sudo: yes
   roles:
