@@ -9,13 +9,12 @@
     use_redis: false
     registry_ssl: false
 
-    # Settings below for when we enable gcs backend
-    # storage_type: "gcs"
-    #gcs_bucket: "{{ deploy_env }}.registry.storage"
-    #gcs_storage_path: "/"
-    #gcs_oauth2: false
-    #gcs_access_key: "{{ lookup('env', 'GCS_ACCESS_KEY') }}"
-    #gcs_secret_key: "{{ lookup('env', 'GCS_SECRET_KEY') }}"
+    storage_type: "gcs"
+    gcs_bucket: "{{ deploy_env }}-mcp-registry-storage"
+    gcs_storage_path: "/"
+    gcs_oauth2: false
+    gcs_access_key: "{{ google_cloud_storage_access_key }}"
+    gcs_secret_key: "{{ google_cloud_storage_secret_key }}"
   roles:
     - aalda.docker-registry
 

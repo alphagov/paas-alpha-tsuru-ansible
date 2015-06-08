@@ -15,3 +15,6 @@ gandalf_port: 8080
 
 mongodb_conf_bind_ip: 0.0.0.0
 mongodb_port: 27017
+
+google_cloud_storage_access_key: "{{ lookup('env', 'GCS_ACCESS_KEY') }}"
+google_cloud_storage_secret_key: "{{ lookup('env', 'GCS_SECRET_KEY') }}"
