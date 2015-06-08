@@ -20,7 +20,12 @@ root directory of this repo. The contents are as follows:
 ```
 GCE_PARAMS = ('...@developer.gserviceaccount.com', '/path/to/gce_account.json')
 GCE_KEYWORD_PARAMS = {'project': 'project_id'}
+GCS_ACCESS_KEY=<your gcs access key>
+GCS_SECRET_KEY=<your gcs secret key>
 ```
+
+Instructions on how to get your `GCS_ACCESS_KEY` and `GCS_SECRET_KEY` can be found [here](https://developers.google.com/storage/docs/reference/v1/getting-startedv1#keys)
+
 
 * [GnuPG](#setting-up-gpg-encrypted-vault-password-support)
 
