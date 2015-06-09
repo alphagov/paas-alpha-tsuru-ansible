@@ -12,9 +12,7 @@
     storage_type: "gcs"
     gcs_bucket: "{{ deploy_env }}-mcp-registry-storage"
     gcs_storage_path: "/"
-    gcs_oauth2: false
-    gcs_access_key: "{{ google_cloud_storage_access_key }}"
-    gcs_secret_key: "{{ google_cloud_storage_secret_key }}"
+    use_gcs_default_credentials: true
   roles:
     - aalda.docker-registry
 
