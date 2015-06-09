@@ -3,9 +3,6 @@
   roles:
     - role: tsuru_api
       tags: tsuru_api
-
-- hosts: "{{ hosts_prefix }}-tsuru-api*"
-  sudo: yes
   tasks:
     - name: Install httplib2 for Ansible uri module
       apt: name=python-httplib2 state=present
