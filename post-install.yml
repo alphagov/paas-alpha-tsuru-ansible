@@ -58,6 +58,16 @@
       shell: >
         tsuru-admin platform-add python -d https://raw.github.com/tsuru/basebuilder/master/python/Dockerfile
       when: "not 'python' in tsuru_platforms.stdout"
+    - name: Tsuru platform add java
+      ignore_errors: no
+      shell: >
+        tsuru-admin platform-add java -d https://raw.github.com/tsuru/basebuilder/master/java/Dockerfile
+      when: "not 'java' in tsuru_platforms.stdout"
+    - name: Tsuru platform add static
+      ignore_errors: no
+      shell: >
+        tsuru-admin platform-add static -d https://raw.github.com/tsuru/basebuilder/master/static/Dockerfile
+      when: "not 'static' in tsuru_platforms.stdout"
 
     - name: Tsuru key-list
       shell: >
