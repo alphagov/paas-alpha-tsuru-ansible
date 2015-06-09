@@ -1,36 +1,34 @@
 - hosts: "{{ hosts_prefix }}-tsuru-api*[0]"
   sudo: yes
   tasks:
+    - name: Install git client
+      apt: name=git state=present
     - name: Check tsuru_deployer key
       stat: path=~/.ssh/tsuru_deployer
       register: tsuru_deployer_key
-      delegate_to: "localhost"
-      sudo: no
 
     - name: Generate tsuru_deployer key
       shell: >
         ssh-keygen -b 2048 -t rsa -f ~/.ssh/tsuru_deployer -q -N ""
       when: tsuru_deployer_key.stat.exists == False
-      delegate_to: "localhost"
-      sudo: no
     - name: Generate tsuru_deployer.pub key
       shell: >
         ssh-keygen -y -f ~/.ssh/tsuru_deployer >~/.ssh/tsuru_deployer.pub
       when: tsuru_deployer_key.stat.exists == False
-      delegate_to: "localhost"
-      sudo: no
 
-    - name: Get localhost home
-      shell: >
-        echo ~
-      register: local_home
-      delegate_to: "localhost"
-      sudo: no
-    - name: Deploy tsuru_deployer.pub key
+    - name: Generate ssh config for git
       copy:
-        src: "{{ local_home.stdout }}/.ssh/tsuru_deployer.pub"
-        dest: ~/.ssh/
+        content: |
+          Host {{ deploy_env }}-gandalf.{{ domain_name }}
+            HostName {{ deploy_env }}-gandalf.{{ domain_name }} 
+            User git
+            IdentityFile ~/.ssh/tsuru_deployer
+        dest: ~/.ssh/config        
         mode: 0600
+
+    - name: Add Gandalf to known hosts
+      shell: >
+        ssh-keyscan {{ deploy_env }}-gandalf.{{ domain_name }} >~/.ssh/known_hosts
 
     - name: Tsuru pool-list
       shell: > 
@@ -92,52 +90,44 @@
         tsuru app-info -a dashboard | grep -o 'git@.\+'
       register: dashboard_git_remote
 
-# deploy from localhost (api server doesn't have firewall open to push to gandalf)
     - name: Git pull dashboard
       git:
         repo: https://github.com/tsuru/tsuru-dashboard.git
         dest: /tmp/tsuru-dashboard
-      delegate_to: "localhost"
-      sudo: no
+
     - name: Git push dashboard to gandalf
       shell: >
         git push {{ dashboard_git_remote.stdout }} master
       args: 
         chdir: /tmp/tsuru-dashboard
-      delegate_to: "localhost"
-      sudo: no
 
     - name: Tsuru app-info dashboard
       shell: >
         tsuru app-info -a dashboard
       register: dashboard_app_info
 
-# This deploys postgresapi, but to fully operate more work needs to be done 
-# outside this repository (firewall configuration, ssl certificates etc.)
     - name: Tsuru app-create postgresapi
       ignore_errors: yes
       shell: >
         tsuru app-create postgresapi python
       when: "not 'postgresapi' in tsuru_apps.stdout"
-    - name: Get gandalf repo for postgresapi
-      shell: >
-        tsuru app-info -a postgresapi | grep -o 'git@.\+'
-      register: postgresapi_git_remote
 
     - name: Git pull postgresapi
       git:
         repo: https://github.com/tsuru/postgres-api
         dest: /tmp/postgresapi
-      delegate_to: "localhost"
-      sudo: no
+
+    - name: Get gandalf repo for postgresapi
+      shell: >
+        tsuru app-info -a postgresapi | grep -o 'git@.\+'
+      register: postgresapi_git_remote
+
     - name: Git push postgresapi to gandalf
       shell: >
         git push {{ postgresapi_git_remote.stdout }} master
       args:
         chdir: /tmp/postgresapi
       register: postgresapi_push_result
-      delegate_to: "localhost"
-      sudo: no
 
     - name: Tsuru app-info postgresapi
       shell: >
