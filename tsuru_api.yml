@@ -1,8 +1,15 @@
 - hosts: "{{ hosts_prefix }}-tsuru-api*"
   sudo: yes
+  pre_tasks:
+    - include: ssl_proxy_pre.yml
+  vars:
+    upstream_port: "{{ api_port }}"
+  vars_files:
+    - "ssl_proxy_vars.yml"
   roles:
     - role: tsuru_api
       tags: tsuru_api
+    - role: jdauphant.nginx
   tasks:
     - name: Install httplib2 for Ansible uri module
       apt: name=python-httplib2 state=present
