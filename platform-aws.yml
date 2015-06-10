@@ -15,3 +15,6 @@ gandalf_host_internal: "{{ hostvars[groups[gandalf_host_name][0]][ip_field_name]
 
 mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
 mongodb_host: "{{ hostvars[groups[mongodb_host_name][0]][ip_field_name] }}"
+
+postgres_host_name: "{{ hosts_prefix }}-tsuru-postgres"
+postgres_host: "{{ hostvars[groups[postgres_host_name][0]][ip_field_name] }}"

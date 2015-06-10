@@ -115,3 +115,4 @@
 
 - include: postgres.yml
 - include: router.yml
+- include: post-install.yml
