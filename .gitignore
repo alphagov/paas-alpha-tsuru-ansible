@@ -1,3 +1,4 @@
 secrets.py*
 roles
 ssh.config
+.ansible-galaxy.check

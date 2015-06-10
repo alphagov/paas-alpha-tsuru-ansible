@@ -40,8 +40,10 @@ render-ssh-config: check-env-var
 clean-roles:
 	rm -rf -- roles/*
 
-ansible-galaxy:
+ansible-galaxy: .ansible-galaxy.check
+.ansible-galaxy.check: requirements.yml
 	ansible-galaxy install -r requirements.yml --force
+	touch .ansible-galaxy.check
 
 import-gpg-keys:
 	$(foreach var, \
