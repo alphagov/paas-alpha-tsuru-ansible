@@ -129,11 +129,20 @@ admin_password: <tsuru admin password to create>
 s3_access_key: <docker-registry s3 bucket access key id>
 s3_secret_key: <docker-registry s3 bucket access secret>
 
-ssl_key: |
+aws_ssl_key: |
   -----BEGIN RSA PRIVATE KEY-----
   < private key content >
   -----END RSA PRIVATE KEY-----
-ssl_crt: |
+aws_ssl_crt: |
+  -----BEGIN CERTIFICATE-----
+  < ssl certificate content >
+  -----END CERTIFICATE-----
+
+gce_ssl_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  < private key content >
+  -----END RSA PRIVATE KEY-----
+gce_ssl_crt: |
   -----BEGIN CERTIFICATE-----
   < ssl certificate content >
   -----END CERTIFICATE-----
