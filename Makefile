@@ -1,7 +1,7 @@
 .PHONY: all \
 	aws gce \
 	preflight check-env-var check-env-aws render-ssh-config \
-	clean-roles ansible-galaxy \
+	ansible-galaxy \
 	import-gpg-keys recrypt
 
 ANSIBLE_PLAYBOOK_CMD = ansible-playbook \
@@ -19,7 +19,7 @@ aws: preflight check-env-aws
 gce: preflight
 	SSL_CERT_FILE=$(shell python -m certifi) $(call ANSIBLE_PLAYBOOK_CMD,gce.py,gce)
 
-preflight: check-env-var render-ssh-config clean-roles ansible-galaxy
+preflight: check-env-var render-ssh-config ansible-galaxy
 
 check-env-aws:
 ifndef AWS_SECRET_ACCESS_KEY
@@ -37,11 +37,9 @@ endif
 render-ssh-config: check-env-var
 	sed "s/DEPLOY_ENV/${DEPLOY_ENV}/g" ssh.config.template > ssh.config
 
-clean-roles:
-	rm -rf -- roles/*
-
 ansible-galaxy: .ansible-galaxy.check
 .ansible-galaxy.check: requirements.yml
+	rm -rf -- roles/*
 	ansible-galaxy install -r requirements.yml --force
 	touch .ansible-galaxy.check
 
