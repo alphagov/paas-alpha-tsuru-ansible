@@ -22,6 +22,7 @@ GCE_PARAMS = ('...@developer.gserviceaccount.com', '/path/to/gce_account.json')
 GCE_KEYWORD_PARAMS = {'project': 'project_id'}
 ```
 
+
 * [GnuPG](#setting-up-gpg-encrypted-vault-password-support)
 
 #### Setting up GPG-encrypted vault-password support
@@ -111,6 +112,15 @@ max-cache-ttl 172800
 ##### Final step
 
 Start a new shell or source your bashrc i.e. `. ~/.bashrc`
+
+### Docker registry on the Google Platform
+
+We use a service account with [Google Application Default Credentials](https://developers.google.com/identity/protocols/application-default-credentials).
+
+[We have scoped the access](https://github.com/alphagov/tsuru-terraform/pull/62) of the service account access token to `storage-rw` to allow docker registry read-write access to the `gcs` bucket, this allows:
+
+* The docker registry to get its authorization credentials by making api calls to google
+* The team to provision docker registries with out having to setup their own gcs access and secret keys
 
 ### Instructions:
 
