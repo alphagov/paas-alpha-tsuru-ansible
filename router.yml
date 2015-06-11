@@ -1,43 +1,15 @@
 - hosts: "{{ hosts_prefix }}-tsuru-router*"
   sudo: yes
-  pre_tasks:
-   - name: Update APT cache
-     apt: >
-        update_cache=yes
-   - name: Create Nginx Directory
-     file: dest=/etc/nginx mode=755 owner=root group=root state=directory
-   - name: Upload Unencrypted Key File
-     copy: content="{{ ssl_key }}" dest=/etc/nginx/wildcard.tsuru.paas.alphagov.co.uk.key owner=root group=root
-   - name: Upload Unencrypted Cert File
-     copy: content="{{ ssl_crt }}" dest=/etc/nginx/wildcard.tsuru.paas.alphagov.co.uk.site.chain.crt owner=root group=root
   vars:
     hipache_port: 8080
+    upstream_port: "{{ api_port }}"
+  vars_files:
+    - "ssl_proxy_vars.yml"
+  pre_tasks:
+    - include: ssl_proxy_pre.yml
   roles:
     - role: hipache
       hipache_listen_port: "{{ hipache_port }}"
       hipache_listen_address: '127.0.0.1'
       hipache_listen_address6: '::1'
     - role: jdauphant.nginx
-      nginx_sites:
-        ssl_reverse_proxy:
-          - listen 443 ssl
-          - ssl_certificate wildcard.tsuru.paas.alphagov.co.uk.site.chain.crt
-          - ssl_certificate_key wildcard.tsuru.paas.alphagov.co.uk.key
-          - server_name tsuru.paas.alphagov.co.uk
-          - location / {
-            proxy_pass http://localhost:{{ hipache_port }}/;
-            proxy_redirect default;
-            proxy_redirect http://$host/ https://$host/;
-            proxy_redirect http://$hostname/ https://$host/;
-            proxy_read_timeout 15s;
-            proxy_connect_timeout 15s;
-            }
-        default:
-          - listen 80
-          - return 301 https://$host$request_uri
-      nginx_configs:
-        proxy:
-          - proxy_set_header Host $http_host
-          - proxy_set_header X-Real-IP  $remote_addr
-          - proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
-          - proxy_set_header X-Forwarded-Proto https
