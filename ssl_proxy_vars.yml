@@ -4,7 +4,7 @@ nginx_sites:
     - listen 443 ssl
     - ssl_certificate wildcard.tsuru.paas.alphagov.co.uk.site.chain.crt
     - ssl_certificate_key wildcard.tsuru.paas.alphagov.co.uk.key
-    - server_name tsuru.paas.alphagov.co.uk
+    - server_name {{ domain_name }}
     - location / {
       proxy_pass http://localhost:{{ upstream_port }}/;
       proxy_redirect default;
