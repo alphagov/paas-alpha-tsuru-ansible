@@ -3,6 +3,8 @@
   tasks:
     - name: Install git client
       apt: name=git state=present
+    - name: Install crane
+      apt: name=crane state=present
     - name: Check tsuru_deployer key
       stat: path=~/.ssh/tsuru_deployer
       register: tsuru_deployer_key
@@ -152,6 +154,29 @@
       shell: >
         tsuru app-run --app postgresapi -- python manage.py upgrade_db
       when: "not 'Everything up-to-date' in postgresapi_push_result.stderr"
+
+    - name: Add <deploy_env>-postgresapi<domain_name> cname to posgtresqlapi app
+      shell: >
+        tsuru cname-add {{ deploy_env }}-postgresapi.{{ domain_name }} -a postgresapi
+      when: "not '-postgresapi.' in postgresapi_app_info.stdout"
+
+    - name: Generate postgresapi.yml
+      copy:
+        content: |
+          id: postgresql
+          password: {{ pg_apiuser_pass }}
+          endpoint:
+            production: https://{{ deploy_env }}-postgresapi.{{ domain_name }}
+        dest: ~/postgresapi.yml
+
+    - name: Get service list
+      shell: >
+        tsuru service-list
+      register: service_list
+    - name: Register service
+      shell: >
+        crane create ~/postgresapi.yml
+      when: "not 'postgresql' in service_list.stdout"
 
     - debug: var=dashboard_app_info.stdout_lines
     - debug: var=postgresapi_app_info.stdout_lines
