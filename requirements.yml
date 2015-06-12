@@ -18,10 +18,10 @@
   version: v0.0.2
 - name: tsuru_api
   src: https://github.com/alphagov/ansible-playbook-tsuru_api.git
-  version: v0.0.2
+  version: v0.0.3
 - name: gandalf
   src: https://github.com/alphagov/ansible-playbook-gandalf.git
-  version: v0.0.1
+  version: v0.0.2
 
 # GDS Forked, pull-request sent upstream awaiting merge.
 - name: bennojoy.redis
