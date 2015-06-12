@@ -10,6 +10,7 @@
     postgresql_version: 9.3
     postgresql_encoding: 'UTF-8'
     postgresql_locale: 'en_US.UTF-8'
+    postgresql_ssl : true
 
     postgresql_pg_hba_default:
       - { type: host,  database: all, user: all, address: '0.0.0.0/0',    method: '{{ postgresql_default_auth_method }}', comment: 'Allow all IPv4 remote connections:' }
