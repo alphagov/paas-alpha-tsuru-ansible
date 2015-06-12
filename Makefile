@@ -2,7 +2,10 @@
 	aws gce \
 	preflight check-env-var check-env-aws render-ssh-config \
 	ansible-galaxy \
-	import-gpg-keys recrypt
+	import-gpg-keys recrypt diff-vault
+
+VAULT_FIFO = .diff-vault.fifo
+VAULT_FILE = group_vars/all/secure
 
 ANSIBLE_PLAYBOOK_CMD = ansible-playbook \
 	-i $(1) \
@@ -50,7 +53,16 @@ import-gpg-keys:
 	)
 
 recrypt: import-gpg-keys
-	ansible-vault decrypt group_vars/all/secure && pwgen -cynC1 15 | \
+	ansible-vault decrypt ${VAULT_FILE} && pwgen -cynC1 15 | \
 		gpg --batch --yes --trust-model always -e -o vault_passphrase.gpg \
 			$(shell cat gpg.recipients | awk -F: {'printf "-r "$$1" "'}) && \
-		ansible-vault encrypt group_vars/all/secure
+		ansible-vault encrypt ${VAULT_FILE}
+
+diff-vault:
+	@(mkfifo -m 0600 ${VAULT_FIFO} && \
+		git show master:${VAULT_FILE} > ${VAULT_FIFO}; \
+		rm -f ${VAULT_FIFO}) &
+	@bash -c 'diff -u \
+		<(ansible-vault view ${VAULT_FIFO} 2>/dev/null) \
+		<(ansible-vault view ${VAULT_FILE} 2>/dev/null) \
+		|| [ $$? -eq 1 ]'
