@@ -3,7 +3,9 @@
   pre_tasks:
     - include: ssl_proxy_pre.yml
   vars:
+    tsuru_api_listen_addr: 127.0.0.1
     upstream_port: "{{ api_port }}"
+    tsuru_api_url: "{{ tsuru_api_external_url }}"
   vars_files:
     - "ssl_proxy_vars.yml"
   roles:

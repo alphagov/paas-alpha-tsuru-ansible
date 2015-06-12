@@ -14,7 +14,8 @@
 - hosts: "{{ hosts_prefix }}-tsuru-gandalf*"
   sudo: yes
   roles:
-    - gandalf
+    - role: gandalf
+      tsuru_api_endpoint: "{{ tsuru_api_internal_url }}"
 
 - include: tsuru_api.yml
 
