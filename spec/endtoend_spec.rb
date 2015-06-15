@@ -52,7 +52,7 @@ describe "TsuruEndToEnd" do
       expect(@tsuru_command.stdout).to match /App .* has been created/
     end
 
-    it "should be able to create an application" do
+    it "should be able to create a service" do
       @tsuru_command.service_remove('sampleapp_db') # Remove previous state if needed
       @tsuru_command.service_add('postgresql', 'sampleapp_db', 'shared')
       expect(@tsuru_command.exit_status).to eql 0
