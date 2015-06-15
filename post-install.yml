@@ -102,6 +102,16 @@
         git push {{ dashboard_git_remote.stdout }} master
       args: 
         chdir: /tmp/tsuru-dashboard
+      register: dashboard_push_result
+
+    - name: Tsuru set environment variables for dashboard
+      shell: >
+        tsuru env-set -a dashboard STATSD_PORT=8125;
+        tsuru env-set -a dashboard STATSD_HOST={{ deploy_env }}-metrics.{{ domain_name }};
+        tsuru env-set -a dashboard GRAPHITE_HOST={{ deploy_env }}-metrics.{{ domain_name }};
+        tsuru env-set -a dashboard GRAPHITE_USER={{ graphite_auth_user }}
+        tsuru env-set -a dashboard GRAPHITE_PASS={{ graphite_auth_pass }}
+      when: "not 'Everything up-to-date' in dashboard_push_result.stderr"
 
     - name: Tsuru app-info dashboard
       shell: >
@@ -149,6 +159,8 @@
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN=postgresadmin;
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN_PASSWORD={{ pg_admin_pass }};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PUBLIC_HOST={{ postgres_host }};
+        tsuru env-set -a postgresapi STATSD_PORT=8125;
+        tsuru env-set -a postgresapi STATSD_HOST={{ deploy_env }}-metrics.{{ domain_name }};
       when: "not 'Everything up-to-date' in postgresapi_push_result.stderr"
     - name: Tsuru app-run db upgrade
       shell: >
