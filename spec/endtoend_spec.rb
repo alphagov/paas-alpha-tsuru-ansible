@@ -59,6 +59,12 @@ describe "TsuruEndToEnd" do
       expect(@tsuru_command.stdout).to match /Service successfully added/
     end
 
+    it "should be able to bind a service to an app" do
+      @tsuru_command.service_bind('sampleapp_db', 'sampleapp')
+      expect(@tsuru_command.exit_status).to eql 0
+      expect(@tsuru_command.stdout).to match /Instance .* is now bound to the app .*/
+    end
+
     it "Should be able to push the application" do
       git_url = @tsuru_command.get_app_repository('sampleapp')
       expect(git_url).not_to be_nil

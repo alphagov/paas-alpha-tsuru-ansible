@@ -78,6 +78,10 @@ class TsuruCommandLine
     execute_helper('service-remove', service_instance_name, '-y')
   end
 
+  def service_bind(service_instance_name, app_name)
+    execute_helper('service-bind', service_instance_name, '-a', app_name)
+  end
+
   def get_app_repository(app_name)
     execute_helper('app-info', '-a', app_name)
     if m = /^Repository: (.*)$/.match(@stdout) then
