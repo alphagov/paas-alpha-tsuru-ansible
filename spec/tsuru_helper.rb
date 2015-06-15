@@ -84,11 +84,11 @@ class TsuruCommandLine
 
   def get_app_repository(app_name)
     execute_helper('app-info', '-a', app_name)
-    if m = /^Repository: (.*)$/.match(@stdout) then
-      m[1]
-    else
-      nil
-    end
+    (m = /^Repository: (.*)$/.match(@stdout)) ? m[1] : nil
+  end
+  def get_app_address(app_name)
+    execute_helper('app-info', '-a', app_name)
+    (m = /^Address: (.*)$/.match(@stdout)) ? m[1] : nil
   end
 
   def login(login, pass)

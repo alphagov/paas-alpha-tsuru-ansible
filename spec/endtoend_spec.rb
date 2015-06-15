@@ -1,4 +1,5 @@
 require 'minigit'
+require 'open-uri'
 
 describe "TsuruEndToEnd" do
   context "deploying an application" do
@@ -71,6 +72,11 @@ describe "TsuruEndToEnd" do
       @sampleapp_minigit.push(git_url, 'master')
     end
 
+    it "Should be able to connect to the applitation via HTTPS" do
+      sampleapp_address = @tsuru_command.get_app_address('sampleapp')
+      response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
+      expect(response.status).to be ["200", "OK"]
+    end
   end
 
 end
