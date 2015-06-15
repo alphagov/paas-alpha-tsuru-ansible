@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Graphite cleanup - remove files that are not being updated
+# This indicates that those containers/apps don't exist anymore
+# or stopped sending metrics. For consistency with metrics of
+# live containers, remove idle files only after whisper retention
+# period exires by configuring graphite_storage_file_retention_days
+
+tsrHOME=/opt/graphite/storage/whisper/stats/gauges/tsuru
+find $tsrHOME -type f -mtime {{ graphite_storage_file_retention_days }} -delete
+
+
+# Also remove empty dirs. Run twice as there are two dir levels:
+# <container_id>/<metric_name>
+
+find $tsrHOME -type d -empty -delete
+find $tsrHOME -type d -empty -delete
