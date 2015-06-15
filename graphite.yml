@@ -1,0 +1,32 @@
+- hosts: "{{ hosts_prefix }}-tsuru-graphite"
+  sudo: yes
+  vars:
+    graphite_time_zone: "UTC"
+    graphite_storage_schemas_default_retentions: "10s:3d,1m:60d"
+    graphite_storage_file_retention_days: "65"
+    delete_idle_stats: "true"
+    uwsgi_graphite_extraopts:
+      - option: http
+        value: "{{ ansible_default_ipv4.address }}:8080"
+      - option: plugins
+        value: router_basicauth
+      - option: route
+        value: "^/ basicauth:myRealm,foo:bar"
+  pre_tasks:
+    - name: Update apt cache
+      apt: update_cache=yes cache_valid_time=86400
+  roles:
+    - graphite
+    - statsd
+  tasks:
+    - name: Prepare graphite cleanup script
+      template:
+        src: templates/graphite_cleanup.sh.j2
+        dest: ~/graphite_cleanup.sh
+        mode: 0700
+    - name: Run graphite cleanup daily
+      cron:
+        name: "Graphite idle file cleanup"
+        job: ~/graphite_cleanup.sh
+        hour: "3"
+        minute: "30"
