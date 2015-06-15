@@ -1,3 +1,5 @@
+require 'minigit'
+
 describe "TsuruEndToEnd" do
   context "deploying an application" do
       before(:all) do
@@ -9,6 +11,10 @@ describe "TsuruEndToEnd" do
         @tsuru_command.target_add("ci-insecure", @tsuru_api_url_insecure)
         @tsuru_user = ENV['TSURU_USER']
         @tsuru_pass = ENV['TSURU_PASS']
+        
+        #@tsuru_example_app_minigit = MiniGit.new(File.join(@tsuru_home, 'tsuru_example_app'))
+        MiniGit.git :clone, "https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git", @tsuru_home.path+"/sampleapp"
+        @tsuru_example_app_minigit = MiniGit.new(File.join(@tsuru_home, 'sampleapp'))
       end
 
       
