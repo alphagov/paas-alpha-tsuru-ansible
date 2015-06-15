@@ -98,7 +98,6 @@ class TsuruCommandLine
   private
 
   def execute_helper(*cmd)
-    puts @home.path
     @exit_status=nil
     @stderr=nil
     @stdout=nil
