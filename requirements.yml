@@ -22,6 +22,12 @@
 - name: gandalf
   src: https://github.com/alphagov/ansible-playbook-gandalf.git
   version: v0.0.1
+- name: graphite
+  src: https://github.com/alphagov/ansible-graphite.git
+  version: uwsgi-extraopts
+- name: statsd
+  src: https://github.com/alphagov/ansible-statsd.git
+  version: idlestats
 
 # GDS Forked, pull-request sent upstream awaiting merge.
 - name: bennojoy.redis
