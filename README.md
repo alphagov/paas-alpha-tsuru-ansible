@@ -122,6 +122,10 @@ We use a service account with [Google Application Default Credentials](https://d
 * The docker registry to get its authorization credentials by making api calls to google
 * The team to provision docker registries with out having to setup their own gcs access and secret keys
 
+### Graphite
+
+This platform contains graphite server for [app metrics](http://docs.tsuru.io/en/latest/advanced_topics/metrics.html). The metrics are accessible via Tsuru dashboard. Internal access to graphite is secured. You have to define credentials in these variables: `graphite_secret_key`, `graphite_auth_user` and `graphite_auth_pass`. It is recommended you store them in the vault (see below) rather than defining them on commandline or otherwise.
+
 ### Instructions:
 
 This repository is using [ansible-vault](https://docs.ansible.com/playbooks_vault.html) to secure sensitive information - If you already know the password you do not need to recreate the 'secure' file.
@@ -138,6 +142,9 @@ admin_user: <tsuru admin account to create>
 admin_password: <tsuru admin password to create>
 s3_access_key: <docker-registry s3 bucket access key id>
 s3_secret_key: <docker-registry s3 bucket access secret>
+graphite_secret_key: <graphite secret key>
+graphite_auth_user: <graphite http auth user>
+graphite_auth_pass: <graphite http auth password>
 
 aws_ssl_key: |
   -----BEGIN RSA PRIVATE KEY-----
