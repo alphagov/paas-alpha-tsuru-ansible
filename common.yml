@@ -39,6 +39,7 @@
       service: name=gandalf-server state=restarted
 
 - hosts: "{{ hosts_prefix }}-tsuru-docker*"
+  serial: 1
   sudo: yes
   roles:
     - docker_server
