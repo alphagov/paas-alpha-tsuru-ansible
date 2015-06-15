@@ -107,12 +107,12 @@ class TsuruCommandLine
       # Allow additional preprocessing of the system call if the caller passes a block
       yield(stdin, out, err, wait_thread) if block_given?
 
-      @stdout = out.gets("")
-      puts @stdout
-      @stderr = err.gets("")
-      puts @stderr
+      @stdout = out.readlines().join
+      @stderr = err.readlines().join
       [stdin, out, err].each{|stream| stream.close() if not stream.closed? }
       @exit_status = wait_thread.value.to_i
+
+      # puts @stderr, @stdout TODO: print the output when the test fails
     end
     return @exit_status == 0
   end
