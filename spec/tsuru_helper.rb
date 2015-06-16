@@ -1,8 +1,36 @@
 require 'open3'
 require 'tempfile'
 require 'fileutils'
+require 'minigit'
 
+class SshHelper
+  # Create our own SSH key
+  def self.generate_key(path)
+    FileUtils.mkdir_p(File.dirname(path))
+    system("ssh-keygen -f #{path} -q -N '' ")
+  end
 
+  # Generate some custom configuration for SSH
+  # WARNING: overrides the file
+  def self.write_config(config_path, config)
+    File.open(config_path, 'w') { |f|
+      f.write("Host *\n")
+      config.each { |k,v|
+        f.write("\t#{k} #{v}\n")
+      }
+    }
+  end
+end
+
+# Minigit does not capture the stderr. This small class overrides the
+# system call to redirect stderr to stdout
+class MiniGitStdErrCapturing < MiniGit::Capturing
+  def system(*args)
+    `#{Shellwords.join(args)} 2>&1`
+  end
+end
+
+# Ruby 2.2.2 does not provide mktmpdir. Use Tempfile instead
 class Tempdir < Tempfile
   require 'tmpdir'
   def initialize(basename, tmpdir = Dir::tmpdir)
@@ -23,22 +51,7 @@ class Tempdir < Tempfile
   end
 end
 
-class SshHelper
-  def self.generate_key(path)
-    FileUtils.mkdir_p(File.dirname(path))
-    system("ssh-keygen -f #{path} -N ''")
-  end
-
-  def self.write_config(config_path, config)
-    File.open(config_path, 'w') { |f|
-      f.write("Host *\n")
-      config.each { |k,v|
-        f.write("\t#{k} #{v}\n")
-      }
-    }
-  end
-end
-
+# Wrapper adount the TsuruCommandLine
 class TsuruCommandLine
   attr_reader :exit_status, :stderr, :stdout, :last_command, :env
 

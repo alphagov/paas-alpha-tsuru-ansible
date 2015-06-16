@@ -1,5 +1,6 @@
-require 'minigit'
 require 'open-uri'
+require 'git_helper.rb'
+require 'tsuru_helper.rb'
 
 describe "TsuruEndToEnd" do
   context "deploying an application" do
@@ -16,9 +17,9 @@ describe "TsuruEndToEnd" do
 
       # Clone the same app and setup minigit
       @sampleapp_path = File.join(@tsuru_home, 'sampleapp')
-      MiniGit.git :clone, "https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git", @sampleapp_path
-      @sampleapp_minigit = MiniGit.new(@sampleapp_path)
-            ENV['GIT_PAGER'] = ''
+      minigit_class = MiniGitStdErrCapturing
+      minigit_class.git :clone, "https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git", @sampleapp_path
+      @sampleapp_minigit = minigit_class.new(@sampleapp_path)
 
       # Generate the ssh key and setup ssh
       @ssh_id_rsa_path = File.join(@tsuru_home, '.ssh', 'id_rsa')
@@ -98,7 +99,6 @@ describe "TsuruEndToEnd" do
       expect(response.status).to eq(["200", "OK"])
     end
   end
-
 end
 
 
