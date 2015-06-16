@@ -3,6 +3,10 @@ GEM
   specs:
     diff-lcs (1.2.5)
     minigit (0.0.4)
+    multi_json (1.11.1)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.9.2)
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
       rspec-expectations (~> 3.3.0)
@@ -12,10 +16,21 @@ GEM
     rspec-expectations (3.3.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
+    rspec-its (1.2.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
     rspec-mocks (3.3.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
+    serverspec (2.18.0)
+      multi_json
+      rspec (~> 3.0)
+      rspec-its
+      specinfra (~> 2.35)
+    specinfra (2.36.0)
+      net-scp
+      net-ssh
 
 PLATFORMS
   ruby
@@ -23,6 +38,7 @@ PLATFORMS
 DEPENDENCIES
   minigit
   rspec
+  serverspec (~> 2.18.0)
 
 BUNDLED WITH
    1.10.3
