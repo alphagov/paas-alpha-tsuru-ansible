@@ -40,10 +40,10 @@ class SshHelper
 end
 
 class TsuruCommandLine
-  attr_reader :exit_status, :stderr, :stdout
+  attr_reader :exit_status, :stderr, :stdout, :last_command, :env
 
-  def initialize(home = ENV['HOME'])
-    @home = home
+  def initialize(env = {})
+    @env = env
   end
 
   def target_add(target_label, target_url)
@@ -106,7 +106,7 @@ class TsuruCommandLine
     @stderr=nil
     @stdout=nil
     cmd.insert(0,'tsuru')
-    Open3.popen3({ 'HOME' => @home.path }, *cmd) do |stdin, out, err, wait_thread|
+    Open3.popen3(@env, *cmd) do |stdin, out, err, wait_thread|
       # Allow additional preprocessing of the system call if the caller passes a block
       yield(stdin, out, err, wait_thread) if block_given?
 
@@ -115,7 +115,7 @@ class TsuruCommandLine
       [stdin, out, err].each{|stream| stream.close() if not stream.closed? }
       @exit_status = wait_thread.value.to_i
 
-      # puts @stderr, @stdout TODO: print the output when the test fails
+      # puts @stderr, @stdout # TODO: print the output when the test fails
     end
     return @exit_status == 0
   end
