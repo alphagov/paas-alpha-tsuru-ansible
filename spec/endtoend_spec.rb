@@ -1,19 +1,43 @@
 require 'open-uri'
-require 'git_helper.rb'
 require 'tsuru_helper.rb'
+
+RSpec.configure do |c|
+  c.add_setting :debug_commands, :default => false
+
+  c.add_setting :deploy_env, :default => ENV['DEPLOY_ENV'] || 'ci'
+
+  c.add_setting :target_platform, :default => ENV['TARGET_PLATFORM'] || 'aws'
+
+  # If nil will be populated based on the default platform
+  c.add_setting :target_api_host, :default =>
+    case c.target_platform
+    when 'aws'
+      "#{RSpec.configuration.deploy_env}-api.tsuru.paas.alphagov.co.uk"
+    when 'gce'
+      "#{RSpec.configuration.deploy_env}-api.tsuru2.paas.alphagov.co.uk"
+    else
+      raise "Unknown target_platform = #{c.target_platform}"
+    end
+
+  c.add_setting :tsuru_user, :default => ENV['TSURU_USER']
+  c.add_setting :tsuru_pass, :default => ENV['TSURU_PASS']
+
+end
 
 describe "TsuruEndToEnd" do
   context "deploying an application" do
     before(:all) do
       @tsuru_home = Tempdir.new('tsuru-command')
-      @tsuru_deploy_env = ENV['DEPLOY_ENV'] || 'ci'
-      @tsuru_api_url = "https://#{@tsuru_deploy_env}-api.tsuru.paas.alphagov.co.uk"
-      @tsuru_api_url_insecure = "http://#{@tsuru_deploy_env}-api.tsuru.paas.alphagov.co.uk:8080"
       @tsuru_command = TsuruCommandLine.new({ 'HOME' => @tsuru_home.path })
+
+      @tsuru_api_url = "https://#{RSpec.configuration.target_api_host}"
+      @tsuru_api_url_insecure = "http://#{RSpec.configuration.target_api_host}:8080"
+
       @tsuru_command.target_add("ci", @tsuru_api_url)
       @tsuru_command.target_add("ci-insecure", @tsuru_api_url_insecure)
-      @tsuru_user = ENV['TSURU_USER'] || raise("You must set 'TSURU_USER' env var")
-      @tsuru_pass = ENV['TSURU_PASS'] || raise("You must set 'TSURU_PASS' env var")
+
+      @tsuru_user = RSpec.configuration.tsuru_user || raise("You must set 'TSURU_USER' env var")
+      @tsuru_pass = RSpec.configuration.tsuru_pass || raise("You must set 'TSURU_PASS' env var")
 
       # Clone the same app and setup minigit
       @sampleapp_path = File.join(@tsuru_home, 'sampleapp')
