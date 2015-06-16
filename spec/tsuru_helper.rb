@@ -82,6 +82,10 @@ class TsuruCommandLine
     execute_helper('service-bind', service_instance_name, '-a', app_name)
   end
 
+  def service_unbind(service_instance_name, app_name)
+    execute_helper('service-unbind', service_instance_name, '-a', app_name)
+  end
+
   def get_app_repository(app_name)
     execute_helper('app-info', '-a', app_name)
     (m = /^Repository: (.*)$/.match(@stdout)) ? m[1] : nil
