@@ -27,6 +27,15 @@ describe "TsuruEndToEnd" do
                              { "StrictHostKeyChecking" => "no" } )
     end
 
+    after(:each) do |example|
+      if example.exception
+        # TODO improve how we print the output
+        puts "$ #{@tsuru_command.last_command}"
+        puts @tsuru_command.stdout
+        puts @tsuru_command.stderr
+      end
+    end
+
     it "should not be able to login via HTTP" do
       @tsuru_command.target_set("ci-insecure")
       @tsuru_command.login(@tsuru_user, @tsuru_pass)
