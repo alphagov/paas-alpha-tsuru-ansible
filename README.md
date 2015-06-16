@@ -14,11 +14,29 @@ Install the dependencies:
 bundle install
 ```
 
+end to end tests
+----------------
+
 You must pass the `TSURU_USER` and `TSURU_PASS` environment variables, and
 optionally the `DEPLOY_ENV` (defaults to `ci` if missing).
 
 ```
-TSURU_USER=... TSURU_PASS=... bundle exec rspec .
+TSURU_USER=... TSURU_PASS=... bundle exec rake endtoend:all
+```
+
+integration tests
+-----------------
+
+Based on an inventory. You can list all the tests with:
+
+```
+rake -T
+```
+
+In order to run all:
+
+```
+rake integration:all
 ```
 
 Known issues
