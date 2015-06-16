@@ -11,8 +11,8 @@ describe "TsuruEndToEnd" do
       @tsuru_command = TsuruCommandLine.new({ 'HOME' => @tsuru_home.path })
       @tsuru_command.target_add("ci", @tsuru_api_url)
       @tsuru_command.target_add("ci-insecure", @tsuru_api_url_insecure)
-      @tsuru_user = ENV['TSURU_USER']
-      @tsuru_pass = ENV['TSURU_PASS']
+      @tsuru_user = ENV['TSURU_USER'] || raise("You must set 'TSURU_USER' env var")
+      @tsuru_pass = ENV['TSURU_PASS'] || raise("You must set 'TSURU_PASS' env var")
 
       # Clone the same app and setup minigit
       @sampleapp_path = File.join(@tsuru_home, 'sampleapp')
