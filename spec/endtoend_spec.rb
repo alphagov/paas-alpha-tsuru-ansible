@@ -48,22 +48,29 @@ describe "TsuruEndToEnd" do
       expect(@tsuru_command.exit_status).to eql 0
     end
 
-    it "should be able to add the ssh key" do
+    it "should clean up the environment" do
       @tsuru_command.key_remove('rspec') # Remove previous state if needed
+      @tsuru_command.service_unbind('sampleapptestdb', 'sampleapp')
+      @tsuru_command.service_remove('sampleapptestdb') # Remove previous state if needed
+      @tsuru_command.app_remove('sampleapp') # Remove previous state if needed
+      # Wait for the app to get deleted.
+      # TODO: Improve this, implement some pooling logic.
+      sleep(1)
+    end
+
+    it "should be able to add the ssh key" do
       @tsuru_command.key_add('rspec', @ssh_id_rsa_pub_path)
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /Key .* successfully added!/
     end
 
     it "should be able to create an application" do
-      @tsuru_command.app_remove('sampleapp') # Remove previous state if needed
       @tsuru_command.app_create('sampleapp', 'python')
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /App .* has been created/
     end
 
     it "should be able to create a service" do
-      @tsuru_command.service_remove('sampleapptestdb') # Remove previous state if needed
       @tsuru_command.service_add('postgresql', 'sampleapptestdb', 'shared')
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /Service successfully added/
@@ -87,7 +94,7 @@ describe "TsuruEndToEnd" do
     it "Should be able to connect to the applitation via HTTPS" do
       sampleapp_address = @tsuru_command.get_app_address('sampleapp')
       response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
-      expect(response.status).to be ["200", "OK"]
+      expect(response.status).to eq(["200", "OK"])
     end
   end
 
