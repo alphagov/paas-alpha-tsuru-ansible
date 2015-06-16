@@ -5,8 +5,9 @@ describe "TsuruEndToEnd" do
   context "deploying an application" do
     before(:all) do
       @tsuru_home = Tempdir.new('tsuru-command')
-      @tsuru_api_url = "https://ci-api.tsuru.paas.alphagov.co.uk"
-      @tsuru_api_url_insecure = "http://ci-api.tsuru.paas.alphagov.co.uk:8080"
+      @tsuru_deploy_env = ENV['DEPLOY_ENV'] || 'ci'
+      @tsuru_api_url = "https://#{@tsuru_deploy_env}-api.tsuru.paas.alphagov.co.uk"
+      @tsuru_api_url_insecure = "http://#{@tsuru_deploy_env}-api.tsuru.paas.alphagov.co.uk:8080"
       @tsuru_command = TsuruCommandLine.new({ 'HOME' => @tsuru_home.path })
       @tsuru_command.target_add("ci", @tsuru_api_url)
       @tsuru_command.target_add("ci-insecure", @tsuru_api_url_insecure)
