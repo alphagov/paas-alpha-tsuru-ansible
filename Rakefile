@@ -7,9 +7,10 @@ def get_hosts()
   [
     {
       :name => "ci-tsuru-api-0",
-      :ssh_host => "ci-nat.tsuru.paas.alphagov.co.uk",
+      :ssh_host => "10.128.11.215",
       :ssh_port => nil,
-      :ssh_user => nil,
+      :ssh_user => "ubuntu",
+      :ssh_proxy => "ec2-user@ci-nat.tsuru.paas.alphagov.co.uk",
       :ssh_key => '~/.ssh/id_rsa'
     },
     {
@@ -46,6 +47,7 @@ namespace :integration do
           puts "Run serverspec for #{role} to #{host[:name]}"
           ENV['TARGET_HOST'] = host[:ssh_host]
           ENV['TARGET_PORT'] = host[:ssh_port].to_s if host[:ssh_port]
+          ENV['TARGET_PROXY'] = host[:ssh_proxy]
           ENV['TARGET_PRIVATE_KEY'] = host[:ssh_key]
           ENV['TARGET_USER'] = host[:ssh_user]
           puts ENV['TARGET_HOST']
