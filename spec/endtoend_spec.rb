@@ -63,14 +63,14 @@ describe "TsuruEndToEnd" do
     end
 
     it "should be able to create a service" do
-      @tsuru_command.service_remove('sampleapp_db') # Remove previous state if needed
-      @tsuru_command.service_add('postgresql', 'sampleapp_db', 'shared')
+      @tsuru_command.service_remove('sampleapptestdb') # Remove previous state if needed
+      @tsuru_command.service_add('postgresql', 'sampleapptestdb', 'shared')
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /Service successfully added/
     end
 
     it "should be able to bind a service to an app" do
-      @tsuru_command.service_bind('sampleapp_db', 'sampleapp')
+      @tsuru_command.service_bind('sampleapptestdb', 'sampleapp')
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /Instance .* is now bound to the app .*/
     end
