@@ -1,4 +1,5 @@
 require 'serverspec'
+require 'highline/import' # for ask function
 
 set :backend, :ssh
 #set :ssh_options, { :user => ubuntu }

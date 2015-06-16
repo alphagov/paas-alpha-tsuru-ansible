@@ -1,12 +1,19 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    ansible_spec (0.2)
+      hostlist_expression
+      oj
+      serverspec (>= 2.0.0)
     diff-lcs (1.2.5)
+    highline (1.7.2)
+    hostlist_expression (0.2.1)
     minigit (0.0.4)
     multi_json (1.11.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
+    oj (2.12.9)
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
       rspec-expectations (~> 3.3.0)
@@ -36,6 +43,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ansible_spec
+  highline
   minigit
   rspec
   serverspec (~> 2.18.0)
