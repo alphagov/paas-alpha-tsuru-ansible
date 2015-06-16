@@ -50,7 +50,6 @@ namespace :integration do
           ENV['TARGET_PROXY'] = host[:ssh_proxy]
           ENV['TARGET_PRIVATE_KEY'] = host[:ssh_key]
           ENV['TARGET_USER'] = host[:ssh_user]
-          puts ENV['TARGET_HOST']
           t.pattern = "spec/integration/#{role}/*_spec.rb"
         end
       end
