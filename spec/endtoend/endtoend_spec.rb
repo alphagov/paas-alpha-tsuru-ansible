@@ -101,6 +101,13 @@ describe "TsuruEndToEnd" do
       response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
       expect(response.status).to eq(["200", "OK"])
     end
+
+    it "Should be able to connect to the applitation via HTTPS with a valid cert" do
+      pending "We don't have a certificate for this :)"
+      sampleapp_address = @tsuru_command.get_app_address('sampleapp')
+      response = URI.parse("https://#{sampleapp_address}/").open()
+      expect(response.status).to eq(["200", "OK"])
+    end
   end
 end
 
