@@ -1,33 +1,27 @@
 require 'open3'
 require 'tempfile'
 require 'fileutils'
-require 'minigit'
 
-class SshHelper
-  # Create our own SSH key
-  def self.generate_key(path)
-    FileUtils.mkdir_p(File.dirname(path))
-    system("ssh-keygen -f #{path} -q -N '' ")
-  end
+RSpec.configure do |c|
+  c.add_setting :debug_commands, :default => false
 
-  # Generate some custom configuration for SSH
-  # WARNING: overrides the file
-  def self.write_config(config_path, config)
-    File.open(config_path, 'w') { |f|
-      f.write("Host *\n")
-      config.each { |k,v|
-        f.write("\t#{k} #{v}\n")
-      }
-    }
-  end
-end
+  c.add_setting :deploy_env, :default => ENV['DEPLOY_ENV'] || 'ci'
 
-# Minigit does not capture the stderr. This small class overrides the
-# system call to redirect stderr to stdout
-class MiniGitStdErrCapturing < MiniGit::Capturing
-  def system(*args)
-    `#{Shellwords.join(args)} 2>&1`
-  end
+  c.add_setting :target_platform, :default => ENV['TARGET_PLATFORM'] || 'aws'
+
+  # If nil will be populated based on the default platform
+  c.add_setting :target_api_host, :default =>
+    case c.target_platform
+    when 'aws'
+      "#{RSpec.configuration.deploy_env}-api.tsuru.paas.alphagov.co.uk"
+    when 'gce'
+      "#{RSpec.configuration.deploy_env}-api.tsuru2.paas.alphagov.co.uk"
+    else
+      raise "Unknown target_platform = #{c.target_platform}"
+    end
+
+  c.add_setting :tsuru_user, :default => ENV['TSURU_USER']
+  c.add_setting :tsuru_pass, :default => ENV['TSURU_PASS']
 end
 
 # Ruby 2.2.2 does not provide mktmpdir. Use Tempfile instead

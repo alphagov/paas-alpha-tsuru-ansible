@@ -1,28 +1,7 @@
 require 'open-uri'
+require 'git_helper.rb'
 require 'tsuru_helper.rb'
 
-RSpec.configure do |c|
-  c.add_setting :debug_commands, :default => false
-
-  c.add_setting :deploy_env, :default => ENV['DEPLOY_ENV'] || 'ci'
-
-  c.add_setting :target_platform, :default => ENV['TARGET_PLATFORM'] || 'aws'
-
-  # If nil will be populated based on the default platform
-  c.add_setting :target_api_host, :default =>
-    case c.target_platform
-    when 'aws'
-      "#{RSpec.configuration.deploy_env}-api.tsuru.paas.alphagov.co.uk"
-    when 'gce'
-      "#{RSpec.configuration.deploy_env}-api.tsuru2.paas.alphagov.co.uk"
-    else
-      raise "Unknown target_platform = #{c.target_platform}"
-    end
-
-  c.add_setting :tsuru_user, :default => ENV['TSURU_USER']
-  c.add_setting :tsuru_pass, :default => ENV['TSURU_PASS']
-
-end
 
 describe "TsuruEndToEnd" do
   context "deploying an application" do
