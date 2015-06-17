@@ -20,6 +20,14 @@ def get_hosts()
       :ssh_user => "ubuntu",
       :ssh_key => '~/.ssh/id_rsa'
     },
+    {
+      :name => "ci-tsuru-gandalf-0",
+      :ssh_host => "10.128.10.218",
+      :ssh_port => 22,
+      :ssh_user => "ubuntu",
+      :ssh_proxy => "ec2-user@ci-nat.tsuru.paas.alphagov.co.uk",
+      :ssh_key => '~/.ssh/id_rsa'
+    },
   ]
 end
 
