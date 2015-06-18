@@ -19,7 +19,8 @@ describe "TsuruEndToEnd" do
       @tsuru_pass = RSpec.configuration.tsuru_pass || raise("You must set 'TSURU_PASS' env var")
 
       # Clone the same app and setup minigit
-      @sampleapp_path = File.join(@tsuru_home, 'sampleapp')
+      @sampleapp_name = 'sampleapp' + Time.now.to_i.to_s
+      @sampleapp_path = File.join(@tsuru_home, @sampleapp_name)
       minigit_class = MiniGitStdErrCapturing
       # minigit_class = MiniGit
       minigit_class.git :clone, "https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git", @sampleapp_path
@@ -71,7 +72,7 @@ describe "TsuruEndToEnd" do
     end
 
     it "should be able to create an application" do
-      @tsuru_command.app_create('sampleapp', 'python')
+      @tsuru_command.app_create(@sampleapp_name, 'python')
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /App .* has been created/
     end
@@ -83,13 +84,13 @@ describe "TsuruEndToEnd" do
     end
 
     it "should be able to bind a service to an app" do
-      @tsuru_command.service_bind('sampleapptestdb', 'sampleapp')
+      @tsuru_command.service_bind('sampleapptestdb', @sampleapp_name)
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /Instance .* is now bound to the app .*/
     end
 
     it "Should be able to push the application" do
-      git_url = @tsuru_command.get_app_repository('sampleapp')
+      git_url = @tsuru_command.get_app_repository(@sampleapp_name)
       expect(git_url).not_to be_nil
       @sampleapp_minigit.push(git_url, 'master')
       # Wait for the app to get deployed.
@@ -98,17 +99,27 @@ describe "TsuruEndToEnd" do
     end
 
     it "Should be able to connect to the applitation via HTTPS" do
-      sampleapp_address = @tsuru_command.get_app_address('sampleapp')
+      sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
       response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
       expect(response.status).to eq(["200", "OK"])
     end
 
     it "Should be able to connect to the applitation via HTTPS with a valid cert" do
       pending "We don't have a certificate for this :)"
-      sampleapp_address = @tsuru_command.get_app_address('sampleapp')
+      sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
       response = URI.parse("https://#{sampleapp_address}/").open()
       expect(response.status).to eq(["200", "OK"])
     end
+
+    it "should be able to unbind and bind a service to an app" do
+      pending "There is already a bug filed: https://github.com/tsuru/postgres-api/issues/1"
+      @tsuru_command.service_unbind('sampleapptestdb', @sampleapp_name)
+      expect(@tsuru_command.exit_status).to eql 0
+      @tsuru_command.service_bind('sampleapptestdb', @sampleapp_name)
+      expect(@tsuru_command.exit_status).to eql 0
+      expect(@tsuru_command.stdout).to match /Instance .* is now bound to the app .*/
+    end
+
   end
 end
 
