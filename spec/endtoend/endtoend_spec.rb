@@ -41,6 +41,14 @@ describe "TsuruEndToEnd" do
       end
     end
 
+    after(:all) do
+      @tsuru_command.key_remove('rspec') # Remove previous state if needed
+      @tsuru_command.service_unbind('sampleapptestdb', @sampleapp_name)
+      @tsuru_command.service_remove('sampleapptestdb') # Remove previous state if needed
+      @tsuru_command.app_remove(@sampleapp_name) # Remove previous state if needed
+      @tsuru_home.rmrf
+    end
+
     it "should not be able to login via HTTP" do
       @tsuru_command.target_set("ci-insecure")
       @tsuru_command.login(@tsuru_user, @tsuru_pass)
@@ -53,15 +61,6 @@ describe "TsuruEndToEnd" do
       expect(@tsuru_command.exit_status).to eql 0
     end
 
-    it "should clean up the environment" do
-      @tsuru_command.key_remove('rspec') # Remove previous state if needed
-      @tsuru_command.service_unbind('sampleapptestdb', 'sampleapp')
-      @tsuru_command.service_remove('sampleapptestdb') # Remove previous state if needed
-      @tsuru_command.app_remove('sampleapp') # Remove previous state if needed
-      # Wait for the app to get deleted.
-      # TODO: Improve this, implement some pooling logic.
-      sleep(1)
-    end
 
     it "should be able to add the ssh key" do
       @tsuru_command.key_add('rspec', @ssh_id_rsa_pub_path)

@@ -26,11 +26,13 @@ end
 
 # Ruby 2.2.2 does not provide mktmpdir. Use Tempfile instead
 class Tempdir < Tempfile
-  require 'tmpdir'
-  def initialize(basename, tmpdir = Dir::tmpdir)
+  def initialize(basename)
     super
     File.delete(self.path)
     Dir.mkdir(self.path)
+  end
+  def rmrf
+    FileUtils.rm_rf(@tmpname)
   end
   def unlink # copied from tempfile.rb
     # keep this order for thread safeness
