@@ -21,8 +21,10 @@ describe "TsuruEndToEnd" do
       # Clone the same app and setup minigit
       @sampleapp_path = File.join(@tsuru_home, 'sampleapp')
       minigit_class = MiniGitStdErrCapturing
+      # minigit_class = MiniGit
       minigit_class.git :clone, "https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git", @sampleapp_path
       @sampleapp_minigit = minigit_class.new(@sampleapp_path)
+      ENV['GIT_SSH_COMMAND']="ssh -i #{@tsuru_home.path}/.ssh/id_rsa -v"
 
       # Generate the ssh key and setup ssh
       @ssh_id_rsa_path = File.join(@tsuru_home, '.ssh', 'id_rsa')
