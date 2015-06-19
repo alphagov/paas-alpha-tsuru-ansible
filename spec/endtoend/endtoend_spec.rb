@@ -22,6 +22,21 @@ describe "TsuruEndToEnd" do
       @tsuru_user = RSpec.configuration.tsuru_user || raise("You must set 'TSURU_USER' env var")
       @tsuru_pass = RSpec.configuration.tsuru_pass || raise("You must set 'TSURU_PASS' env var")
 
+      # Generate the ssh key and setup ssh
+      @ssh_id_rsa_path = File.join(@tsuru_home, '.ssh', 'id_rsa')
+      @ssh_id_rsa_pub_path = File.join(@tsuru_home, '.ssh', 'id_rsa.pub')
+      @ssh_config_file = File.join(@tsuru_home, '.ssh', 'config')
+      @ssh_wrapper_path = File.join(@tsuru_home, 'ssh-wrapper')
+      SshHelper.generate_key(@ssh_id_rsa_path)
+      SshHelper.write_config(
+        @ssh_config_file,
+        {
+        "StrictHostKeyChecking" => "no",
+        "IdentityFile" => @ssh_id_rsa_path,
+        }
+      )
+      SshHelper.write_ssh_wrapper(@ssh_wrapper_path, @ssh_config_file)
+
       # Clone the sample app and setup Git
       @sampleapp_name = 'sampleapp' + Time.now.to_i.to_s
       @sampleapp_path = File.join(@tsuru_home, @sampleapp_name)
@@ -29,18 +44,11 @@ describe "TsuruEndToEnd" do
       @git_command = GitCommandLine.new(@sampleapp_path,
         {
           'HOME' => @tsuru_home.path,
-          'GIT_SSH_COMMAND' => "ssh -i #{@tsuru_home.path}/.ssh/id_rsa"
+          'GIT_SSH' => @ssh_wrapper_path
         },
         { :verbose => RSpec.configuration.verbose }
       )
       @git_command.clone("https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git")
-
-      # Generate the ssh key and setup ssh
-      @ssh_id_rsa_path = File.join(@tsuru_home, '.ssh', 'id_rsa')
-      @ssh_id_rsa_pub_path = File.join(@tsuru_home, '.ssh', 'id_rsa.pub')
-      SshHelper.generate_key(@ssh_id_rsa_path)
-      SshHelper.write_config(File.join(@tsuru_home, '.ssh', 'config'),
-                             { "StrictHostKeyChecking" => "no" } )
     end
 
     after(:each) do |example|

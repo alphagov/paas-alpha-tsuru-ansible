@@ -17,7 +17,21 @@ class SshHelper
       }
     }
   end
+
+  # Older versions of git < 2.3 do not allow use the GIT_SSH_COMMAND variable
+  # but only specify the ssh binary with GIT_SSH. Because that, in order to
+  # specify the configuration file we need to create a wrapper
+  def self.write_ssh_wrapper(wrapper_path, config_path)
+    File.open(wrapper_path, 'w') { |f|
+      f.write("""
+#!/bin/bash
+ssh -F #{config_path} $@
+""")
+    }
+    File.chmod(0755, wrapper_path)
+  end
 end
+
 
 class GitCommandLine < CommandLineHelper
 
