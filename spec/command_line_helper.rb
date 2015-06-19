@@ -42,7 +42,7 @@ class CommandLineHelper
       @exit_status = wait_thread.value.to_i >> 8
     end
 
-    $stdout.puts "Exit code: #{@exit_status}"
+    $stdout.puts "Exit code: #{@exit_status}" if @options[:verbose]
     return @exit_status == 0
   end
 end
