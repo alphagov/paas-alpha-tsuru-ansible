@@ -23,6 +23,7 @@ RSpec.configure do |c|
 
   c.add_setting :tsuru_user, :default => ENV['TSURU_USER']
   c.add_setting :tsuru_pass, :default => ENV['TSURU_PASS']
+  c.add_setting :verbose, :default => (ENV['VERBOSE'] and ENV['VERBOSE'].downcase == 'true')
 end
 
 # Ruby 2.2.2 does not provide mktmpdir. Use Tempfile instead

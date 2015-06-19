@@ -7,7 +7,10 @@ describe "TsuruEndToEnd" do
   context "deploying an application" do
     before(:all) do
       @tsuru_home = Tempdir.new('tsuru-command')
-      @tsuru_command = TsuruCommandLine.new({ 'HOME' => @tsuru_home.path })
+      @tsuru_command = TsuruCommandLine.new(
+        {'HOME' => @tsuru_home.path },
+        { :verbose => RSpec.configuration.verbose }
+      )
 
       @tsuru_api_url = "https://#{RSpec.configuration.target_api_host}"
       @tsuru_api_url_insecure = "http://#{RSpec.configuration.target_api_host}:8080"
@@ -22,10 +25,13 @@ describe "TsuruEndToEnd" do
       @sampleapp_name = 'sampleapp' + Time.now.to_i.to_s
       @sampleapp_path = File.join(@tsuru_home, @sampleapp_name)
 
-      @git_command = GitCommandLine.new(@sampleapp_path, {
-        'HOME' => @tsuru_home.path,
-        'GIT_SSH_COMMAND' => "ssh -i #{@tsuru_home.path}/.ssh/id_rsa"
-      })
+      @git_command = GitCommandLine.new(@sampleapp_path,
+        {
+          'HOME' => @tsuru_home.path,
+          'GIT_SSH_COMMAND' => "ssh -i #{@tsuru_home.path}/.ssh/id_rsa"
+        },
+        { :verbose => RSpec.configuration.verbose }
+      )
       @git_command.clone("https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git")
 
       # Generate the ssh key and setup ssh

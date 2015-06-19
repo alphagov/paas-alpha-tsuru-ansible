@@ -21,8 +21,8 @@ end
 
 class GitCommandLine < CommandLineHelper
 
-  def initialize(path, env = {})
-    @env = env
+  def initialize(path, env = {}, options = {})
+    super(env, options)
     @path = path
   end
 
