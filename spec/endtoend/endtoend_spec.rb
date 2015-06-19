@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'openssl'
 require 'git_helper.rb'
 require 'tsuru_helper.rb'
 
