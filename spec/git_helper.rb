@@ -1,4 +1,4 @@
-require 'minigit'
+require 'command_line_helper'
 
 class SshHelper
   # Create our own SSH key
@@ -19,12 +19,19 @@ class SshHelper
   end
 end
 
-# Minigit does not capture the stderr. This small class overrides the
-# system call to redirect stderr to stdout
-class MiniGitStdErrCapturing < MiniGit::Capturing
-  def system(*args)
-    `#{Shellwords.join(args)} 2>&1`
+class GitCommandLine < CommandLineHelper
+
+  def initialize(path, env = {})
+    @env = env
+    @path = path
   end
+
+  def clone(url)
+    execute_helper('git', 'clone', url, @path)
+  end
+
+  def push(remote = 'origin', local_branch = 'master', remote_branch = 'master')
+    execute_helper('git', 'push', remote, "#{local_branch}:#{remote_branch}", { :chdir => @path })
+  end
+
 end
-
-

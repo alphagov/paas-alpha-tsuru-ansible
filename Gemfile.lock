@@ -8,7 +8,6 @@ GEM
     diff-lcs (1.2.5)
     highline (1.7.2)
     hostlist_expression (0.2.1)
-    minigit (0.0.4)
     multi_json (1.11.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -45,7 +44,6 @@ PLATFORMS
 DEPENDENCIES
   ansible_spec
   highline
-  minigit
   rspec
   serverspec (~> 2.18.0)
 

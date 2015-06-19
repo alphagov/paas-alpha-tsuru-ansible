@@ -18,14 +18,15 @@ describe "TsuruEndToEnd" do
       @tsuru_user = RSpec.configuration.tsuru_user || raise("You must set 'TSURU_USER' env var")
       @tsuru_pass = RSpec.configuration.tsuru_pass || raise("You must set 'TSURU_PASS' env var")
 
-      # Clone the same app and setup minigit
+      # Clone the sample app and setup Git
       @sampleapp_name = 'sampleapp' + Time.now.to_i.to_s
       @sampleapp_path = File.join(@tsuru_home, @sampleapp_name)
-      minigit_class = MiniGitStdErrCapturing
-      # minigit_class = MiniGit
-      minigit_class.git :clone, "https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git", @sampleapp_path
-      @sampleapp_minigit = minigit_class.new(@sampleapp_path)
-      ENV['GIT_SSH_COMMAND']="ssh -i #{@tsuru_home.path}/.ssh/id_rsa -v"
+
+      @git_command = GitCommandLine.new(@sampleapp_path, {
+        'HOME' => @tsuru_home.path,
+        'GIT_SSH_COMMAND' => "ssh -i #{@tsuru_home.path}/.ssh/id_rsa"
+      })
+      @git_command.clone("https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git")
 
       # Generate the ssh key and setup ssh
       @ssh_id_rsa_path = File.join(@tsuru_home, '.ssh', 'id_rsa')
@@ -92,7 +93,8 @@ describe "TsuruEndToEnd" do
     it "Should be able to push the application" do
       git_url = @tsuru_command.get_app_repository(@sampleapp_name)
       expect(git_url).not_to be_nil
-      @sampleapp_minigit.push(git_url, 'master')
+      @git_command.push(git_url)
+      expect(@git_command.exit_status).to eql 0
     end
 
     it "Should be able to connect to the applitation via HTTPS" do
