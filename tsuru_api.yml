@@ -7,7 +7,7 @@
     upstream_port: "{{ api_port }}"
     tsuru_api_url: "{{ tsuru_api_external_url }}"
   vars_files:
-    - "ssl_proxy_vars.yml"
+    - "api_ssl_proxy_vars.yml"
   roles:
     - role: tsuru_api
       tags: tsuru_api
