@@ -38,7 +38,6 @@ class CommandLineHelper
 
       tout.join
       terr.join
-      # [stdin, out, err].each{|stream| stream.close() if not stream.closed? }
       @exit_status = wait_thread.value.to_i >> 8
     end
 
