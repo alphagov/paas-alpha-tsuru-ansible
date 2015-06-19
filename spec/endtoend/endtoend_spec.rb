@@ -93,9 +93,6 @@ describe "TsuruEndToEnd" do
       git_url = @tsuru_command.get_app_repository(@sampleapp_name)
       expect(git_url).not_to be_nil
       @sampleapp_minigit.push(git_url, 'master')
-      # Wait for the app to get deployed.
-      # TODO: Implement some pooling logic.
-      sleep(5)
     end
 
     it "Should be able to connect to the applitation via HTTPS" do
