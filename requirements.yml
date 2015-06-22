@@ -1,7 +1,7 @@
 # vim:ft=ansible:
 
 - src: aalda.docker-registry
-  version: v1.0.5
+  version: v1.0.6
 - src: jdauphant.nginx
   version: v1.3.4
 - src: ANXS.postgresql
