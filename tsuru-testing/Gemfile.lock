@@ -1,0 +1,51 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ansible_spec (0.2)
+      hostlist_expression
+      oj
+      serverspec (>= 2.0.0)
+    diff-lcs (1.2.5)
+    highline (1.7.2)
+    hostlist_expression (0.2.1)
+    multi_json (1.11.1)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.9.2)
+    oj (2.12.9)
+    rspec (3.3.0)
+      rspec-core (~> 3.3.0)
+      rspec-expectations (~> 3.3.0)
+      rspec-mocks (~> 3.3.0)
+    rspec-core (3.3.0)
+      rspec-support (~> 3.3.0)
+    rspec-expectations (3.3.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-its (1.2.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
+    rspec-mocks (3.3.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-support (3.3.0)
+    serverspec (2.18.0)
+      multi_json
+      rspec (~> 3.0)
+      rspec-its
+      specinfra (~> 2.35)
+    specinfra (2.36.0)
+      net-scp
+      net-ssh
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ansible_spec
+  highline
+  rspec
+  serverspec (~> 2.18.0)
+
+BUNDLED WITH
+   1.10.3
