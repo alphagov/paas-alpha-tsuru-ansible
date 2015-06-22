@@ -3,6 +3,8 @@ require 'tempfile'
 require 'fileutils'
 require 'command_line_helper'
 
+require 'rspec/retry'
+
 RSpec.configure do |c|
   c.add_setting :debug_commands, :default => false
 
@@ -24,6 +26,9 @@ RSpec.configure do |c|
   c.add_setting :tsuru_user, :default => ENV['TSURU_USER']
   c.add_setting :tsuru_pass, :default => ENV['TSURU_PASS']
   c.add_setting :verbose, :default => (ENV['VERBOSE'] and ENV['VERBOSE'].downcase == 'true')
+
+  c.verbose_retry = true if RSpec.configuration.verbose
+
 end
 
 # Ruby 2.2.2 does not provide mktmpdir. Use Tempfile instead

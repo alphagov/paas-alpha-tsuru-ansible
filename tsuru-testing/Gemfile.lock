@@ -28,6 +28,8 @@ GEM
     rspec-mocks (3.3.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
+    rspec-retry (0.4.0)
+      rspec-core
     rspec-support (3.3.0)
     serverspec (2.18.0)
       multi_json
@@ -45,6 +47,7 @@ DEPENDENCIES
   ansible_spec
   highline
   rspec
+  rspec-retry
   serverspec (~> 2.18.0)
 
 BUNDLED WITH

@@ -3,7 +3,6 @@ require 'openssl'
 require 'git_helper.rb'
 require 'tsuru_helper.rb'
 
-
 describe "TsuruEndToEnd" do
   context "deploying an application" do
     before(:all) do
@@ -49,15 +48,8 @@ describe "TsuruEndToEnd" do
         { :verbose => RSpec.configuration.verbose }
       )
       @git_command.clone("https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git")
-    end
 
-    after(:each) do |example|
-      if example.exception
-        # TODO improve how we print the output
-        puts "$ #{@tsuru_command.last_command}"
-        puts @tsuru_command.stdout
-        puts @tsuru_command.stderr
-      end
+
     end
 
     after(:all) do
@@ -112,10 +104,18 @@ describe "TsuruEndToEnd" do
       expect(@git_command.exit_status).to eql 0
     end
 
-    it "Should be able to connect to the applitation via HTTPS" do
+    it "Should be able to connect to the applitation via HTTPS", :retry => 3, :retry_wait => 1 do
       sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
-      response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
-      expect(response.status).to eq(["200", "OK"])
+      # Capture the exception to print the expection message
+      begin
+        response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
+        expect(response.status).to eq(["200", "OK"])
+      rescue OpenURI::HTTPError => e
+        if RSpec.configuration.verbose
+          $stdout.puts "Request to https://#{sampleapp_address}/ failed with OpenURI::HTTPError: #{e.message}"
+        end
+        raise e
+      end
     end
 
     it "Should be able to connect to the applitation via HTTPS with a valid cert" do
