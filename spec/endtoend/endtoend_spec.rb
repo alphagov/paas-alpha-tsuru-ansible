@@ -1,7 +1,7 @@
 require 'open-uri'
 require 'openssl'
-require 'git_helper.rb'
-require 'tsuru_helper.rb'
+require 'git_helper'
+require 'tsuru_helper'
 
 describe "TsuruEndToEnd" do
   context "deploying an application" do

@@ -1,4 +1,3 @@
-# require 'open3'
 require 'tempfile'
 require 'fileutils'
 require 'command_line_helper'
