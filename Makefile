@@ -58,6 +58,24 @@ recrypt: import-gpg-keys
 			$(shell cat gpg.recipients | awk -F: {'printf "-r "$$1" "'}) && \
 		ansible-vault encrypt ${VAULT_FILE}
 
+test-aws:
+	bundle install
+	TARGET_PLATFORM=aws \
+	TSURU_USER=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
+				 awk '/admin_user:/ { print $$2; }') \
+	TSURU_PASS=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
+				 awk '/admin_password:/ { print $$2; }') \
+	bundle exec rake endtoend:all
+
+test-gce:
+	bundle install
+	TARGET_PLATFORM=gce \
+	TSURU_USER=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
+				 awk '/admin_user:/ { print $$2; }') \
+	TSURU_PASS=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
+				 awk '/admin_password:/ { print $$2; }') \
+	bundle exec rake endtoend:all
+
 diff-vault:
 	@(mkfifo -m 0600 ${VAULT_FIFO} && \
 		git show master:${VAULT_FILE} > ${VAULT_FIFO}; \
