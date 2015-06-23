@@ -179,13 +179,25 @@ This will run a basic smoke test against a deployed environment.
 
 Based on ruby 2.2.2, it is recommended to use `rbenv` or `rvm`.
 
-Install the dependencies:
+#### Run using make
+This will install the dependencies, run against the CI environment and use the default tsuru admin credentials stored in the Ansible vault.
+```bash
+make test-aws
+make test-gce
+```
 
+You can specify another test environment:
+```bash
+make test-aws DEPLOY_ENV=...
+make test-gce DEPLOY_ENV=...
+```
+
+#### Custom run
+
+Install the dependencies:
 ```bash
 bundle install
 ```
-
-#### Run
 
 You must pass the `TSURU_USER` and `TSURU_PASS` environment variables, and
 optionally the `DEPLOY_ENV` (defaults to `ci` if missing).
@@ -196,9 +208,10 @@ TSURU_USER=... TSURU_PASS=... DEPLOY_ENV=... bundle exec rake endtoend:all
 
 #### Troubleshooting
 
-To enable verbose mode set the environment variable VERBOSE to true.
+To enable verbose mode set the variable VERBOSE to true.
 ```bash
-TSURU_USER=... TSURU_PASS=... VERBOSE=true bundle exec rake endtoend:all
+make test-aws VERBOSE=TRUE
+make test-gce VERBOSE=TRUE
 ```
 
 #### Known issues
