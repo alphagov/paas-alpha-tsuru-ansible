@@ -26,5 +26,5 @@
 # GDS Forked, pull-request sent upstream awaiting merge.
 - name: bennojoy.redis
   src: https://github.com/alphagov/ansible-playbook-redis.git
-  version: v0.0.1
+  version: v0.0.2
 
