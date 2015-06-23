@@ -170,3 +170,66 @@ Use the `Makefile`. Run without any arguments for more information:
 ```
 make
 ```
+
+### Smoke test
+
+This will run a basic smoke test against a deployed environment.
+
+#### Dependencies
+
+Based on ruby 2.2.2, it is recommended to use `rbenv` or `rvm`.
+
+#### Run using make
+This will install the dependencies, run against the CI environment and use the default tsuru admin credentials stored in the Ansible vault.
+```bash
+make test-aws
+make test-gce
+```
+
+You can specify another test environment:
+```bash
+make test-aws DEPLOY_ENV=...
+make test-gce DEPLOY_ENV=...
+```
+
+#### Custom run
+
+Install the dependencies:
+```bash
+bundle install
+```
+
+You must pass the `TSURU_USER` and `TSURU_PASS` environment variables, and
+optionally the `DEPLOY_ENV` (defaults to `ci` if missing).
+
+```bash
+TSURU_USER=... TSURU_PASS=... DEPLOY_ENV=... bundle exec rake endtoend:all
+```
+
+#### Troubleshooting
+
+To enable verbose mode set the variable VERBOSE to true.
+```bash
+make test-aws VERBOSE=TRUE
+make test-gce VERBOSE=TRUE
+```
+
+#### Known issues
+
+The role in postgres is not deleted when the service is unbound and causes the following error:
+```
+Error: Failed to bind the instance "sampleapptestdb" to the app "sampleapp": role "sampleapptfc95b7" already exists
+```
+
+This is a [know issue](https://github.com/tsuru/postgres-api/issues/1)
+
+Workaround:
+
+ 1. Connect to the postgres DB
+ 2. Run `DROP role sampleapp_3f9ef5`
+
+Quick one-liner:
+
+```
+ssh -F ssh.config postgres-host.domain.com "sudo -u postgres psql -c 'DROP role sampleapp_3f9ef5;'"
+```
