@@ -9,6 +9,17 @@ class CommandLineHelper
     @options = options
   end
 
+  def wait()
+    @tout.join if @tout
+    @terr.join if @terr
+    @exit_status = @wait_thread.value.to_i >> 8 if @wait_thread
+    self
+  end
+
+  def ctrl_c()
+    Process.kill("TERM", @wait_thread.pid)
+  end
+
   protected
 
   def execute_helper_async(*cmd)
@@ -33,17 +44,6 @@ class CommandLineHelper
         @stderr << l
       }
     end
-  end
-
-  def wait()
-    @tout.join if @tout
-    @terr.join if @terr
-    @exit_status = @wait_thread.value.to_i >> 8 if @wait_thread
-    self
-  end
-
-  def ctrl_c()
-    Process.kill("TERM", @wait_thread.pid)
   end
 
   def execute_helper(*cmd)
