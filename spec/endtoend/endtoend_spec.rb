@@ -49,13 +49,17 @@ describe "TsuruEndToEnd" do
       )
       @git_command.clone("https://github.com/alphagov/flask-sqlalchemy-postgres-heroku-example.git")
 
+      # Generate a random DB instance. postgresql truncates this name
+      # to create objects in postgres, so we need to keep the most variable
+      # part in the first characters.
+      @sampleapp_db_instance = 'tst' + Time.now.to_i.to_s.reverse
 
     end
 
     after(:all) do
       @tsuru_command.key_remove('rspec') # Remove previous state if needed
-      @tsuru_command.service_unbind('sampleapptestdb', @sampleapp_name)
-      @tsuru_command.service_remove('sampleapptestdb') # Remove previous state if needed
+      @tsuru_command.service_unbind(@sampleapp_db_instance, @sampleapp_name)
+      @tsuru_command.service_remove(@sampleapp_db_instance) # Remove previous state if needed
       @tsuru_command.app_remove(@sampleapp_name) # Remove previous state if needed
       @tsuru_home.rmrf
     end
@@ -86,13 +90,13 @@ describe "TsuruEndToEnd" do
     end
 
     it "should be able to create a service" do
-      @tsuru_command.service_add('postgresql', 'sampleapptestdb', 'shared')
+      @tsuru_command.service_add('postgresql', @sampleapp_db_instance, 'shared')
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /Service successfully added/
     end
 
     it "should be able to bind a service to an app" do
-      @tsuru_command.service_bind('sampleapptestdb', @sampleapp_name)
+      @tsuru_command.service_bind(@sampleapp_db_instance, @sampleapp_name)
       expect(@tsuru_command.exit_status).to eql 0
       expect(@tsuru_command.stdout).to match /Instance .* is now bound to the app .*/
     end
