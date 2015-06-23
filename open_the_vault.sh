@@ -1,2 +1,2 @@
 #!/bin/sh
-gpg --batch --use-agent --decrypt vault_passphrase.gpg
+gpg --batch --use-agent --quiet --decrypt vault_passphrase.gpg
