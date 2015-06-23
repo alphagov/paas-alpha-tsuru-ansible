@@ -11,37 +11,51 @@ class CommandLineHelper
 
   protected
 
-  def execute_helper(*cmd)
+  def execute_helper_async(*cmd)
     @exit_status=nil
     @stderr = ''
     @stdout = ''
 
     $stdout.puts "Executing: #{@env.map { |k,v| "#{k}='#{v}'" }.join(' ')} #{cmd.join(' ')}" if @options[:verbose]
 
-    Open3.popen3(@env, *cmd) do |stdin, out, err, wait_thread|
-      # Allow additional preprocessing of the system call if the caller passes a block
-      yield(stdin, out, err, wait_thread) if block_given?
+    @in_fd, @out_fd, @err_fd, @wait_thread = Open3.popen3(@env, *cmd)
 
-      # Print standard out end error as they receive content
-      tout = Thread.new do
-        out.each {|l|
-          $stdout.puts "stdout: #{l}" if @options[:verbose]
-          @stdout << l
-        }
-      end
-      terr = Thread.new do
-        err.each {|l|
-          $stderr.puts "stderr: #{l}" if @options[:verbose]
-          @stderr << l
-        }
-      end
-
-      tout.join
-      terr.join
-      @exit_status = wait_thread.value.to_i >> 8
+    # Print standard out end error as they receive content
+    @tout = Thread.new do
+      @out_fd.each {|l|
+        $stdout.puts "stdout: #{l}" if @options[:verbose]
+        @stdout << l
+      }
     end
+    @terr = Thread.new do
+      @err_fd.each {|l|
+        $stderr.puts "stderr: #{l}" if @options[:verbose]
+        @stderr << l
+      }
+    end
+  end
+
+  def wait()
+    @tout.join if @tout
+    @terr.join if @terr
+    @exit_status = @wait_thread.value.to_i >> 8 if @wait_thread
+    self
+  end
+
+  def ctrl_c()
+    Process.kill("TERM", @wait_thread.pid)
+  end
+
+  def execute_helper(*cmd)
+    execute_helper_async(*cmd)
+
+    # Allow additional preprocessing of the system call if the caller passes a block
+    yield(@in_fd, @out_fd, @err_fd, @wait_thread) if block_given?
+
+    self.wait
 
     $stdout.puts "Exit code: #{@exit_status}" if @options[:verbose]
     return @exit_status == 0
   end
+
 end
