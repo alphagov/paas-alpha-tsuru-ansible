@@ -4,6 +4,7 @@ require 'rspec/core/rake_task'
 namespace :endtoend do
   RSpec::Core::RakeTask.new(:all) do |t|
     t.pattern = "spec/endtoend/*_spec.rb"
+    t.verbose = false
   end
 end
 

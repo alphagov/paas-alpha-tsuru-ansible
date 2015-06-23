@@ -2,7 +2,8 @@
 	aws gce \
 	preflight check-env-var check-env-aws render-ssh-config \
 	ansible-galaxy \
-	import-gpg-keys recrypt diff-vault
+	import-gpg-keys recrypt diff-vault \
+	check-target-platform-var
 
 VAULT_FIFO = .diff-vault.fifo
 VAULT_FILE = group_vars/all/secure
@@ -58,23 +59,24 @@ recrypt: import-gpg-keys
 			$(shell cat gpg.recipients | awk -F: {'printf "-r "$$1" "'}) && \
 		ansible-vault encrypt ${VAULT_FILE}
 
-test-aws:
-	bundle install
-	TARGET_PLATFORM=aws \
+check-target-platform-var:
+	@[ -z "${TARGET_PLATFORM}" ] && echo TARGET_PLATFORM cannot be empty && exit 2 || true
+
+test: check-target-platform-var
+	@bundle install --quiet
+	@TARGET_PLATFORM=${TARGET_PLATFORM} \
 	TSURU_USER=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
 				 awk '/admin_user:/ { print $$2; }') \
 	TSURU_PASS=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
 				 awk '/admin_password:/ { print $$2; }') \
 	bundle exec rake endtoend:all
 
-test-gce:
-	bundle install
-	TARGET_PLATFORM=gce \
-	TSURU_USER=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
-				 awk '/admin_user:/ { print $$2; }') \
-	TSURU_PASS=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
-				 awk '/admin_password:/ { print $$2; }') \
-	bundle exec rake endtoend:all
+set-aws:
+	$(eval TARGET_PLATFORM=aws)
+set-gce:
+	$(eval TARGET_PLATFORM=gce)
+test-aws: set-aws test
+test-gce: set-gce test
 
 diff-vault:
 	@(mkfifo -m 0600 ${VAULT_FIFO} && \

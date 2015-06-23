@@ -27,7 +27,8 @@ RSpec.configure do |c|
   c.add_setting :verbose, :default => (ENV['VERBOSE'] and ENV['VERBOSE'].downcase == 'true')
 
   c.verbose_retry = true if RSpec.configuration.verbose
-
+  
+  puts "Running test against: '#{RSpec.configuration.target_api_host}'"
 end
 
 # Ruby 2.2.2 does not provide mktmpdir. Use Tempfile instead
