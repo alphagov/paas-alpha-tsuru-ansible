@@ -12,6 +12,7 @@ describe "TsuruEndToEnd" do
         { :verbose => RSpec.configuration.verbose }
       )
 
+      @tsuru_api_host = RSpec.configuration.target_api_host || raise("You must set 'TARGET_API_HOST' env var")
       @tsuru_api_url = "https://#{RSpec.configuration.target_api_host}"
       @tsuru_api_url_insecure = "http://#{RSpec.configuration.target_api_host}:8080"
 

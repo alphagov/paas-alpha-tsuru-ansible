@@ -59,12 +59,12 @@ recrypt: import-gpg-keys
 			$(shell cat gpg.recipients | awk -F: {'printf "-r "$$1" "'}) && \
 		ansible-vault encrypt ${VAULT_FILE}
 
-check-target-platform-var:
-	@[ -z "${TARGET_PLATFORM}" ] && echo TARGET_PLATFORM cannot be empty && exit 2 || true
+check-target-api-host-var:
+	@[ -z "${TARGET_API_HOST}" ] && echo TARGET_API_HOST cannot be empty && exit 2 || true
 
-test: check-target-platform-var
+test: check-target-api-host-var
 	@bundle install --quiet
-	@TARGET_PLATFORM=${TARGET_PLATFORM} \
+	@TARGET_API_HOST=${TARGET_API_HOST} \
 	TSURU_USER=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
 				 awk '/admin_user:/ { print $$2; }') \
 	TSURU_PASS=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
@@ -72,9 +72,9 @@ test: check-target-platform-var
 	bundle exec rake endtoend:all
 
 set-aws:
-	$(eval TARGET_PLATFORM=aws)
+	$(eval TARGET_API_HOST=${DEPLOY_ENV}-api.$(shell cat platform-aws.yml | awk -F \" '/domain_name:/ { print $$2 }'))
 set-gce:
-	$(eval TARGET_PLATFORM=gce)
+	$(eval TARGET_API_HOST=${DEPLOY_ENV}-api.$(shell cat platform-gce.yml | awk -F \" '/domain_name:/ { print $$2 }'))
 test-aws: set-aws test
 test-gce: set-gce test
 
