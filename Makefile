@@ -63,7 +63,7 @@ check-target-api-host-var:
 	@[ -z "${TARGET_API_HOST}" ] && echo TARGET_API_HOST cannot be empty && exit 2 || true
 
 test: check-target-api-host-var
-	@bundle install --quiet
+	@bundle install --path vendor/bundle --quiet
 	@TARGET_API_HOST=${TARGET_API_HOST} \
 	TSURU_USER=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
 				 awk '/admin_user:/ { print $$2; }') \
