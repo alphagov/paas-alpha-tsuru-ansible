@@ -62,14 +62,22 @@ recrypt: import-gpg-keys
 check-target-api-host-var:
 	@[ -z "${TARGET_API_HOST}" ] && echo TARGET_API_HOST cannot be empty && exit 2 || true
 
-test: check-target-api-host-var
+test: check-env-var check-target-api-host-var load-tsuru-creds
 	@bundle install --path vendor/bundle --quiet
 	@TARGET_API_HOST=${TARGET_API_HOST} \
-	TSURU_USER=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
-				 awk '/admin_user:/ { print $$2; }') \
-	TSURU_PASS=$(shell ansible-vault view group_vars/all/secure 2>/dev/null | \
-				 awk '/admin_password:/ { print $$2; }') \
+	TSURU_USER=${TSURU_USER} \
+	TSURU_PASS=${TSURU_PASS} \
 	bundle exec rake endtoend:all
+
+load-tsuru-creds:
+	$(eval TSURU_USER=$(shell \
+		ansible-vault view group_vars/all/secure | \
+		    awk '/admin_user:/ { print $$2; }'))
+	$(eval TSURU_PASS=$(shell \
+		ansible-vault view group_vars/all/secure | \
+			awk '/admin_password:/ { print $$2; }'))
+	@[ -z "${TSURU_USER}" -o -z "${TSURU_PASS}" ] && \
+		echo Error loading tsuru credentials from vault && exit 2 || true
 
 set-aws:
 	$(eval TARGET_API_HOST=${DEPLOY_ENV}-api.$(shell cat platform-aws.yml | awk -F \" '/domain_name:/ { print $$2 }'))
