@@ -123,6 +123,22 @@ describe "TsuruEndToEnd" do
       end
     end
 
+    it "Should get log output in 3 seconds" do
+      sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
+      query = "my_special_query_" + Time.now.to_i.to_s
+      @tsuru_command.tail_app_logs(@sampleapp_name)
+      sleep 1
+      begin
+        response = URI.parse("https://#{sampleapp_address}/" + query).open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
+      rescue
+        ()
+      end
+      sleep 3
+      @tsuru_command.ctrl_c()
+      @tsuru_command.wait()
+      expect(@tsuru_command.stdout).to include query
+    end
+
     it "Should be able to connect to the applitation via HTTPS with a valid cert" do
       pending "We don't have a certificate for this :)"
       sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)

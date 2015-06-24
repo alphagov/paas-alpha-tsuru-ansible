@@ -90,6 +90,11 @@ class TsuruCommandLine < CommandLineHelper
     execute_helper('tsuru', 'app-info', '-a', app_name)
     (m = /^Repository: (.*)$/.match(@stdout)) ? m[1] : nil
   end
+
+  def tail_app_logs(app_name)
+    execute_helper_async('tsuru','app-log','-a', app_name, '-f')
+  end
+
   def get_app_address(app_name)
     execute_helper('tsuru', 'app-info', '-a', app_name)
     (m = /^Address: (.*)$/.match(@stdout)) ? m[1] : nil
