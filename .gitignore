@@ -3,3 +3,4 @@ roles
 ssh.config
 .ansible-galaxy.check
 .diff-vault.fifo
+vendor/
