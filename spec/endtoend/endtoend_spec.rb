@@ -3,6 +3,7 @@ require 'openssl'
 require 'git_helper'
 require 'tsuru_helper'
 
+
 describe "TsuruEndToEnd" do
   context "deploying an application" do
     before(:all) do
@@ -109,18 +110,10 @@ describe "TsuruEndToEnd" do
       expect(@git_command.exit_status).to eql 0
     end
 
-    it "Should be able to connect to the applitation via HTTPS", :retry => 3, :retry_wait => 1 do
+    it "Should be able to connect to the applitation via HTTPS" do
       sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
-      # Capture the exception to print the expection message
-      begin
-        response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
-        expect(response.status).to eq(["200", "OK"])
-      rescue OpenURI::HTTPError => e
-        if RSpec.configuration.verbose
-          $stdout.puts "Request to https://#{sampleapp_address}/ failed with OpenURI::HTTPError: #{e.message}"
-        end
-        raise e
-      end
+      response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
+      expect(response.status).to eq(["200", "OK"])
     end
 
     it "Should get log output in 3 seconds" do
