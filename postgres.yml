@@ -5,6 +5,7 @@
   sudo_user: root
   roles:
     - ANXS.postgresql
+    - wal_e
   vars:
     #Basic settings
     postgresql_version: 9.3
@@ -52,3 +53,12 @@
       - name: postgresadmin                   # user name
         db: postgres
         role_attr_flags: "SUPERUSER" # role attribute flags
+
+    # WAL-E Configuration
+    wal_e_aws_instance_profile: true
+    wal_e_s3_prefix: "s3://{{ postgres_backup_s3_bucket }}/wal-e"
+    wal_e_pgdata_dir: "/var/lib/postgresql/{{ postgresql_version }}/main/"
+    postgresql_wal_level: hot_standby
+    postgresql_archive_mode: on
+    postgres_backup_s3_bucket: "{{ deploy_env }}-mcp.postgres.backup"
+    postgresql_archive_command: "/usr/bin/envdir {{ wal_e_envdir }} /usr/local/bin/wal-e {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %} wal-push %p"

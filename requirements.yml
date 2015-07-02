@@ -22,6 +22,9 @@
 - name: gandalf
   src: https://github.com/alphagov/ansible-playbook-gandalf.git
   version: v0.0.2
+- name: wal_e
+  src: https://github.com/alphagov/ansible-playbook-wal-e.git
+  version: v0.0.1
 
 # GDS Forked, pull-request sent upstream awaiting merge.
 - name: bennojoy.redis

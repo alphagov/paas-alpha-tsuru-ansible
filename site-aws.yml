@@ -11,6 +11,7 @@
     storage_type: "s3"
     s3_region: "eu-west-1"
     s3_bucket: "{{ deploy_env }}-mcp.registry.storage"
+    postgres_backup_s3_bucket: "{{ deploy_env }}-mcp.postgres.backup"
     storage_path: "/"
 
   roles:
