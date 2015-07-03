@@ -134,8 +134,8 @@ Required contents for group_vars/all/secure (if you don't know the password)
 ---
 pg_admin_pass: <your postgres admin password>
 pg_apiuser_pass: <password for postgresapi database>
-admin_user: <tsuru admin account to create>
-admin_password: <tsuru admin password to create>
+admin_user: <email address for tsuru admin user>
+admin_password: <password for tsuru admin user>
 
 aws_ssl_key: |
   -----BEGIN RSA PRIVATE KEY-----
