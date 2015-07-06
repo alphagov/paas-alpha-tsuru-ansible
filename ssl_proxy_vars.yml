@@ -10,7 +10,6 @@ nginx_sites:
       proxy_redirect default;
       proxy_redirect http://$host/ https://$host/;
       proxy_redirect http://$hostname/ https://$host/;
-      proxy_read_timeout 15s;
       proxy_connect_timeout 15s;
       proxy_buffering off;
       }
