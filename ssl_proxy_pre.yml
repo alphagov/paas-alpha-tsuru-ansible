@@ -5,6 +5,6 @@
 - name: Create Nginx Directory
   file: dest=/etc/nginx mode=755 owner=root group=root state=directory
 - name: Upload Unencrypted Key File
-  copy: content="{{ ssl_key }}" dest=/etc/nginx/wildcard.tsuru.paas.alphagov.co.uk.key owner=root group=root
+  copy: content="{{ ssl_key }}" dest=/etc/nginx/wildcard.{{ domain_name }}.key owner=root group=root
 - name: Upload Unencrypted Cert File
-  copy: content="{{ ssl_crt }}" dest=/etc/nginx/wildcard.tsuru.paas.alphagov.co.uk.site.chain.crt owner=root group=root
+  copy: content="{{ ssl_crt }}" dest=/etc/nginx/wildcard.{{ domain_name }}.site.chain.crt owner=root group=root

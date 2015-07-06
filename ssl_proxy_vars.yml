@@ -2,8 +2,8 @@
 nginx_sites:
   ssl_reverse_proxy:
     - listen 443 ssl
-    - ssl_certificate wildcard.tsuru.paas.alphagov.co.uk.site.chain.crt
-    - ssl_certificate_key wildcard.tsuru.paas.alphagov.co.uk.key
+    - ssl_certificate wildcard.{{ domain_name }}.site.chain.crt
+    - ssl_certificate_key wildcard.{{ domain_name }}.key
     - server_name {{ domain_name }}
     - location / {
       proxy_pass http://localhost:{{ upstream_port }}/;
