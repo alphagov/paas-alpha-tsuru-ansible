@@ -1,3 +1,4 @@
+require 'net/http'
 require 'open-uri'
 require 'openssl'
 require 'git_helper'
@@ -13,10 +14,10 @@ describe "TsuruEndToEnd" do
 
   describe "tsuru API" do
     it "should pass healthchecks for all components" do
-      response = URI.parse("#{@tsuru_api_url}/healthcheck/?check=all").open()
-      expect(response.status).to eq(["200", "OK"])
+      response = Net::HTTP.get_response(URI.parse("#{@tsuru_api_url}/healthcheck/?check=all"))
+      expect(response.code.to_i).to eq(200)
 
-      component_lines = response.read.split("\n")
+      component_lines = response.body.split("\n")
       expect(component_lines.size).to be >= 3
       component_lines.each do |component_line|
         expect(component_line).to match(%r{:\sWORKING\s})
