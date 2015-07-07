@@ -132,6 +132,15 @@ describe "TsuruEndToEnd" do
       expect(@tsuru_command.stdout).to include query
     end
 
+    it "should not get disconnected sooner than in a minute when following logs and no data is transferred" do
+      # read_proxy_timeout default is 60s, if no data gets sent for this period the connection will be closed...
+      start = Time.now.to_i
+      @tsuru_command.tail_app_logs(@sampleapp_name)
+      @tsuru_command.wait()
+      stop = Time.now.to_i
+      expect(stop - start).to be >= 60
+    end
+
     it "should be able to connect to the applitation via HTTPS with a valid cert" do
       pending "We don't have a certificate for this :)"
       sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
