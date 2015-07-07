@@ -12,16 +12,22 @@ describe "TsuruEndToEnd" do
     @tsuru_api_url_insecure = "http://#{@tsuru_api_host}:8080"
   }
 
-  describe "tsuru API" do
-    it "should pass healthchecks for all components" do
-      response = Net::HTTP.get_response(URI.parse("#{@tsuru_api_url}/healthcheck/?check=all"))
-      expect(response.code.to_i).to eq(200)
+  describe "healthchecks" do
+    let(:healthcheck_response) {
+      Net::HTTP.get_response(URI.parse("#{@tsuru_api_url}/healthcheck/?check=all"))
+    }
 
-      component_lines = response.body.split("\n")
+    it "should return each component as WORKING" do
+      component_lines = healthcheck_response.body.split("\n")
       expect(component_lines.size).to be >= 3
+
       component_lines.each do |component_line|
         expect(component_line).to match(%r{:\sWORKING\s})
       end
+    end
+
+    it "should return status code of 200 to indicate all components are healthy" do
+      expect(healthcheck_response.code.to_i).to eq(200)
     end
   end
 
