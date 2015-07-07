@@ -1,3 +1,4 @@
+require 'net/http'
 require 'open-uri'
 require 'openssl'
 require 'git_helper'
@@ -5,6 +6,31 @@ require 'tsuru_helper'
 
 
 describe "TsuruEndToEnd" do
+  before(:all) {
+    @tsuru_api_host = RSpec.configuration.target_api_host || raise("You must set 'TARGET_API_HOST' env var")
+    @tsuru_api_url = "https://#{@tsuru_api_host}"
+    @tsuru_api_url_insecure = "http://#{@tsuru_api_host}:8080"
+  }
+
+  describe "healthchecks" do
+    let(:healthcheck_response) {
+      Net::HTTP.get_response(URI.parse("#{@tsuru_api_url}/healthcheck/?check=all"))
+    }
+
+    it "should return each component as WORKING" do
+      component_lines = healthcheck_response.body.split("\n")
+      expect(component_lines.size).to be >= 3
+
+      component_lines.each do |component_line|
+        expect(component_line).to match(%r{:\sWORKING\s})
+      end
+    end
+
+    it "should return status code of 200 to indicate all components are healthy" do
+      expect(healthcheck_response.code.to_i).to eq(200)
+    end
+  end
+
   context "deploying an application" do
     before(:all) do
       @tsuru_home = Tempdir.new('tsuru-command')
@@ -12,10 +38,6 @@ describe "TsuruEndToEnd" do
         {'HOME' => @tsuru_home.path },
         { :verbose => RSpec.configuration.verbose }
       )
-
-      @tsuru_api_host = RSpec.configuration.target_api_host || raise("You must set 'TARGET_API_HOST' env var")
-      @tsuru_api_url = "https://#{RSpec.configuration.target_api_host}"
-      @tsuru_api_url_insecure = "http://#{RSpec.configuration.target_api_host}:8080"
 
       @tsuru_command.target_add("ci", @tsuru_api_url)
       @tsuru_command.target_add("ci-insecure", @tsuru_api_url_insecure)

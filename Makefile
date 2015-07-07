@@ -64,7 +64,8 @@ check-target-api-host-var:
 
 test: check-env-var check-target-api-host-var load-tsuru-creds
 	@bundle install --path vendor/bundle --quiet
-	@TARGET_API_HOST=${TARGET_API_HOST} \
+	@SSL_CERT_FILE=$(shell python -m certifi) \
+	TARGET_API_HOST=${TARGET_API_HOST} \
 	TSURU_USER=${TSURU_USER} \
 	TSURU_PASS=${TSURU_PASS} \
 	bundle exec rake endtoend:all
