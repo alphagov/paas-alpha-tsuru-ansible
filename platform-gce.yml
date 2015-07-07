@@ -24,3 +24,15 @@ postgres_host: "{{ hostvars[postgres_host_name][ip_field_name] }}"
 
 influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
 influxdb_url: "http://{{ hostvars[influxdb_host_name][ip_field_name] }}:8086"
+
+# WAL-E Configuration
+enable_postgres_log_shipping: true
+postgresql_wal_level: hot_standby
+postgresql_archive_mode: on
+postgres_backup_s3_bucket: "{{ deploy_env }}-mcp-postgres-backup"
+wal_e_aws_instance_profile: false
+wal_e_aws_access_key: {{ gs_access_key }}
+wal_e_aws_secret_key: {{ gs_secret }}
+postgresql_archive_command: "/usr/bin/envdir {{ wal_e_envdir }} /usr/local/bin/wal-e {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %} wal-push %p"
+wal_e_s3_prefix: "s3://{{ postgres_backup_s3_bucket }}/wal-e"
+wal_e_pgdata_dir: "/var/lib/postgresql/{{ postgresql_version }}/main/"
