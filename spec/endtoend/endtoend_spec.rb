@@ -103,20 +103,20 @@ describe "TsuruEndToEnd" do
       expect(@tsuru_command.stdout).to match /Instance .* is now bound to the app .*/
     end
 
-    it "Should be able to push the application" do
+    it "should be able to push the application" do
       git_url = @tsuru_command.get_app_repository(@sampleapp_name)
       expect(git_url).not_to be_nil
       @git_command.push(git_url)
       expect(@git_command.exit_status).to eql 0
     end
 
-    it "Should be able to connect to the applitation via HTTPS" do
+    it "should be able to connect to the applitation via HTTPS" do
       sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
       response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
       expect(response.status).to eq(["200", "OK"])
     end
 
-    it "Should get log output in 3 seconds" do
+    it "should get log output in 3 seconds" do
       sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
       query = "my_special_query_" + Time.now.to_i.to_s
       @tsuru_command.tail_app_logs(@sampleapp_name)
@@ -132,7 +132,7 @@ describe "TsuruEndToEnd" do
       expect(@tsuru_command.stdout).to include query
     end
 
-    it "Should be able to connect to the applitation via HTTPS with a valid cert" do
+    it "should be able to connect to the applitation via HTTPS with a valid cert" do
       pending "We don't have a certificate for this :)"
       sampleapp_address = @tsuru_command.get_app_address(@sampleapp_name)
       response = URI.parse("https://#{sampleapp_address}/").open()
