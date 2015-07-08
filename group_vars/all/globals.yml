@@ -10,6 +10,10 @@ docker_port: 4243
 
 hipache_host_external_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 
+influxdb_database: influxdb
+influxdb_user: influxdb
+influx_pass: influxdb
+
 gandalf_host_external: "{{ deploy_env }}-gandalf.{{ domain_name }}"
 gandalf_port: 8080
 
