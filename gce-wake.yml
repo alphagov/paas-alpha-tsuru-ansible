@@ -1,0 +1,15 @@
+---
+
+# Start all the instances in the specified GCE deployment
+  - hosts: localhost
+    tasks:
+      - name: Deploy gce.py
+        file: src=gce.py dest=./gce.py mode=0744
+      - name: Deploy secrets.py
+        file: src=secrets.py dest=./secrets.py mode=0700
+
+      - name: Wake instances
+        shell: "./gce.py --start {{ item }}"
+        when: '"{{ deploy_env }}-tsuru-" in item'
+        with_items: groups['status_terminated']
+
