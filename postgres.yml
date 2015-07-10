@@ -5,6 +5,8 @@
   sudo_user: root
   roles:
     - ANXS.postgresql
+    - { role: wal_e, when: enable_postgres_log_shipping is defined and enable_postgres_log_shipping }
+
   vars:
     #Basic settings
     postgresql_version: 9.3
