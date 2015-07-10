@@ -62,4 +62,5 @@
 
 - include: postgres.yml
 - include: router.yml
+- include: influx_grafana.yml
 - include: post-install.yml
