@@ -31,3 +31,6 @@ wal_e_aws_instance_profile: true
 postgresql_archive_command: "/usr/bin/envdir {{ wal_e_envdir }} /usr/local/bin/wal-e {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %} wal-push %p"
 wal_e_s3_prefix: "s3://{{ postgres_backup_s3_bucket }}/wal-e"
 wal_e_pgdata_dir: "/var/lib/postgresql/{{ postgresql_version }}/main/"
+
+influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
+influxdb_url: "http://{{ hostvars[groups[influxdb_host_name][0]][ip_field_name] }}:8086"
