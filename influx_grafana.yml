@@ -11,7 +11,7 @@
     - role: Stouts.grafana
   post_tasks:
     - name: Copy grafana API control script
-      copy: src=datasource.sh dest=/usr/local/bin/datasource.sh mode=0750 owner=root group=root
+      copy: src=files/datasource.sh dest=/usr/local/bin/datasource.sh mode=0750 owner=root group=root
     - name: Add influx datasource to grafana
       shell: /usr/local/bin/datasource.sh {{ influxdb_database }}
 
