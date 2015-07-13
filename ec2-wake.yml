@@ -15,5 +15,5 @@
           region: "eu-west-1"
           state: 'running'
           instance_ids: "{{ item.value.ec2_id }}"
-        when: item.value.ec2_tag_Name is defined and item.value.ec2_tag_Name.find("{{ deploy_env }}-tsuru-") != -1
+        when: item.value.ec2_tag_Name is defined and item.value.ec2_tag_Name | match("^{{ deploy_env }}-*")
         with_dict: ec2_hosts._meta.hostvars

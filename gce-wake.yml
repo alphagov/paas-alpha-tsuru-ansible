@@ -10,6 +10,6 @@
 
       - name: Wake instances
         shell: "./gce.py --start {{ item }}"
-        when: '"{{ deploy_env }}-tsuru-" in item'
+        when: item | match("^{{ deploy_env }}-*")
         with_items: groups['status_terminated']
 
