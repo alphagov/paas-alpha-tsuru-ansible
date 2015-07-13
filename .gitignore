@@ -4,3 +4,5 @@ ssh.config
 .ansible-galaxy.check
 .diff-vault.fifo
 vendor/
+ansible-ec2.cache
+ansible-ec2.index
