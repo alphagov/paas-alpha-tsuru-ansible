@@ -85,7 +85,7 @@
     - name: Tsuru app-create dashboard
       ignore_errors: yes
       shell: >
-        tsuru app-create dashboard python
+        tsuru app-create dashboard python -t admin
       when: "not 'dashboard' in tsuru_apps.stdout"
     - name: Get gandalf repo for dashboard
       shell: >
@@ -111,7 +111,7 @@
     - name: Tsuru app-create postgresapi
       ignore_errors: yes
       shell: >
-        tsuru app-create postgresapi python
+        tsuru app-create postgresapi python -t admin
       when: "not 'postgresapi' in tsuru_apps.stdout"
 
     - name: Git pull postgresapi
