@@ -286,6 +286,8 @@ class Ec2Inventory(object):
         parser = argparse.ArgumentParser(description='Produce an Ansible Inventory file based on EC2')
         parser.add_argument('--list', action='store_true', default=True,
                            help='List instances (default: True)')
+        parser.add_argument('--stopped', action='store_true', default=False,
+                           help='List instances (default: False)')
         parser.add_argument('--host', action='store',
                            help='Get all the variables about a specific instance')
         parser.add_argument('--refresh-cache', action='store_true', default=False,
@@ -379,8 +381,12 @@ class Ec2Inventory(object):
         ''' Adds an instance to the inventory and index, as long as it is
         addressable '''
 
-        # Only want running instances unless all_instances is True
-        if not self.all_instances and instance.state != 'running':
+        # Only want running instances unless all_instances is True and not interested in stopped
+        if not self.all_instances and instance.state != 'running' and not self.args.stopped:
+            return
+
+        # Only want stopped instances unless all_instances is True and interested in stopped
+        if not self.all_instances and instance.state != 'stopped' and self.args.stopped:
             return
 
         # Select the best destination address

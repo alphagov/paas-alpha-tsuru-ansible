@@ -95,3 +95,19 @@ diff-vault:
 		<(ansible-vault view ${VAULT_FIFO} 2>/dev/null) \
 		<(ansible-vault view ${VAULT_FILE} 2>/dev/null) \
 		|| [ $$? -eq 1 ]'
+
+start-aws: check-env-var render-ssh-config
+	ansible-playbook -i ec2.py ec2-wake.yml -e deploy_env=${DEPLOY_ENV}
+
+start-gce: check-env-var render-ssh-config
+	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py gce-wake.yml -e deploy_env=${DEPLOY_ENV}
+
+suspend-aws: check-env-var render-ssh-config
+	ansible all -i ec2.py -a 'sudo poweroff' -l "!~^tag_Name_${DEPLOY_ENV}-tsuru-nat:~^tag_Name_${DEPLOY_ENV}-"
+	ansible all -i ec2.py -a 'sudo poweroff' -l "~^tag_Name_${DEPLOY_ENV}-tsuru-nat"
+
+suspend-gce: check-env-var render-ssh-config
+	SSL_CERT_FILE=$(shell python -m certifi) \
+	ansible all -i gce.py -a 'sudo poweroff' -l "!~^${DEPLOY_ENV}-tsuru-nat:~^${DEPLOY_ENV}-"
+	SSL_CERT_FILE=$(shell python -m certifi) \
+	ansible all -i gce.py -a 'sudo poweroff' -l "~^${DEPLOY_ENV}-tsuru-nat"
