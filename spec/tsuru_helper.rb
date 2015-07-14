@@ -67,7 +67,7 @@ class TsuruCommandLine < CommandLineHelper
   end
 
   def service_add(service_name, service_instance_name, plan)
-    execute_helper('tsuru', 'service-add', service_name, service_instance_name, plan)
+    execute_helper('tsuru', 'service-add', service_name, service_instance_name, plan, '-t', 'admin')
   end
 
   def service_remove(service_instance_name)
