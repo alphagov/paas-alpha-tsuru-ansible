@@ -51,7 +51,7 @@ class TsuruCommandLine < CommandLineHelper
   end
 
   def app_create(app_name, platform)
-    execute_helper('tsuru', 'app-create', app_name, platform)
+    execute_helper('tsuru', 'app-create', app_name, platform, '-t', 'admin')
   end
 
   def app_remove(app_name)
@@ -67,7 +67,7 @@ class TsuruCommandLine < CommandLineHelper
   end
 
   def service_add(service_name, service_instance_name, plan)
-    execute_helper('tsuru', 'service-add', service_name, service_instance_name, plan)
+    execute_helper('tsuru', 'service-add', service_name, service_instance_name, plan, '-t', 'admin')
   end
 
   def service_remove(service_instance_name)
