@@ -51,7 +51,7 @@ class TsuruCommandLine < CommandLineHelper
   end
 
   def app_create(app_name, platform)
-    execute_helper('tsuru', 'app-create', app_name, platform)
+    execute_helper('tsuru', 'app-create', app_name, platform, '-t', 'admin')
   end
 
   def app_remove(app_name)
