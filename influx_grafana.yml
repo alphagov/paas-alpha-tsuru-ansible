@@ -1,10 +1,12 @@
 - hosts: "{{ hosts_prefix }}-influx-grafana*"
   sudo: yes
   vars:
-    influxdb_version: latest
-  tasks: # The influxdb and telegraf packages disagree on ownership of /var/run/influxdb - Telegraf Issue #37
-    - name: Create /etc/default/telegraf to fix conflict between influxdb and telegraf packages
-      copy: dest=/etc/default/telegraf mode=0644 content="USER=influxdb\nGROUP=influxdb\n"
+    influxdb_version: 0.9.1
+    telegraf_version: 0.1.4
+  pre_tasks:
+    # FIXME: Remove when deployed everywhere.
+    - name: Remove custom /etc/default/telegraf hack
+      file: path=/etc/default/telegraf state=absent
   roles:
     - role: influxdb
     - role: telegraf
