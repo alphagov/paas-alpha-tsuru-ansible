@@ -14,7 +14,7 @@
 # GDS created and maintained playbooks
 - name: docker_server
   src: https://github.com/alphagov/ansible-playbook-docker_server.git
-  version: v0.0.2
+  version: v0.1.0
 - name: hipache
   src: https://github.com/alphagov/ansible-playbook-hipache.git
   version: v0.0.2

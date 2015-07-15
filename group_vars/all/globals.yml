@@ -7,6 +7,7 @@ api_port: 8080
 docker_registry_host: "{{ deploy_env }}-docker-registry.{{ domain_name }}"
 docker_registry_port: 6000
 docker_port: 4243
+docker_version: 1.7.0
 
 hipache_host_external_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 
