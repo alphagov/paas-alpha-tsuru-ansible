@@ -44,6 +44,18 @@ class GitCommandLine < CommandLineHelper
     execute_helper('git', 'clone', url, @path)
   end
 
+  def init()
+    execute_helper('git', 'init', { :chdir => @path })
+  end
+
+  def add(*cmd)
+    execute_helper('git', 'add', *cmd, { :chdir => @path })
+  end
+
+  def commit(msg)
+    execute_helper('git', 'commit', '-m', msg, { :chdir => @path })
+  end
+
   def push(remote = 'origin', local_branch = 'master', remote_branch = 'master')
     execute_helper('git', 'push', remote, "#{local_branch}:#{remote_branch}", { :chdir => @path })
   end
