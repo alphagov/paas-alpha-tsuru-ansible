@@ -4,8 +4,11 @@ require 'tsuru_helper'
 class WorkSpace
   attr_accessor :tsuru_home, :tsuru_user, :tsuru_pass, :ssh_id_rsa_pub_path
   attr_accessor :tsuru_command
+  attr_accessor :has_login
 
   def clean()
+      # Remove previous state if needed
+      @tsuru_command.key_remove('default_key') if @has_login
       @tsuru_home.rmrf
   end
 
@@ -19,7 +22,18 @@ class WorkSpace
       )
   end
 
+  def do_login(tsuru_api_url, tsuru_user, tsuru_pass)
+      @tsuru_command.target_add("api", tsuru_api_url)
+      @tsuru_command.target_set("api")
+      @tsuru_command.login(tsuru_user, tsuru_pass)
+      raise "Failed login: #{@tsuru_command.stderr}" if @tsuru_command.exit_status != 0
+      @tsuru_command.key_add('default_key', @ssh_id_rsa_pub_path)
+      raise "Failed key-add: #{@tsuru_command.stderr}" if @tsuru_command.exit_status != 0
+      @has_login = true
+  end
+
   def initialize()
+      @has_login = false
       @tsuru_home = Tempdir.new('tsuru-command')
       @tsuru_command = TsuruCommandLine.new(
         { 'HOME' => @tsuru_home.path },
