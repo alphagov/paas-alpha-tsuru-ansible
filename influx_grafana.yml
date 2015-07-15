@@ -2,14 +2,8 @@
   sudo: yes
   vars:
     influxdb_version: 0.9.1
-    telegraf_version: 0.1.4
-  pre_tasks:
-    # FIXME: Remove when deployed everywhere.
-    - name: Remove custom /etc/default/telegraf hack
-      file: path=/etc/default/telegraf state=absent
   roles:
     - role: influxdb
-    - role: telegraf
     - role: Stouts.grafana
   post_tasks:
     - name: Copy grafana API control script
@@ -19,5 +13,8 @@
 
 - hosts: "{{ hosts_prefix }}-*"
   sudo: yes
+  tags: telegraf
+  vars:
+    telegraf_version: 0.1.4
   roles:
     - telegraf
