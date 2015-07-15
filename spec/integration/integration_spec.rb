@@ -28,6 +28,7 @@ describe "Integration" do
 
       @git_command = @workspace.create_git_command(@sampleapp_path)
       @git_command.init()
+      @git_command.config_name_mail("John Smith", "john.smith@example.com")
       @git_command.add("file.txt")
       @git_command.commit("a commit")
     end

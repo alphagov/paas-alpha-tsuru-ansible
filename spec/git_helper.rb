@@ -48,6 +48,11 @@ class GitCommandLine < CommandLineHelper
     execute_helper('git', 'init', { :chdir => @path })
   end
 
+  def config_name_mail(name, mail)
+    execute_helper('git', 'config', 'user.name', name, { :chdir => @path })
+    execute_helper('git', 'config', 'user.email', mail, { :chdir => @path })
+  end
+
   def add(*cmd)
     execute_helper('git', 'add', *cmd, { :chdir => @path })
   end
