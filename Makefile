@@ -70,6 +70,15 @@ test: check-env-var check-target-api-host-var load-tsuru-creds
 	TSURU_PASS=${TSURU_PASS} \
 	bundle exec rake endtoend:all
 
+integration-test: check-env-var check-target-api-host-var load-tsuru-creds
+	@bundle install --path vendor/bundle --quiet
+	@SSL_CERT_FILE=$(shell python -m certifi) \
+	TARGET_API_HOST=${TARGET_API_HOST} \
+	TSURU_USER=${TSURU_USER} \
+	TSURU_PASS=${TSURU_PASS} \
+	bundle exec rake integration:all
+
+
 load-tsuru-creds:
 	$(eval TSURU_USER=$(shell \
 		ansible-vault view group_vars/all/secure | \
@@ -86,6 +95,10 @@ set-gce:
 	$(eval TARGET_API_HOST=${DEPLOY_ENV}-api.$(shell cat platform-gce.yml | awk -F \" '/domain_name:/ { print $$2 }'))
 test-aws: set-aws test
 test-gce: set-gce test
+
+integration-test-aws: set-aws integration-test
+integration-test-gce: set-gce integration-test
+
 
 diff-vault:
 	@(mkfifo -m 0600 ${VAULT_FIFO} && \
