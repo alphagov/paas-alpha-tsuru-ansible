@@ -32,7 +32,7 @@
   version: v0.0.1
 - name: telegraf
   src: https://github.com/alphagov/ansible-playbook-telegraf.git
-  version: v0.0.1
+  version: v0.1.0
 
 # GDS Forked, pull-request sent upstream awaiting merge.
 - name: bennojoy.redis
