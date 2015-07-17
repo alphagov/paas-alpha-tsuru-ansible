@@ -8,13 +8,23 @@
       service: name=postgresql state=stopped
       when: backup_label.stat.exists == False
 
+    # Wait for master to create 1st backup, should happen within 2 mins as there's no data yet on master
+    - name: Wait for backup to appear
+      shell: >
+        su postgres -c '/usr/bin/envdir /etc/wal-e/ wal-e {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %}
+        backup-list 2>/dev/null | wc -l'
+      register: backups
+      until: "backups.stdout > 1"
+      retries: 24
+      delay: 5
+      when: backup_label.stat.exists == False
+
     - name: Restore latest backup
       shell: >
         su postgres -c '/usr/bin/envdir /etc/wal-e/ wal-e {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %} 
         backup-fetch /var/lib/postgresql/9.3/main/ LATEST'
       when: backup_label.stat.exists == False
 
-    # TODO: Check if standby and only create the file then. When promoted to master file gets removed and should not be re-created.
     - name: Create recovery.conf
       template:
         src: templates/recovery.conf.j2
