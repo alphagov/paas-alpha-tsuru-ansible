@@ -58,6 +58,10 @@ class TsuruCommandLine < CommandLineHelper
     execute_helper('tsuru', 'app-remove', '-a', app_name, '-y')
   end
 
+  def app_unlock(app_name)
+    execute_helper('tsuru-admin', 'app-unlock', '-a', app_name, '-y')
+  end
+
   def key_add(ssh_key_name, ssh_key_path)
     execute_helper('tsuru', 'key-add', ssh_key_name, ssh_key_path)
   end
@@ -80,6 +84,14 @@ class TsuruCommandLine < CommandLineHelper
 
   def service_unbind(service_instance_name, app_name)
     execute_helper('tsuru', 'service-unbind', service_instance_name, '-a', app_name)
+  end
+
+  def platform_add(platform_name, dockerfile)
+    execute_helper('tsuru-admin', 'platform-add', platform_name, '-d', dockerfile)
+  end
+
+  def platform_remove(platform_name)
+    execute_helper('tsuru-admin', 'platform-remove', platform_name, '-y')
   end
 
   def get_app_repository(app_name)
