@@ -59,7 +59,7 @@ describe "Integration" do
     end
 
     it "should be able to deploy a platform with a delay in tsuru_unit_agent" do
-      @workspace.tsuru_command.platform_add(@sampleplatform_name, 'https://raw.githubusercontent.com/alphagov/tsuru-ansible/98450546_timeout_test_platform/spec/test_platforms/delay_unit_platform/Dockerfile')
+      @workspace.tsuru_command.platform_add(@sampleplatform_name, 'https://raw.githubusercontent.com/alphagov/tsuru-ansible/master/spec/test_platforms/delay_unit_platform/Dockerfile')
       expect(@workspace.tsuru_command.exit_status).to eql 0
       expect(@workspace.tsuru_command.stdout).to match /Platform successfully added/
     end
