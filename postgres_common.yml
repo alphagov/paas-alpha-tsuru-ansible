@@ -1,0 +1,29 @@
+---
+
+    #Basic settings
+    postgresql_version: 9.3
+    postgresql_encoding: 'UTF-8'
+    postgresql_locale: 'en_US.UTF-8'
+    postgresql_ssl : true
+
+    # Replication settings
+    postgresql_max_wal_senders: 3
+    postgresql_hot_standby: true
+    postgresql_hot_standby_feedback: true
+
+    postgresql_pg_hba_default:
+      - { type: host,  database: replication, user: replication, address: '0.0.0.0/0',    method: 'md5', comment: 'Allow all standby server remote connections:' }
+      - { type: host,  database: all, user: all, address: '0.0.0.0/0',    method: '{{ postgresql_default_auth_method }}', comment: 'Allow all IPv4 remote connections:' }
+      - { type: local, database: all, user: '{{ postgresql_admin_user }}', address: '', method: '{{ postgresql_default_auth_method }}', comment: '' }
+      - { type: local, database: all, user: all, address: '',             method: '{{ postgresql_default_auth_method }}', comment: '"local" is for Unix domain socket connections only' }
+      - { type: host,  database: all, user: all, address: '127.0.0.1/32', method: '{{ postgresql_default_auth_method }}', comment: 'IPv4 local connections:' }
+      - { type: host,  database: all, user: all, address: '::1/128',      method: '{{ postgresql_default_auth_method }}', comment: 'IPv6 local connections:' }
+
+    postgresql_listen_addresses:
+      - '*'
+
+    postgresql_admin_user: "postgres"
+    postgresql_default_auth_method: "trust"
+
+    postgresql_cluster_name: "main"
+    postgresql_cluster_reset: false
