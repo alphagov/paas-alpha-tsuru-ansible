@@ -10,7 +10,7 @@ VAULT_FILE = group_vars/all/secure
 
 ANSIBLE_PLAYBOOK_CMD = ansible-playbook \
 	-i $(1) \
-	site-$(2).yml \
+	site.yml \
 	-e "@platform-$(2).yml" \
 	-e "deploy_env=${DEPLOY_ENV}" ${ARGS}
 
