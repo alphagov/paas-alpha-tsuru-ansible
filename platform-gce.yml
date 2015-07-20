@@ -11,7 +11,6 @@ redis_host: "{{ hostvars[redis_host_name][ip_field_name] }}"
 
 tsuru_api_host_name: "{{ hosts_prefix }}-tsuru-api-0"
 tsuru_api_host: "{{ hostvars[tsuru_api_host_name][ip_field_name] }}"
-tsuru_api_internal_lb: "{{ hosts_prefix }}-api.{{ domain_name }}"
 tsuru_api_external_lb: "{{ hosts_prefix }}-api.{{ domain_name }}"
 
 gandalf_host_name: "{{ hosts_prefix }}-tsuru-gandalf"

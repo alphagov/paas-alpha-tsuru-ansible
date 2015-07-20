@@ -21,7 +21,6 @@ mongodb_conf_bind_ip: 0.0.0.0
 mongodb_port: 27017
 
 tsuru_api_external_url: https://{{ tsuru_api_external_lb }}:443
-tsuru_api_internal_url: https://{{ tsuru_api_internal_lb }}:443
 
 # WAL-E Configuration
 enable_postgres_log_shipping: true
