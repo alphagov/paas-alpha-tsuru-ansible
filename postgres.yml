@@ -3,10 +3,10 @@
   sudo: yes
   sudo_user: root
   vars_files:
-    - "postgres_common.yml"
+    - "postgres_common_vars.yml"
 
   pre_tasks:
-    - include_vars: postgres_master.yml
+    - include_vars: postgres_master_vars.yml
       when: "ansible_default_ipv4.address == postgres_master"
 
   roles:
@@ -16,5 +16,5 @@
   post_tasks:
     - include: postgres_master_post.yml
       when: "ansible_default_ipv4.address == postgres_master"
-    - include: postgres_standby.yml
+    - include: postgres_standby_post.yml
       when: "ansible_default_ipv4.address != postgres_master"
