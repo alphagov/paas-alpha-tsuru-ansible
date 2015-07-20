@@ -1,0 +1,12 @@
+---
+- hosts: "{{ hosts_prefix }}-tsuru-registry*"
+  sudo: yes
+
+  pre_tasks:
+    - include_vars: gce_registry_vars.yml
+      when: "platform == 'gce'"
+    - include_vars: aws_registry_vars.yml
+      when: "platform == 'aws'"
+
+  roles:
+    - aalda.docker-registry
