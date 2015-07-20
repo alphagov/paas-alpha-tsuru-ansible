@@ -1,15 +1,15 @@
 ---
 
-    - name: Check if this node has started restoring
+    - name: PostgreSQL Standby | Check if this node has started restoring
       stat: path=/var/lib/postgresql/9.3/main/recovery.conf
       register: backup_label
 
-    - name: Stop postgresql before doing backup restore
+    - name: PostgreSQL Standby | Stop postgresql before doing backup restore
       service: name=postgresql state=stopped
       when: backup_label.stat.exists == False
 
     # Wait for master to create 1st backup, should happen within 2 mins as there's no data yet on master
-    - name: Wait for backup to appear
+    - name: PostgreSQL Standby | Wait for backup to appear
       shell: >
         su postgres -c '/usr/bin/envdir /etc/wal-e/ wal-e {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %}
         backup-list 2>/dev/null | wc -l'
@@ -19,18 +19,18 @@
       delay: 5
       when: backup_label.stat.exists == False
 
-    - name: Restore latest backup
+    - name: PostgreSQL Standby | Restore latest backup
       shell: >
         su postgres -c '/usr/bin/envdir /etc/wal-e/ wal-e {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %} 
         backup-fetch /var/lib/postgresql/9.3/main/ LATEST'
       when: backup_label.stat.exists == False
 
-    - name: Create recovery.conf
+    - name: PostgreSQL Standby | Create recovery.conf
       template:
         src: templates/recovery.conf.j2
         dest: /var/lib/postgresql/9.3/main/recovery.conf
         owner: "postgres"
 
-    - name: Start postgresql
+    - name: PostgreSQL Standby | Start postgresql
       service: name=postgresql state=started
       when: backup_label.stat.exists == False
