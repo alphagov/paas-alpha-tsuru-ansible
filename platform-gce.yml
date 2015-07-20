@@ -1,4 +1,5 @@
 ---
+platform: "gce"
 ip_field_name: "gce_private_ip"
 domain_name: "tsuru2.paas.alphagov.co.uk"
 hosts_prefix: "{{ deploy_env }}"
