@@ -1,6 +1,11 @@
 ---
 - hosts: "{{ hosts_prefix }}-tsuru-registry*"
   sudo: yes
+  vars:
+    registry_port: "{{ docker_registry_port }}"
+    use_nginx: true
+    use_redis: false
+    registry_ssl: false
 
   pre_tasks:
     - include_vars: gce_registry_vars.yml

@@ -1,10 +1,4 @@
 ---
-
-    registry_port: "{{ docker_registry_port }}"
-    use_nginx: true
-    use_redis: false
-    registry_ssl: false
-
     storage_type: "s3"
     s3_region: "eu-west-1"
     s3_bucket: "{{ deploy_env }}-mcp.registry.storage"
