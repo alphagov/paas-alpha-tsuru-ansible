@@ -8,9 +8,9 @@
     registry_ssl: false
 
   pre_tasks:
-    - include_vars: gce_registry_vars.yml
+    - include_vars: registry_gce_vars.yml
       when: "platform == 'gce'"
-    - include_vars: aws_registry_vars.yml
+    - include_vars: registry_aws_vars.yml
       when: "platform == 'aws'"
 
   roles:
