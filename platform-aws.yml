@@ -1,4 +1,5 @@
 ---
+platform: "aws"
 ip_field_name: "ec2_private_ip_address"
 domain_name: "tsuru.paas.alphagov.co.uk"
 hosts_prefix: "tag_Name_{{ deploy_env }}"

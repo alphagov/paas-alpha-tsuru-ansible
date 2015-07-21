@@ -1,4 +1,6 @@
 # Bring up db tier (redis, mongodb).
+- include: registry.yml
+
 - hosts: "{{ hosts_prefix }}-tsuru-db"
   sudo: yes
   roles:

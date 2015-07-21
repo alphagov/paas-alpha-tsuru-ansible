@@ -1,5 +1,4 @@
 ---
-
 - hosts: "{{ hosts_prefix }}-tsuru-registry*"
   sudo: yes
   vars:
@@ -8,12 +7,11 @@
     use_redis: false
     registry_ssl: false
 
-    storage_type: "s3"
-    s3_region: "eu-west-1"
-    s3_bucket: "{{ deploy_env }}-mcp.registry.storage"
-    storage_path: "/"
+  pre_tasks:
+    - include_vars: registry_gce_vars.yml
+      when: "platform == 'gce'"
+    - include_vars: registry_aws_vars.yml
+      when: "platform == 'aws'"
 
   roles:
     - aalda.docker-registry
-
-- include: common.yml

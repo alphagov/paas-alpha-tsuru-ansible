@@ -1,0 +1,5 @@
+---
+    storage_type: "gcs"
+    gcs_bucket: "{{ deploy_env }}-mcp-registry-storage"
+    gcs_storage_path: "/"
+    use_gcs_default_credentials: true
