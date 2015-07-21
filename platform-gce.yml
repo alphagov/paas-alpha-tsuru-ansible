@@ -21,7 +21,7 @@ mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
 mongodb_host: "{{ hostvars[mongodb_host_name][ip_field_name] }}"
 
 postgres_host_name: "{{ hosts_prefix }}-tsuru-postgres-0"
-postgres_host: "{{ hostvars[postgres_host_name][ip_field_name] }}"
+postgres_host: "{{ deploy_env }}-postgres-master.{{ domain_name }}"
 postgres_master: "{{ hostvars[postgres_host_name][ip_field_name] }}"
 
 influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
