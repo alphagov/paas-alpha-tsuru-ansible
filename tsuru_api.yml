@@ -16,20 +16,21 @@
     - name: Install httplib2 for Ansible uri module
       apt: name=python-httplib2 state=present
 
+# Run these tasks explicitly on 1st API server as the rest of playbooks (post install) expect it
+- hosts: "{{ hosts_prefix }}-tsuru-api*[0]"
+  sudo: yes
+  tasks:
     - name: add admin team
-      run_once: true
       shell: >
         mongo tsuru --eval 'db.teams.update({_id: "admin"}, {_id: "admin"}, {upsert: true})';
       delegate_to: "{{ mongodb_host }}"
 
     - name: add admin user to admin team
-      run_once: true
       shell: >
         mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
       delegate_to: "{{ mongodb_host }}"
 
     - name: add admin user
-      run_once: true
       uri:
         method=POST body_format=json
         body="{\"email\":\"{{ admin_user }}\",\"password\":\"{{ admin_password }}\"}"
@@ -37,7 +38,6 @@
         status_code=201,409
 
     - name: login with the admin user
-      run_once: true
       uri:
         method=POST body_format=json
         body="{\"password\":\"{{ admin_password }}\"}"
@@ -46,5 +46,4 @@
       register: login_response
 
     - name: write admin token
-      run_once: true
       copy: dest=~/.tsuru_token mode=0600 content="{{ (login_response.content|from_json).token }}"
