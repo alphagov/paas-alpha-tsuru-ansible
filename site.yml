@@ -5,11 +5,6 @@
   sudo: yes
   roles:
     - bennojoy.redis
-
-- hosts: "{{ hosts_prefix }}-tsuru-db"
-  sudo: yes
-  sudo_user: root
-  roles:
     - greendayonfire.mongodb
 
 # tsuru core components.
@@ -41,11 +36,13 @@
       service: name=gandalf-server state=restarted
 
 - hosts: "{{ hosts_prefix }}-tsuru-docker*"
-  serial: 1
   sudo: yes
   roles:
     - docker_server
 
+- hosts: "{{ hosts_prefix }}-tsuru-docker*"
+  serial: 1
+  sudo: yes
   post_tasks:
     - name: Register node.
       shell: >
