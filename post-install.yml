@@ -178,6 +178,66 @@
         crane create ~/postgresapi.yml
       when: "not 'postgresql' in service_list.stdout"
 
+    # Elasticsearch
+
+    - name: Post Install Tasks | Tsuru app-create elasticsearchapi
+      ignore_errors: yes
+      shell: >
+        tsuru app-create elasticsearchapi python -t admin
+      when: "not 'elasticsearchapi' in tsuru_apps.stdout"
+
+    - name: Post Install Tasks | Get env variables of elasticsearchapi
+      shell: >
+        tsuru env-get -a elasticsearchapi
+      register: elasticsearchapi_env
+
+    - name: Post Install Tasks | Tsuru set environment variables for elasticsearchapi
+      shell: >
+        tsuru env-set -a elasticsearchapi ELASTICSEARCH_HOST={{ elasticsearch_host }};
+      when: "not \"{{ elasticsearch_host }}\" in elasticsearchapi_env.stdout"
+
+    - name: Post Install Tasks | Git pull elasticsearchapi
+      git:
+        repo: https://github.com/alphagov/elastic-search-api.git
+        dest: /tmp/elasticsearchapi
+        version: "717c1faa36c926ec8715fc7245ad8bde0f8a30f6"
+
+    - name: Post Install Tasks | Get gandalf repo for elasticsearchapi
+      shell: >
+        tsuru app-info -a elasticsearchapi | grep -o 'git@.\+'
+      register: elasticsearchapi_git_remote
+
+    - name: Post Install Tasks | Git push elasticsearchapi to gandalf
+      shell: >
+        git push {{ elasticsearchapi_git_remote.stdout }} master
+      args:
+        chdir: /tmp/elasticsearchapi
+
+    - name: Post Install Tasks | Tsuru app-info elasticsearchapi
+      shell: >
+        tsuru app-info -a elasticsearchapi
+      register: elasticsearchapi_app_info
+
+    - name: Post Install Tasks | Add <deploy_env>-elasticsearchapi.<domain_name> cname to elasticsearchapi app
+      shell: >
+        tsuru cname-add {{ elasticsearch_url }} -a elasticsearchapi
+      when: "not \"{{ elasticsearch_url }}\" in elasticsearchapi_app_info.stdout"
+
+    - name: Post Install Tasks | Generate elasticsearchapi.yml
+      copy:
+        content: |
+          id: elasticsearch
+          username: admin
+          password: password
+          endpoint:
+            production: https://{{ elasticsearch_url }}
+        dest: ~/elasticsearchapi.yml
+
+    - name: Post Install Tasks | Register elasticsearch service
+      shell: >
+        crane create ~/elasticsearchapi.yml
+      when: "not 'elasticsearch' in service_list.stdout"
+
     - debug: var=dashboard_app_info.stdout_lines
     - debug: var=postgresapi_app_info.stdout_lines
-
+    - debug: var=elasticsearchapi_app_info.stdout_lines
