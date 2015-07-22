@@ -55,10 +55,21 @@ describe "TsuruEndToEnd" do
     end
 
     after(:all) do
+      # Remove previous state if needed.
       @workspace.tsuru_command.key_remove('rspec') # Remove previous state if needed
       @workspace.tsuru_command.service_unbind(@sampleapp_db_instance, @sampleapp_name)
-      @workspace.tsuru_command.service_remove(@sampleapp_db_instance) # Remove previous state if needed
-      @workspace.tsuru_command.app_remove(@sampleapp_name) # Remove previous state if needed
+      @workspace.tsuru_command.service_remove(@sampleapp_db_instance)
+      # Remove the application. Wait for the unlock if needed
+      retries=5
+      begin
+        @workspace.tsuru_command.app_remove(@sampleapp_name)
+        expect(@workspace.tsuru_command.stderr).to_not match /App locked by/
+      rescue RSpec::Expectations::ExpectationNotMetError
+        sleep 5
+        retry if (retries -= 1) > 0
+        @workspace.tsuru_command.app_unlock(@sampleapp_name)
+        @workspace.tsuru_command.app_remove(@sampleapp_name)
+      end
       @workspace.clean
     end
 
