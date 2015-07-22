@@ -1,0 +1,19 @@
+---
+
+- hosts: "{{ hosts_prefix }}-tsuru-elasticsearch"
+  sudo: yes
+  sudo_user: root
+  tasks:
+    - name: Elasticsearch | Install java
+      apt: name=openjdk-7-jre-headless state=present update_cache=yes
+    - name: Elasticsearch | Download ES 1.6.0
+      get_url:
+        url: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.6.0.deb
+        dest: /tmp/elasticsearch-1.6.0.deb
+    - name: Elasticsearch | Install ES 1.6.0
+      apt:
+        deb: /tmp/elasticsearch-1.6.0.deb
+    - name: Elasticsearch | Start the service
+      service:
+        name: elasticsearch
+        state: started
