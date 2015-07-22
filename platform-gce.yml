@@ -20,10 +20,6 @@ gandalf_host_internal: "{{ hostvars[gandalf_host_name][ip_field_name] }}"
 mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
 mongodb_host: "{{ hostvars[mongodb_host_name][ip_field_name] }}"
 
-postgres_host_name: "{{ hosts_prefix }}-tsuru-postgres-0"
-postgres_host: "{{ deploy_env }}-postgres-master.{{ domain_name }}"
-postgres_master: "{{ hostvars[postgres_host_name][ip_field_name] }}"
-
 influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
 influxdb_url: "http://{{ hostvars[influxdb_host_name][ip_field_name] }}:8086"
 

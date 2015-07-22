@@ -6,6 +6,12 @@
     - "postgres_common_vars.yml"
 
   pre_tasks:
+    - name: "PostgreSQL | Get Postgres Master IP from DNS"
+      shell: "dig +short {{ postgres_host }}"
+      register: postgres_master_IP_dig
+    - name: "PostgreSQL | Set Postgres Master IP fact"
+      set_fact:
+        postgres_master: "{{ postgres_master_IP_dig.stdout }}"
     - include_vars: postgres_master_vars.yml
       when: "ansible_default_ipv4.address == postgres_master"
 
