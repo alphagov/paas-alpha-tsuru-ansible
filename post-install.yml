@@ -1,142 +1,144 @@
 - hosts: "{{ hosts_prefix }}-tsuru-api*[0]"
   sudo: yes
   tasks:
-    - name: Install git client
+    - name: Post Install Tasks | Install git client
       apt: name=git state=present
-    - name: Install crane
+    - name: Post Install Tasks | Install crane
       apt: name=crane state=present
-    - name: Check tsuru_deployer key
+    - name: Post Install Tasks | Check tsuru_deployer key
       stat: path=~/.ssh/tsuru_deployer
       register: tsuru_deployer_key
 
-    - name: Generate tsuru_deployer key
+    - name: Post Install Tasks | Generate tsuru_deployer key
       shell: >
         ssh-keygen -b 2048 -t rsa -f ~/.ssh/tsuru_deployer -q -N ""
       when: tsuru_deployer_key.stat.exists == False
-    - name: Generate tsuru_deployer.pub key
+    - name: Post Install Tasks | Generate tsuru_deployer.pub key
       shell: >
         ssh-keygen -y -f ~/.ssh/tsuru_deployer >~/.ssh/tsuru_deployer.pub
       when: tsuru_deployer_key.stat.exists == False
 
-    - name: Generate ssh config for git
+    - name: Post Install Tasks | Generate ssh config for git
       copy:
         content: |
           Host {{ deploy_env }}-gandalf.{{ domain_name }}
-            HostName {{ deploy_env }}-gandalf.{{ domain_name }} 
+            HostName {{ deploy_env }}-gandalf.{{ domain_name }}
             User git
             IdentityFile ~/.ssh/tsuru_deployer
-        dest: ~/.ssh/config        
+        dest: ~/.ssh/config
         mode: 0600
 
-    - name: Add Gandalf to known hosts
+    - name: Post Install Tasks | Add Gandalf to known hosts
       shell: >
         ssh-keyscan {{ deploy_env }}-gandalf.{{ domain_name }} >~/.ssh/known_hosts
 
-    - name: Tsuru pool-list
-      shell: > 
+    - name: Post Install Tasks | Tsuru pool-list
+      shell: >
         tsuru-admin pool-list
       register: tsuru_pools
-    - name: Tsuru pool add default
+    - name: Post Install Tasks | Tsuru pool add default
       shell: >
         tsuru-admin pool-add default
       when: "not 'default' in tsuru_pools.stdout"
-    - name: Check admin pool
+    - name: Post Install Tasks | Check admin pool
       shell: >
         tsuru pool-list | grep admin
       register: admin_pool
-    - name: Add admin team to default pool
+    - name: Post Install Tasks | Add admin team to default pool
       shell: >
         tsuru-admin pool-teams-add default admin
       when: "not 'default' in admin_pool.stdout"
 
-    - name: Tsuru platform-list
+    - name: Post Install Tasks | Tsuru platform-list
       shell: >
         tsuru platform-list | awk {'print $2'}
       register: tsuru_platforms
-    - name: Tsuru platform add python
+    - name: Post Install Tasks | Tsuru platform add python
       ignore_errors: no
       shell: >
         tsuru-admin platform-add python -d https://raw.github.com/tsuru/basebuilder/master/python/Dockerfile
       when: "not 'python' in tsuru_platforms.stdout"
-    - name: Tsuru platform add java
+    - name: Post Install Tasks | Tsuru platform add java
       ignore_errors: no
       shell: >
         tsuru-admin platform-add java -d https://raw.github.com/tsuru/basebuilder/master/java/Dockerfile
       when: "not 'java' in tsuru_platforms.stdout"
-    - name: Tsuru platform add static
+    - name: Post Install Tasks | Tsuru platform add static
       ignore_errors: no
       shell: >
         tsuru-admin platform-add static -d https://raw.github.com/tsuru/basebuilder/master/static/Dockerfile
       when: "not 'static' in tsuru_platforms.stdout"
 
-    - name: Tsuru key-list
+    - name: Post Install Tasks | Tsuru key-list
       shell: >
         tsuru key-list
       register: tsuru_keys
-    - name: Tsuru add ssh key
+    - name: Post Install Tasks | Tsuru add ssh key
       shell: >
         tsuru key-add tsuru_deployer ~/.ssh/tsuru_deployer.pub
       when: "not 'tsuru_deployer' in tsuru_keys.stdout"
 
-    - name: Tsuru app-list
+    - name: Post Install Tasks | Tsuru app-list
       shell: >
         tsuru app-list
       register: tsuru_apps
-    - name: Tsuru app-create dashboard
+    - name: Post Install Tasks | Tsuru app-create dashboard
       ignore_errors: yes
       shell: >
         tsuru app-create dashboard python -t admin
       when: "not 'dashboard' in tsuru_apps.stdout"
-    - name: Get gandalf repo for dashboard
+    - name: Post Install Tasks | Get gandalf repo for dashboard
       shell: >
         tsuru app-info -a dashboard | grep -o 'git@.\+'
       register: dashboard_git_remote
 
-    - name: Git pull dashboard
+    - name: Post Install Tasks | Git pull dashboard
       git:
         repo: https://github.com/tsuru/tsuru-dashboard.git
         dest: /tmp/tsuru-dashboard
 
-    - name: Git push dashboard to gandalf
+    - name: Post Install Tasks | Git push dashboard to gandalf
       shell: >
         git push {{ dashboard_git_remote.stdout }} master
-      args: 
+      args:
         chdir: /tmp/tsuru-dashboard
 
-    - name: Tsuru app-info dashboard
+    - name: Post Install Tasks | Tsuru app-info dashboard
       shell: >
         tsuru app-info -a dashboard
       register: dashboard_app_info
 
-    - name: Tsuru app-create postgresapi
+    # Adding postgresapi app
+
+    - name: Post Install Tasks | Tsuru app-create postgresapi
       ignore_errors: yes
       shell: >
         tsuru app-create postgresapi python -t admin
       when: "not 'postgresapi' in tsuru_apps.stdout"
 
-    - name: Git pull postgresapi
+    - name: Post Install Tasks | Git pull postgresapi
       git:
         repo: https://github.com/tsuru/postgres-api
         dest: /tmp/postgresapi
 
-    - name: Get gandalf repo for postgresapi
+    - name: Post Install Tasks | Get gandalf repo for postgresapi
       shell: >
         tsuru app-info -a postgresapi | grep -o 'git@.\+'
       register: postgresapi_git_remote
 
-    - name: Git push postgresapi to gandalf
+    - name: Post Install Tasks | Git push postgresapi to gandalf
       shell: >
         git push {{ postgresapi_git_remote.stdout }} master
       args:
         chdir: /tmp/postgresapi
       register: postgresapi_push_result
 
-    - name: Tsuru app-info postgresapi
+    - name: Post Install Tasks | Tsuru app-info postgresapi
       shell: >
         tsuru app-info -a postgresapi
       register: postgresapi_app_info
 
-    - name: Tsuru set environment variables for postgresapi
+    - name: Post Install Tasks | Tsuru set environment variables for postgresapi
       shell: >
         tsuru env-set -a postgresapi POSTGRESAPI_DATABASE=postgresapi;
         tsuru env-set -a postgresapi POSTGRESAPI_USER=postgresapi;
@@ -150,17 +152,17 @@
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN_PASSWORD={{ pg_admin_pass }};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PUBLIC_HOST={{ postgres_master_host }};
       when: "not 'Everything up-to-date' in postgresapi_push_result.stderr"
-    - name: Tsuru app-run db upgrade
+    - name: Post Install Tasks | Tsuru app-run db upgrade
       shell: >
         tsuru app-run --app postgresapi -- python manage.py upgrade_db
       when: "not 'Everything up-to-date' in postgresapi_push_result.stderr"
 
-    - name: Add <deploy_env>-postgresapi<domain_name> cname to posgtresqlapi app
+    - name: Post Install Tasks | Add <deploy_env>-postgresapi.<domain_name> cname to posgtresqlapi app
       shell: >
         tsuru cname-add {{ deploy_env }}-postgresapi.{{ domain_name }} -a postgresapi
       when: "not '-postgresapi.' in postgresapi_app_info.stdout"
 
-    - name: Generate postgresapi.yml
+    - name: Post Install Tasks | Generate postgresapi.yml
       copy:
         content: |
           id: postgresql
@@ -169,11 +171,11 @@
             production: https://{{ deploy_env }}-postgresapi.{{ domain_name }}
         dest: ~/postgresapi.yml
 
-    - name: Get service list
+    - name: Post Install Tasks | Get service list
       shell: >
         tsuru service-list
       register: service_list
-    - name: Register service
+    - name: Post Install Tasks | Register service
       shell: >
         crane create ~/postgresapi.yml
       when: "not 'postgresql' in service_list.stdout"
