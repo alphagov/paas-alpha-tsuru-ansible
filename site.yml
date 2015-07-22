@@ -60,6 +60,7 @@
       when: "not ansible_default_ipv4.address in docker_node_list.stdout"
 
 - include: postgres.yml
+- include: elasticsearch.yml
 - include: router.yml
 - include: influx_grafana.yml
 - include: post-install.yml
