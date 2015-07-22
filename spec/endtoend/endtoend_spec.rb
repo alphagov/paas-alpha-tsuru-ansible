@@ -60,7 +60,7 @@ describe "TsuruEndToEnd" do
       @workspace.tsuru_command.service_unbind(@sampleapp_db_instance, @sampleapp_name)
       @workspace.tsuru_command.service_remove(@sampleapp_db_instance)
       # Remove the application. Wait for the unlock if needed
-      retries=5
+      retries=25
       begin
         @workspace.tsuru_command.app_remove(@sampleapp_name)
         expect(@workspace.tsuru_command.stderr).to_not match /App locked by/
