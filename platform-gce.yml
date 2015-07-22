@@ -23,6 +23,8 @@ mongodb_host: "{{ hostvars[mongodb_host_name][ip_field_name] }}"
 influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
 influxdb_url: "http://{{ hostvars[influxdb_host_name][ip_field_name] }}:8086"
 
+elasticsearch_host: "{{ hostvars[elasticsearch_host_name][ip_field_name] }}"
+
 # WAL-E Configuration
 wal_e_aws_instance_profile: false
 wal_e_aws_access_key: "{{ gs_access_key }}"

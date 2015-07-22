@@ -20,6 +20,8 @@ gandalf_host_internal: "{{ hostvars[groups[gandalf_host_name][0]][ip_field_name]
 mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
 mongodb_host: "{{ hostvars[groups[mongodb_host_name][0]][ip_field_name] }}"
 
+elasticsearch_host: "{{ hostvars[groups[elasticsearch_host_name][0]][ip_field_name] }}"
+
 influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
 influxdb_url: "http://{{ hostvars[groups[influxdb_host_name][0]][ip_field_name] }}:8086"
 
