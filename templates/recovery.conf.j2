@@ -5,4 +5,4 @@ standby_mode = 'on'
 restore_command ='/usr/bin/envdir /etc/wal-e /usr/local/bin/wal-e {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %} wal-fetch "%f" "%p"'
 
 # replication configuration
-primary_conninfo = 'host={{ postgres_host }} port=5432 user=replication password={{ pg_replicationuser_pass }}'
+primary_conninfo = 'host={{ postgres_master_host }} port=5432 user=replication password={{ pg_replicationuser_pass }}'
