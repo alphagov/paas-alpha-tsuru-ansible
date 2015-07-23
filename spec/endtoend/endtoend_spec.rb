@@ -56,10 +56,8 @@ describe "TsuruEndToEnd" do
 
     after(:all) do
       # Remove previous state if needed.
-      @workspace.tsuru_command.key_remove('rspec') # Remove previous state if needed
-      @workspace.tsuru_command.service_unbind(@sampleapp_db_instance, @sampleapp_name)
-      @workspace.tsuru_command.service_remove(@sampleapp_db_instance)
-      # Remove the application. Wait for the unlock if needed
+      @workspace.tsuru_command.key_remove('rspec')
+      # Remove the app. Wait for the unlock if needed
       retries=25
       begin
         @workspace.tsuru_command.app_remove(@sampleapp_name)
@@ -70,6 +68,7 @@ describe "TsuruEndToEnd" do
         @workspace.tsuru_command.app_unlock(@sampleapp_name)
         @workspace.tsuru_command.app_remove(@sampleapp_name)
       end
+      @workspace.tsuru_command.service_remove(@sampleapp_db_instance)
       @workspace.clean
     end
 
