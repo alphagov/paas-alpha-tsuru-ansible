@@ -6,8 +6,14 @@
     - "postgres_common_vars.yml"
 
   pre_tasks:
+    - name: "PostgreSQL | Get Postgres Master IP from DNS"
+      shell: "dig +short {{ postgres_master_host }}"
+      register: postgres_master_ip_from_dig
+    - name: "PostgreSQL | Set Postgres Master IP fact"
+      set_fact:
+        postgres_master_ip: "{{ postgres_master_ip_from_dig.stdout }}"
     - include_vars: postgres_master_vars.yml
-      when: "ansible_default_ipv4.address == postgres_master"
+      when: "ansible_default_ipv4.address == postgres_master_ip"
 
   roles:
     - ANXS.postgresql
@@ -15,6 +21,6 @@
 
   post_tasks:
     - include: postgres_master_post.yml
-      when: "ansible_default_ipv4.address == postgres_master"
+      when: "ansible_default_ipv4.address == postgres_master_ip"
     - include: postgres_standby_post.yml
-      when: "ansible_default_ipv4.address != postgres_master"
+      when: "ansible_default_ipv4.address != postgres_master_ip"

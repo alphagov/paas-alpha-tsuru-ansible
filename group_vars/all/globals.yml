@@ -34,3 +34,5 @@ wal_e_pgdata_dir: "/var/lib/postgresql/{{ postgresql_version }}/main/"
 postgresql_archive_command: >
   /usr/bin/envdir {{ wal_e_envdir }} /usr/local/bin/wal-e
   {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %} wal-push %p
+
+postgres_master_host: "{{ deploy_env }}-postgres-master.{{ domain_name }}"

@@ -141,14 +141,14 @@
         tsuru env-set -a postgresapi POSTGRESAPI_DATABASE=postgresapi;
         tsuru env-set -a postgresapi POSTGRESAPI_USER=postgresapi;
         tsuru env-set -a postgresapi POSTGRESAPI_PASSWORD={{ pg_apiuser_pass }};
-        tsuru env-set -a postgresapi POSTGRESAPI_HOST={{ postgres_host }};
+        tsuru env-set -a postgresapi POSTGRESAPI_HOST={{ postgres_master_host }};
         tsuru env-set -a postgresapi POSTGRESAPI_PORT=5432;
         tsuru env-set -a postgresapi POSTGRESAPI_SALT=md5;
-        tsuru env-set -a postgresapi POSTGRESAPI_SHARED_HOST={{ postgres_host }};
+        tsuru env-set -a postgresapi POSTGRESAPI_SHARED_HOST={{ postgres_master_host }};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PORT=5432;
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN=postgresadmin;
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN_PASSWORD={{ pg_admin_pass }};
-        tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PUBLIC_HOST={{ postgres_host }};
+        tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PUBLIC_HOST={{ postgres_master_host }};
       when: "not 'Everything up-to-date' in postgresapi_push_result.stderr"
     - name: Tsuru app-run db upgrade
       shell: >
