@@ -36,3 +36,6 @@ postgresql_archive_command: >
   {% if wal_e_aws_instance_profile %}--aws-instance-profile{% endif %} wal-push %p
 
 postgres_master_host: "{{ deploy_env }}-postgres-master.{{ domain_name }}"
+
+elasticsearch_host_name: "{{ hosts_prefix }}-tsuru-elasticsearch"
+elasticsearch_api: "{{ deploy_env }}-elasticsearchapi.{{ domain_name }}"
