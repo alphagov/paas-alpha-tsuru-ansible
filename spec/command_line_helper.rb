@@ -12,7 +12,15 @@ class CommandLineHelper
   def wait()
     @tout.join if @tout
     @terr.join if @terr
-    @exit_status = @wait_thread.value.to_i >> 8 if @wait_thread
+    if @wait_thread
+      # Return code can be the the signal number if killed with signal
+      # or exit value shifted 8 bits if exited normally
+      if @wait_thread.value.signaled?
+        @exit_status = @wait_thread.value.to_i + 128
+      else
+        @exit_status = @wait_thread.value.to_i >> 8
+      end
+    end
     self
   end
 

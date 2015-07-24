@@ -55,10 +55,27 @@ describe "TsuruEndToEnd" do
     end
 
     after(:all) do
-      @workspace.tsuru_command.key_remove('rspec') # Remove previous state if needed
-      @workspace.tsuru_command.service_unbind(@sampleapp_db_instance, @sampleapp_name)
-      @workspace.tsuru_command.service_remove(@sampleapp_db_instance) # Remove previous state if needed
-      @workspace.tsuru_command.app_remove(@sampleapp_name) # Remove previous state if needed
+      # Remove previous state if needed.
+      @workspace.tsuru_command.key_remove('rspec')
+      # Remove the app. Wait for the unlock if needed
+      retries=25
+      begin
+        @workspace.tsuru_command.app_remove(@sampleapp_name)
+        expect(@workspace.tsuru_command.stderr).to_not match /App locked by/
+      rescue RSpec::Expectations::ExpectationNotMetError
+        sleep 5
+        retry if (retries -= 1) > 0
+        @workspace.tsuru_command.app_unlock(@sampleapp_name)
+        @workspace.tsuru_command.app_remove(@sampleapp_name)
+      end
+      retries=25
+      begin
+        sleep 1
+        @workspace.tsuru_command.service_remove(@sampleapp_db_instance)
+        expect(@workspace.tsuru_command.stderr).to_not match /This service instance is bound to at least one app/
+      rescue RSpec::Expectations::ExpectationNotMetError
+        retry if (retries -= 1) > 0
+      end
       @workspace.clean
     end
 
@@ -98,20 +115,20 @@ describe "TsuruEndToEnd" do
       expect(@workspace.tsuru_command.stdout).to match /Instance .* is now bound to the app .*/
     end
 
-    it "Should be able to push the application" do
+    it "should be able to push the application" do
       git_url = @workspace.tsuru_command.get_app_repository(@sampleapp_name)
       expect(git_url).not_to be_nil
       @git_command.push(git_url)
       expect(@git_command.exit_status).to eql 0
     end
 
-    it "Should be able to connect to the applitation via HTTPS" do
+    it "should be able to connect to the applitation via HTTPS" do
       sampleapp_address = @workspace.tsuru_command.get_app_address(@sampleapp_name)
       response = URI.parse("https://#{sampleapp_address}/").open({ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
       expect(response.status).to eq(["200", "OK"])
     end
 
-    it "Should get log output in 3 seconds" do
+    it "should get log output in 3 seconds" do
       sampleapp_address = @workspace.tsuru_command.get_app_address(@sampleapp_name)
       query = "my_special_query_" + Time.now.to_i.to_s
       @workspace.tsuru_command.tail_app_logs(@sampleapp_name)
@@ -127,7 +144,7 @@ describe "TsuruEndToEnd" do
       expect(@workspace.tsuru_command.stdout).to include query
     end
 
-    it "Should be able to connect to the applitation via HTTPS with a valid cert" do
+    it "should be able to connect to the applitation via HTTPS with a valid cert" do
       pending "We don't have a certificate for this :)"
       sampleapp_address = @workspace.tsuru_command.get_app_address(@sampleapp_name)
       response = URI.parse("https://#{sampleapp_address}/").open()
