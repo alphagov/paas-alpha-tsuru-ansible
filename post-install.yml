@@ -54,17 +54,14 @@
         tsuru platform-list | awk {'print $2'}
       register: tsuru_platforms
     - name: Post Install Tasks | Tsuru platform add python
-      ignore_errors: no
       shell: >
         tsuru-admin platform-add python -d https://raw.github.com/tsuru/basebuilder/master/python/Dockerfile
       when: "not 'python' in tsuru_platforms.stdout"
     - name: Post Install Tasks | Tsuru platform add java
-      ignore_errors: no
       shell: >
         tsuru-admin platform-add java -d https://raw.github.com/tsuru/basebuilder/master/java/Dockerfile
       when: "not 'java' in tsuru_platforms.stdout"
     - name: Post Install Tasks | Tsuru platform add static
-      ignore_errors: no
       shell: >
         tsuru-admin platform-add static -d https://raw.github.com/tsuru/basebuilder/master/static/Dockerfile
       when: "not 'static' in tsuru_platforms.stdout"
@@ -83,7 +80,6 @@
         tsuru app-list
       register: tsuru_apps
     - name: Post Install Tasks | Tsuru app-create dashboard
-      ignore_errors: yes
       shell: >
         tsuru app-create dashboard python -t admin
       when: "not 'dashboard' in tsuru_apps.stdout"
@@ -111,7 +107,6 @@
     # Adding postgresapi app
 
     - name: Post Install Tasks | Tsuru app-create postgresapi
-      ignore_errors: yes
       shell: >
         tsuru app-create postgresapi python -t admin
       when: "not 'postgresapi' in tsuru_apps.stdout"
@@ -183,7 +178,6 @@
     # Elasticsearch
 
     - name: Post Install Tasks | Tsuru app-create elasticsearchapi
-      ignore_errors: yes
       shell: >
         tsuru app-create elasticsearchapi python -t admin
       when: "not 'elasticsearchapi' in tsuru_apps.stdout"
