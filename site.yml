@@ -46,16 +46,16 @@
   post_tasks:
     - name: Register node.
       shell: >
-        tsuru-admin docker-node-add --register address=http://{{ ansible_default_ipv4.address }}:{{ docker_port }} pool=default
+        tsuru-admin docker-node-add --register address=http://{{ ansible_default_ipv4.address }}:{{ docker_port }} pool=default </dev/null
       delegate_to: "{{ tsuru_api_host }}"
     - name: Check docker nodes are in the default pool
       shell: >
-        tsuru-admin docker-node-list -f pool=default
+        tsuru-admin docker-node-list -f pool=default </dev/null
       delegate_to: "{{ tsuru_api_host }}"
       register: docker_node_list
     - name: Update docker node metadata for default pool
       shell: >
-        tsuru-admin docker-node-update http://{{ ansible_default_ipv4.address }}:{{ docker_port }} pool=default
+        tsuru-admin docker-node-update http://{{ ansible_default_ipv4.address }}:{{ docker_port }} pool=default </dev/null
       delegate_to: "{{ tsuru_api_host }}"
       when: "not ansible_default_ipv4.address in docker_node_list.stdout"
 
