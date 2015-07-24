@@ -155,7 +155,14 @@ describe "TsuruEndToEnd" do
       pending "There is already a bug filed: https://github.com/tsuru/postgres-api/issues/1"
       @workspace.tsuru_command.service_unbind(@sampleapp_db_instance, @sampleapp_name)
       expect(@workspace.tsuru_command.exit_status).to eql 0
-      @workspace.tsuru_command.service_bind(@sampleapp_db_instance, @sampleapp_name)
+      retries=5
+      begin
+        sleep 1
+        @workspace.tsuru_command.service_bind(@sampleapp_db_instance, @sampleapp_name)
+        expect(@workspace.tsuru_command.stderr).to_not match /This app is already bound to this service instance/m
+      rescue RSpec::Expectations::ExpectationNotMetError
+        retry if (retries -= 1) > 0
+      end
       expect(@workspace.tsuru_command.exit_status).to eql 0
       expect(@workspace.tsuru_command.stdout).to match /Instance .* is now bound to the app .*/
     end
