@@ -68,12 +68,15 @@
 
     - name: Post Install Tasks | Tsuru key-list
       shell: >
-        tsuru key-list
+        tsuru key-list -n
       register: tsuru_keys
+    - name: Post Install Tasks | Get public key content
+      shell: cat ~/.ssh/tsuru_deployer.pub
+      register: public_key_content
     - name: Post Install Tasks | Tsuru add ssh key
       shell: >
         tsuru key-add tsuru_deployer ~/.ssh/tsuru_deployer.pub
-      when: "not 'tsuru_deployer' in tsuru_keys.stdout"
+      when: "not public_key_content.stdout in tsuru_keys.stdout"
 
     - name: Post Install Tasks | Tsuru app-list
       shell: >
