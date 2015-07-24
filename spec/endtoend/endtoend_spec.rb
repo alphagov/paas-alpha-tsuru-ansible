@@ -68,7 +68,14 @@ describe "TsuruEndToEnd" do
         @workspace.tsuru_command.app_unlock(@sampleapp_name)
         @workspace.tsuru_command.app_remove(@sampleapp_name)
       end
-      @workspace.tsuru_command.service_remove(@sampleapp_db_instance)
+      retries=25
+      begin
+        @workspace.tsuru_command.service_remove(@sampleapp_db_instance)
+        expect(@workspace.tsuru_command.stderr).to_not match /This service instance is bound to at least one app/
+      rescue RSpec::Expectations::ExpectationNotMetError
+        sleep 1
+        retry if (retries -= 1) > 0
+      end
       @workspace.clean
     end
 
