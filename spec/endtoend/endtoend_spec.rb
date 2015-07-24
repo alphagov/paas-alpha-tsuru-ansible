@@ -70,10 +70,10 @@ describe "TsuruEndToEnd" do
       end
       retries=25
       begin
+        sleep 1
         @workspace.tsuru_command.service_remove(@sampleapp_db_instance)
         expect(@workspace.tsuru_command.stderr).to_not match /This service instance is bound to at least one app/
       rescue RSpec::Expectations::ExpectationNotMetError
-        sleep 1
         retry if (retries -= 1) > 0
       end
       @workspace.clean
