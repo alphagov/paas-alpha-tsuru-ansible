@@ -216,8 +216,8 @@
 
     - name: Post Install Tasks | Add <deploy_env>-elasticsearchapi.<domain_name> cname to elasticsearchapi app
       shell: >
-        tsuru cname-add {{ elasticsearch_url }} -a elasticsearchapi
-      when: "not \"{{ elasticsearch_url }}\" in elasticsearchapi_app_info.stdout"
+        tsuru cname-add {{ elasticsearch_api }} -a elasticsearchapi
+      when: "not \"{{ elasticsearch_api }}\" in elasticsearchapi_app_info.stdout"
 
     - name: Post Install Tasks | Generate elasticsearchapi.yml
       copy:
@@ -226,7 +226,7 @@
           username: admin
           password: password
           endpoint:
-            production: https://{{ elasticsearch_url }}
+            production: https://{{ elasticsearch_api }}
         dest: ~/elasticsearchapi.yml
 
     - name: Post Install Tasks | Register elasticsearch service

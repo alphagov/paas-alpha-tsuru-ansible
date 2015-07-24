@@ -38,4 +38,4 @@ postgresql_archive_command: >
 postgres_master_host: "{{ deploy_env }}-postgres-master.{{ domain_name }}"
 
 elasticsearch_host_name: "{{ hosts_prefix }}-tsuru-elasticsearch"
-elasticsearch_url: "{{ deploy_env }}-elasticsearchapi.{{ domain_name }}"
+elasticsearch_api: "{{ deploy_env }}-elasticsearchapi.{{ domain_name }}"
