@@ -73,6 +73,10 @@
     - name: Post Install Tasks | Get public key content
       shell: cat ~/.ssh/tsuru_deployer.pub
       register: public_key_content
+    - name: Post Install Tasks | Tsuru remove old key
+      shell: >
+        tsuru key-remove -y tsuru_deployer
+      when: "not public_key_content.stdout in tsuru_keys.stdout and 'tsuru_deployer' in tsuru_keys.stdout"
     - name: Post Install Tasks | Tsuru add ssh key
       shell: >
         tsuru key-add tsuru_deployer ~/.ssh/tsuru_deployer.pub
