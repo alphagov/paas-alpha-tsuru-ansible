@@ -1,4 +1,4 @@
-- hosts: "{{ hosts_prefix }}-tsuru-api*[0]"
+- hosts: "{{ hosts_prefix }}-tsuru-api-0"
   sudo: yes
   tasks:
     - name: Post Install Tasks | Install git client
@@ -66,14 +66,21 @@
         tsuru-admin platform-add static -d https://raw.github.com/tsuru/basebuilder/master/static/Dockerfile
       when: "not 'static' in tsuru_platforms.stdout"
 
-    - name: Post Install Tasks | Tsuru key-list
+    - name: Post Install Tasks | Tsuru list tsuru_deployer key
       shell: >
-        tsuru key-list
+        tsuru key-list -n | awk '$2 == "tsuru_deployer"'
       register: tsuru_keys
+    - name: Post Install Tasks | Get local key content
+      shell: cat ~/.ssh/tsuru_deployer.pub
+      register: public_key_content
+    - name: Post Install Tasks | Tsuru remove old key
+      shell: >
+        tsuru key-remove -y tsuru_deployer
+      when: "not public_key_content.stdout in tsuru_keys.stdout and tsuru_keys.stdout != ''"
     - name: Post Install Tasks | Tsuru add ssh key
       shell: >
         tsuru key-add tsuru_deployer ~/.ssh/tsuru_deployer.pub
-      when: "not 'tsuru_deployer' in tsuru_keys.stdout"
+      when: "not public_key_content.stdout in tsuru_keys.stdout"
 
     - name: Post Install Tasks | Tsuru app-list
       shell: >
