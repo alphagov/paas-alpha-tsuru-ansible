@@ -1,4 +1,4 @@
-- hosts: "{{ hosts_prefix }}-tsuru-api*[0]"
+- hosts: "{{ hosts_prefix }}-tsuru-api-0"
   sudo: yes
   tasks:
     - name: Post Install Tasks | Install git client
