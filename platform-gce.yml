@@ -6,24 +6,7 @@ hosts_prefix: "{{ deploy_env }}"
 ssl_crt: "{{ gce_ssl_crt }}"
 ssl_key: "{{ gce_ssl_key }}"
 
-redis_host_name: "{{ hosts_prefix }}-tsuru-db"
-redis_host: "{{ hostvars[redis_host_name][ip_field_name] }}"
-
-tsuru_api_host_name: "{{ hosts_prefix }}-tsuru-api-0"
-tsuru_api_host: "{{ hostvars[tsuru_api_host_name][ip_field_name] }}"
 tsuru_api_internal_lb: "{{ deploy_env }}-api.{{ domain_name }}"
-tsuru_api_external_lb: "{{ deploy_env }}-api.{{ domain_name }}"
-
-gandalf_host_name: "{{ hosts_prefix }}-tsuru-gandalf"
-gandalf_host_internal: "{{ hostvars[gandalf_host_name][ip_field_name] }}"
-
-mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
-mongodb_host: "{{ hostvars[mongodb_host_name][ip_field_name] }}"
-
-influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
-influxdb_url: "http://{{ hostvars[influxdb_host_name][ip_field_name] }}:8086"
-
-elasticsearch_host: "{{ hostvars[elasticsearch_host_name][ip_field_name] }}"
 
 # WAL-E Configuration
 wal_e_aws_instance_profile: false
