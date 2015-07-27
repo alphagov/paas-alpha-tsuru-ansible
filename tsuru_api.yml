@@ -17,7 +17,7 @@
       apt: name=python-httplib2 state=present
 
 # Run these tasks explicitly on 1st API server as the rest of playbooks (post install) expect it
-- hosts: "{{ tsuru_api_host_name }}"
+- hosts: "{{ hosts_prefix }}-tsuru-api-0"
   sudo: yes
   tasks:
     - name: add admin team
