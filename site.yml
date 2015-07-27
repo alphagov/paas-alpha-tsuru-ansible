@@ -3,6 +3,8 @@
 
 - hosts: "{{ hosts_prefix }}-tsuru-db"
   sudo: yes
+  vars:
+    mongodb_conf_dbpath: "/var/lib/mongodb"
   roles:
     - bennojoy.redis
     - greendayonfire.mongodb
