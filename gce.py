@@ -300,6 +300,9 @@ class GceInventory(object):
             if groups.has_key(stat): groups[stat].append(name)
             else: groups[stat] = [name]
 
+            # FIXME: Hack for compatibility with `ec2.py`
+            groups[name] = [name]
+
         groups["_meta"] = meta
 
         return groups

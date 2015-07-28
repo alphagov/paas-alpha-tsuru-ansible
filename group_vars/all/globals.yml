@@ -1,6 +1,11 @@
 ---
 
+redis_host_name: "{{ hosts_prefix }}-tsuru-db"
+redis_host: "{{ hostvars[groups[redis_host_name][0]][ip_field_name] }}"
 redis_port: 6379
+
+tsuru_api_host_name: "{{ hosts_prefix }}-tsuru-api-0"
+tsuru_api_host: "{{ hostvars[groups[tsuru_api_host_name][0]][ip_field_name] }}"
 api_port: 8080
 
 docker_registry_host: "{{ deploy_env }}-docker-registry.{{ domain_name }}"
@@ -10,16 +15,23 @@ docker_version: 1.7.0
 
 hipache_host_external_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 
+influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
+influxdb_url: "http://{{ hostvars[groups[influxdb_host_name][0]][ip_field_name] }}:8086"
 influxdb_database: influxdb
 influxdb_user: influxdb
 influx_pass: influxdb
 
+gandalf_host_name: "{{ hosts_prefix }}-tsuru-gandalf"
+gandalf_host_internal: "{{ hostvars[groups[gandalf_host_name][0]][ip_field_name] }}"
 gandalf_host_external: "{{ deploy_env }}-gandalf.{{ domain_name }}"
 gandalf_port: 8080
 
+mongodb_host_name: "{{ hosts_prefix }}-tsuru-db"
+mongodb_host: "{{ hostvars[groups[mongodb_host_name][0]][ip_field_name] }}"
 mongodb_conf_bind_ip: 0.0.0.0
 mongodb_port: 27017
 
+tsuru_api_external_lb: "{{ deploy_env }}-api.{{ domain_name }}"
 tsuru_api_external_url: https://{{ tsuru_api_external_lb }}:443
 tsuru_api_internal_url: https://{{ tsuru_api_internal_lb }}:443
 
@@ -38,4 +50,5 @@ postgresql_archive_command: >
 postgres_master_host: "{{ deploy_env }}-postgres-master.{{ domain_name }}"
 
 elasticsearch_host_name: "{{ hosts_prefix }}-tsuru-elasticsearch"
+elasticsearch_host: "{{ hostvars[groups[elasticsearch_host_name][0]][ip_field_name] }}"
 elasticsearch_api: "{{ deploy_env }}-elasticsearchapi.{{ domain_name }}"
