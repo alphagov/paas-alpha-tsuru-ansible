@@ -9,7 +9,7 @@
     - bennojoy.redis
     - greendayonfire.mongodb
 
-# MongoDB: migrate old /data/db dir to new location
+#FIXME: Remove when deployed to all environments
   post_tasks:
     - name: MongoDB | Check /data/db directory
       stat: path=/data/db
