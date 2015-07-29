@@ -5,6 +5,12 @@
 # tsuru core components.
 - hosts: "{{ hosts_prefix }}-tsuru-gandalf*"
   sudo: yes
+  vars:
+    tsuru_repo: 'ppa:multicloudpaas/tsuru'
+  pre_tasks:
+      # FIXME: Remove when `tsuru_repo` is deployed.
+    - name: Remove upstream APT repo
+      apt_repository: repo='ppa:tsuru/ppa' state=absent
   roles:
     - role: gandalf
       tsuru_api_endpoint: "{{ tsuru_api_internal_url }}"
