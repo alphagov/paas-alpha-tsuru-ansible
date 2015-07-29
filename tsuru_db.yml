@@ -1,0 +1,34 @@
+---
+- hosts: "{{ hosts_prefix }}-tsuru-db"
+  sudo: yes
+  vars:
+    mongodb_conf_dbpath: "/var/lib/mongodb"
+    etcd_interface: eth0
+  pre_tasks:
+    - name: Add tsuru DB into etcd group
+      add_host: name={{ inventory_hostname }} groups=etcd
+      when: vulcand is defined and vulcand
+  roles:
+    - bennojoy.redis
+    - greendayonfire.mongodb
+    - { role: retr0h.etcd, when: vulcand is defined and vulcand }
+
+#FIXME: Remove when deployed to all environments
+  post_tasks:
+    - name: MongoDB | Check /data/db directory
+      stat: path=/data/db
+      register: mongo_data_db
+    - name: MongoDB | Migrate data - stop mongo
+      service: name=mongod state=stopped
+      when: mongo_data_db.stat.isdir is defined and mongo_data_db.stat.isdir
+    - name: MongoDB | Migrate data - prepare destination
+      shell: >
+        rm -rf {{ mongodb_conf_dbpath }}
+      when: mongo_data_db.stat.isdir is defined and mongo_data_db.stat.isdir
+    - name: MongoDB | Migrate data - move data dir
+      shell: >
+        mv /data/db {{ mongodb_conf_dbpath }}
+      when: mongo_data_db.stat.isdir is defined and mongo_data_db.stat.isdir
+    - name: MongoDB | Migrate data - start mongo
+      service: name=mongod state=started
+      when: mongo_data_db.stat.isdir is defined and mongo_data_db.stat.isdir
