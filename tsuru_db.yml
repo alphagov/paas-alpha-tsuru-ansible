@@ -3,9 +3,15 @@
   sudo: yes
   vars:
     mongodb_conf_dbpath: "/var/lib/mongodb"
+    etcd_interface: eth0
+  pre_tasks:
+    - name: Add tsuru DB into etcd group
+      add_host: name={{ inventory_hostname }} groups=etcd
+      when: vulcand is defined and vulcand
   roles:
     - bennojoy.redis
     - greendayonfire.mongodb
+    - { role: retr0h.etcd, when: vulcand is defined and vulcand }
 
 #FIXME: Remove when deployed to all environments
   post_tasks:
