@@ -44,7 +44,7 @@ render-ssh-config: check-env-var
 ansible-galaxy: .ansible-galaxy.check
 .ansible-galaxy.check: requirements.yml
 	rm -rf -- roles/*
-	ansible-galaxy install -r requirements.yml --force
+	SSL_CERT_FILE=$(shell python -m certifi) ansible-galaxy install -r requirements.yml --force
 	touch .ansible-galaxy.check
 
 import-gpg-keys:
