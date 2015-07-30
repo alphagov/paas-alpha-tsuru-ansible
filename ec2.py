@@ -149,7 +149,14 @@ class Ec2Inventory(object):
         self.read_settings()
         self.parse_cli_args()
 
-        # Cache
+        # Cache invaliation
+        if self.args.invalidate_cache:
+            if self.is_cache_valid():
+                self.do_invalidate_cache()
+            return
+
+
+        # Cache refresh
         if self.args.refresh_cache:
             self.do_api_calls_update_cache()
         elif not self.is_cache_valid():
@@ -292,7 +299,22 @@ class Ec2Inventory(object):
                            help='Get all the variables about a specific instance')
         parser.add_argument('--refresh-cache', action='store_true', default=False,
                            help='Force refresh of cache by making API requests to EC2 (default: False - use cache files)')
+        parser.add_argument('--invalidate-cache', action='store_true', default=False,
+                   help='Force invalidation of local cache. This is useful when your most recent actions changed ec2 resource states.')
         self.args = parser.parse_args()
+
+
+    def do_invalidate_cache(self):
+        ''' Expires cache '''
+
+        if os.path.isfile(self.cache_path_cache):
+            invalid_time = time() - self.cache_max_age -1
+            a_time = os.path.getatime(self.cache_path_cache)
+            try:
+                os.utime(self.cache_path_cache, (a_time,invalid_time))
+            except os.Error, e:
+                print("Failed invalidating cache:")
+                print e
 
 
     def do_api_calls_update_cache(self):
