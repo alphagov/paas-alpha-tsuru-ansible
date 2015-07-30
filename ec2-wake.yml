@@ -1,14 +1,12 @@
 ---
+
+# Change state of all instances in the EC2 environment
   - hosts: localhost
     tasks:
-      - name: Copy ec2.py to /tmp
-        copy: src="./ec2.py" dest="/tmp/ec2.py" mode=0744
-      - name: Copy ec2.ini to /tmp
-        copy: src="./ec2.ini" dest="/tmp/ec2.ini" mode=0644
+      - name: Deploy ec2.py
+        file: src=ec2.py dest=./ec2.py mode=0744
       - name: Get stopped instances
         shell: "./ec2.py --stopped --refresh-cache"
-        args:
-          chdir: /tmp
         register: ec2_hosts_raw
       - set_fact:
           ec2_hosts: "{{ ec2_hosts_raw.stdout|from_json }}"
