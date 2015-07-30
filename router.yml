@@ -1,12 +1,16 @@
 - hosts: "{{ hosts_prefix }}-tsuru-router*"
   sudo: yes
   vars:
+    tsuru_repo: 'ppa:multicloudpaas/tsuru'
     hipache_port: 8080
     upstream_port: "{{ api_port }}"
   vars_files:
     - "ssl_proxy_vars.yml"
   pre_tasks:
     - include: ssl_proxy_pre.yml
+      # FIXME: Remove when `tsuru_repo` is deployed.
+    - name: Remove upstream APT repo
+      apt_repository: repo='ppa:tsuru/ppa' state=absent
   roles:
     - role: hipache
       hipache_listen_port: "{{ hipache_port }}"
