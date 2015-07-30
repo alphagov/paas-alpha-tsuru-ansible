@@ -110,10 +110,10 @@ diff-vault:
 		|| [ $$? -eq 1 ]'
 
 start-aws: check-env-var render-ssh-config
-	ansible-playbook -i "localhost," -c local ec2-wake.yml -e deploy_env=${DEPLOY_ENV}
+	ansible-playbook -i "localhost," -c local wake-ec2.yml -e deploy_env=${DEPLOY_ENV}
 
 start-gce: check-env-var render-ssh-config
-	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py gce-wake.yml -e deploy_env=${DEPLOY_ENV}
+	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py wake-gce.yml -e deploy_env=${DEPLOY_ENV}
 
 suspend-aws: check-env-var render-ssh-config
 	ansible all -i ec2.py -a 'sudo poweroff' -l "!~^tag_Name_${DEPLOY_ENV}-tsuru-nat:~^tag_Name_${DEPLOY_ENV}-"
