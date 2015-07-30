@@ -110,7 +110,7 @@ diff-vault:
 		|| [ $$? -eq 1 ]'
 
 start-aws: check-env-var render-ssh-config
-	ansible-playbook -i ec2.py ec2-wake.yml -e deploy_env=${DEPLOY_ENV}
+	ansible-playbook -i "localhost," -c local ec2-wake.yml -e deploy_env=${DEPLOY_ENV}
 
 start-gce: check-env-var render-ssh-config
 	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py gce-wake.yml -e deploy_env=${DEPLOY_ENV}
