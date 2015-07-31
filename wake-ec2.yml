@@ -1,10 +1,6 @@
 ---
-
-# Change state of all instances in the EC2 environment
   - hosts: localhost
     tasks:
-      - name: Deploy ec2.py
-        file: src=ec2.py dest=./ec2.py mode=0744
       - name: Get stopped instances
         shell: "./ec2.py --stopped --refresh-cache"
         register: ec2_hosts_raw
@@ -17,3 +13,5 @@
           instance_ids: "{{ item.value.ec2_id }}"
         when: item.value.ec2_tag_Name is defined and item.value.ec2_tag_Name | match("^{{ deploy_env }}-*")
         with_dict: ec2_hosts._meta.hostvars
+      - name: Invalidate ec2 cache
+        shell: "./ec2.py --invalidate-cache"
