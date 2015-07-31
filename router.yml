@@ -1,8 +1,7 @@
 - hosts: "{{ hosts_prefix }}-tsuru-router*"
   sudo: yes
   vars:
-    hipache_port: 8080
-    upstream_port: "{{ api_port }}"
+    upstream_port: "{{ router_port }}"
   vars_files:
     - "ssl_proxy_vars.yml"
   pre_tasks:
@@ -13,7 +12,7 @@
   roles:
     - role: hipache
       tsuru_repo: 'ppa:multicloudpaas/tsuru'
-      hipache_listen_port: "{{ hipache_port }}"
+      hipache_listen_port: "{{ router_port }}"
       hipache_listen_address: '127.0.0.1'
       hipache_listen_address6: '::1'
     - role: jdauphant.nginx
