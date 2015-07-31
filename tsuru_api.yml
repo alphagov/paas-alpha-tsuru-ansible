@@ -2,11 +2,18 @@
   sudo: yes
   pre_tasks:
     - include: ssl_proxy_pre.yml
+    - name: Remove daily snapshots repo
+      apt_repository: repo='ppa:tsuru/snapshots' state=absent
+      when: vulcand is undefined
+    - name: Remove our private repo
+      apt_repository: repo='ppa:multicloudpaas/tsuru' state=absent
+      when: vulcand is defined
       # FIXME: Remove when `tsuru_repo` is deployed.
     - name: Remove upstream APT repo
       apt_repository: repo='ppa:tsuru/ppa' state=absent
   vars:
-    tsuru_repo: 'ppa:multicloudpaas/tsuru'
+    tsuru_package_latest: true
+    tsuru_repo: "{% if vulcand is defined %}ppa:tsuru/snapshots{% else %}ppa:multicloudpaas/tsuru{% endif %}"
     tsuru_api_listen_addr: 127.0.0.1
     upstream_port: "{{ api_port }}"
     tsuru_api_url: "{{ tsuru_api_external_url }}"
