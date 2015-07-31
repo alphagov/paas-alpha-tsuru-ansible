@@ -18,6 +18,9 @@ docker_port: 4243
 docker_version: 1.7.0
 
 router_port: 8080
+router_api_port: 8081
+tsuru_router_host_name: "{{ hosts_prefix }}-tsuru-router-0"
+tsuru_router_host: "{{ hostvars[groups[tsuru_router_host_name][0]][ip_field_name] }}"
 hipache_host_external_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 
 influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"

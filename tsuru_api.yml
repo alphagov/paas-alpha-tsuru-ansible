@@ -12,6 +12,12 @@
     - name: Remove upstream APT repo
       apt_repository: repo='ppa:tsuru/ppa' state=absent
   vars:
+    router_config_vulcand:
+      domain: "{{ hipache_host_external_lb }}"
+      api-url: "http://{{ tsuru_router_host }}:{{ router_api_port }}"
+    router_config_hipache:
+      domain: "{{ hipache_host_external_lb }}"
+      redis-server: "{{ redis_host }}:{{ redis_port }}"
     upstream_port: "{{ api_port }}"
     tsuru_api_url: "{{ tsuru_api_external_url }}"
   vars_files:
@@ -21,6 +27,8 @@
       tsuru_package_latest: true
       tsuru_api_listen_addr: 127.0.0.1
       tsuru_repo: "{% if vulcand is defined %}ppa:tsuru/snapshots{% else %}ppa:multicloudpaas/tsuru{% endif %}"
+      tsuru_router_type: "{% if vulcand is defined %}vulcand{% else %}hipache{% endif %}"
+      tsuru_router_config: "{% if vulcand is defined %}{{ router_config_vulcand }}{% else %}{{ router_config_hipache }}{% endif %}"
       tags: tsuru_api
     - role: jdauphant.nginx
   tasks:
