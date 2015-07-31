@@ -11,7 +11,7 @@
   roles:
     - bennojoy.redis
     - greendayonfire.mongodb
-    - { role: retr0h.etcd, when: vulcand is defined and vulcand }
+    - { role: retr0h.etcd, when: vulcand is defined }
 
 #FIXME: Remove when deployed to all environments
   post_tasks:
