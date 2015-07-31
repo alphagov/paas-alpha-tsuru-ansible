@@ -13,3 +13,5 @@ wal_e_aws_instance_profile: false
 wal_e_aws_access_key: "{{ gs_access_key }}"
 wal_e_aws_secret_key: "{{ gs_secret }}"
 wal_e_s3_endpoint: "http+path://storage.googleapis.com"
+# Disable backup deletion until https://github.com/wal-e/wal-e/issues/192 is fixed
+wal_e_backup_delete_disabled: true

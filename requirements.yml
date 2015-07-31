@@ -34,7 +34,7 @@
   version: v0.1.0
 - name: wal_e
   src: https://github.com/alphagov/ansible-playbook-wal-e.git
-  version: v0.0.3
+  version: v0.0.4
 - name: influxdb
   src: https://github.com/alphagov/ansible-playbook-influxdb.git
   version: v0.0.1
