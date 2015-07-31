@@ -13,7 +13,6 @@
       apt_repository: repo='ppa:tsuru/ppa' state=absent
   vars:
     tsuru_package_latest: true
-    tsuru_repo: "{% if vulcand is defined %}ppa:tsuru/snapshots{% else %}ppa:multicloudpaas/tsuru{% endif %}"
     tsuru_api_listen_addr: 127.0.0.1
     upstream_port: "{{ api_port }}"
     tsuru_api_url: "{{ tsuru_api_external_url }}"
@@ -21,6 +20,7 @@
     - "ssl_proxy_vars.yml"
   roles:
     - role: tsuru_api
+      tsuru_repo: "{% if vulcand is defined %}ppa:tsuru/snapshots{% else %}ppa:multicloudpaas/tsuru{% endif %}"
       tags: tsuru_api
     - role: jdauphant.nginx
   tasks:
