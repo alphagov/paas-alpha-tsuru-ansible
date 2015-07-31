@@ -41,6 +41,9 @@
 - name: telegraf
   src: https://github.com/alphagov/ansible-playbook-telegraf.git
   version: v0.1.0
+- name: vulcand
+  src: https://github.com/alphagov/ansible-playbook-vulcand.git
+  #version: not pinned because under development
 
 # GDS Forked, pull-request sent upstream awaiting merge.
 - name: bennojoy.redis

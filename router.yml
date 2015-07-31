@@ -15,4 +15,11 @@
       hipache_listen_port: "{{ router_port }}"
       hipache_listen_address: '127.0.0.1'
       hipache_listen_address6: '::1'
+      when: vulcand is not defined
+    - role: vulcand
+      vulcand_version: 'v0.8.0-beta.3'
+      vulcand_args:
+        port: "{{ router_port }}"
+        etcd: "http://{{ etcd_host }}:{{ etcd_port }}"
+      when: vulcand is defined
     - role: jdauphant.nginx

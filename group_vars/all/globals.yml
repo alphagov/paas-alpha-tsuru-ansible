@@ -1,5 +1,9 @@
 ---
 
+etcd_host_name: "{{ hosts_prefix }}-tsuru-db"
+etcd_host: "{{ hostvars[groups[etcd_host_name][0]][ip_field_name] }}"
+etcd_port: 2379
+
 redis_host_name: "{{ hosts_prefix }}-tsuru-db"
 redis_host: "{{ hostvars[groups[redis_host_name][0]][ip_field_name] }}"
 redis_port: 6379
