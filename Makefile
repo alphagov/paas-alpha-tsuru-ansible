@@ -82,10 +82,10 @@ integration-test: check-env-var check-target-api-host-var load-tsuru-creds
 load-tsuru-creds:
 	$(eval TSURU_USER=$(shell \
 		ansible-vault view group_vars/all/secure | \
-		    awk '/admin_user:/ { print $$2; }'))
+		    awk '/^admin_user:/ { print $$2; }'))
 	$(eval TSURU_PASS=$(shell \
 		ansible-vault view group_vars/all/secure | \
-			awk '/admin_password:/ { print $$2; }'))
+			awk '/^admin_password:/ { print $$2; }'))
 	@[ -z "${TSURU_USER}" -o -z "${TSURU_PASS}" ] && \
 		echo Error loading tsuru credentials from vault && exit 2 || true
 
