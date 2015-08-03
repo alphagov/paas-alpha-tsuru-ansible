@@ -20,6 +20,7 @@ influxdb_url: "http://{{ hostvars[groups[influxdb_host_name][0]][ip_field_name] 
 influxdb_database: influxdb
 influxdb_user: influxdb
 influx_pass: influxdb
+influxdb_retention_period: 2w
 
 gandalf_host_name: "{{ hosts_prefix }}-tsuru-gandalf"
 gandalf_host_internal: "{{ hostvars[groups[gandalf_host_name][0]][ip_field_name] }}"
