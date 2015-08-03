@@ -122,6 +122,7 @@
       git:
         repo: https://github.com/tsuru/postgres-api
         dest: /tmp/postgresapi
+        version: "f25564ed29fc204d0207a54a28011e33789f89ca"
 
     - name: Post Install Tasks | Get gandalf repo for postgresapi
       shell: >
@@ -150,9 +151,11 @@
         tsuru env-set -a postgresapi POSTGRESAPI_SALT=md5;
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_HOST={{ postgres_master_host }};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PORT=5432;
-        tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN=postgresadmin;
+        tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN={{ pg_admin_user}};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN_PASSWORD={{ pg_admin_pass }};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PUBLIC_HOST={{ postgres_master_host }};
+        tsuru env-set -a postgresapi POSTGRESAPI_BROKER_USERNAME={{ pg_admin_user }};
+        tsuru env-set -a postgresapi POSTGRESAPI_BROKER_PASSWORD={{ pg_admin_pass }};
       when: "not 'Everything up-to-date' in postgresapi_push_result.stderr"
     - name: Post Install Tasks | Tsuru app-run db upgrade
       shell: >
@@ -168,7 +171,8 @@
       copy:
         content: |
           id: postgresql
-          password: {{ pg_apiuser_pass }}
+          username: {{ pg_admin_user }}
+          password: {{ pg_admin_pass }}
           endpoint:
             production: https://{{ deploy_env }}-postgresapi.{{ domain_name }}
         dest: ~/postgresapi.yml

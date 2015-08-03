@@ -133,6 +133,7 @@ Required contents for group_vars/all/secure (if you don't know the password)
 ```yaml
 ---
 pg_admin_pass: <your postgres admin password>
+pg_admin_user: <your postgres admin username>
 pg_apiuser_pass: <password for postgresapi database>
 pg_replicationuser_pass: <password for postgres replication>
 admin_user: <email address for tsuru admin user>
