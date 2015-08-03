@@ -151,10 +151,10 @@
         tsuru env-set -a postgresapi POSTGRESAPI_SALT=md5;
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_HOST={{ postgres_master_host }};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PORT=5432;
-        tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN=postgresadmin;
+        tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN={{ pg_admin_user}};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_ADMIN_PASSWORD={{ pg_admin_pass }};
         tsuru env-set -a postgresapi POSTGRESAPI_SHARED_PUBLIC_HOST={{ postgres_master_host }};
-        tsuru env-set -a postgresapi POSTGRESAPI_BROKER_USERNAME=postgresadmin;
+        tsuru env-set -a postgresapi POSTGRESAPI_BROKER_USERNAME={{ pg_admin_user }};
         tsuru env-set -a postgresapi POSTGRESAPI_BROKER_PASSWORD={{ pg_admin_pass }};
       when: "not 'Everything up-to-date' in postgresapi_push_result.stderr"
     - name: Post Install Tasks | Tsuru app-run db upgrade
@@ -171,7 +171,7 @@
       copy:
         content: |
           id: postgresql
-          username: postgresadmin
+          username: {{ pg_admin_user }}
           password: {{ pg_admin_pass }}
           endpoint:
             production: https://{{ deploy_env }}-postgresapi.{{ domain_name }}
