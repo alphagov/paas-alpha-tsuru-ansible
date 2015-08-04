@@ -28,7 +28,7 @@
   version: v0.1.0
 - name: tsuru_api
   src: https://github.com/alphagov/ansible-playbook-tsuru_api.git
-  version: v0.1.1
+  version: v0.3.0
 - name: gandalf
   src: https://github.com/alphagov/ansible-playbook-gandalf.git
   version: v0.1.0
@@ -41,6 +41,9 @@
 - name: telegraf
   src: https://github.com/alphagov/ansible-playbook-telegraf.git
   version: v0.1.0
+- name: vulcand
+  src: https://github.com/alphagov/ansible-playbook-vulcand.git
+  #version: not pinned because under development
 
 # GDS Forked, pull-request sent upstream awaiting merge.
 - name: bennojoy.redis
