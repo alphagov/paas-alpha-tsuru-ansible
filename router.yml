@@ -7,6 +7,16 @@
     - "ssl_proxy_vars.yml"
   pre_tasks:
     - include: ssl_proxy_pre.yml
+    - name: "Router | Include SSL proxy varrs"
+      include_vars: ssl_proxy_vars.yml
+      when: vulcand is not defined
+    - name: "Router | set http to https redirect"
+      set_fact:
+        nginx_sites:
+          default:
+          - listen 80
+          - return 301 https://$host$request_uri
+      when: vulcand is defined
       # FIXME: Remove when `tsuru_repo` is deployed.
     - name: Remove upstream APT repo
       apt_repository: repo='ppa:tsuru/ppa' state=absent
