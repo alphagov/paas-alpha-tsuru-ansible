@@ -18,10 +18,12 @@
 
 - hosts: "{{ hosts_prefix }}-tsuru-gandalf*"
   sudo: yes
+  vars:
+    tsuru_cmd: "{% if vulcand is defined %}tsurud{% else %}tsr{% endif %}"
   tasks:
     - name: generate tsuru token
       run_once: true
-      shell: tsr token
+      shell: "{{ tsuru_cmd }} token"
       delegate_to: "{{ tsuru_api_host }}"
       register: tsr_token
 
