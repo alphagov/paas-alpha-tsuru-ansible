@@ -232,3 +232,14 @@ Quick one-liner:
 ```
 ssh -F ssh.config postgres-host.domain.com "sudo -u postgres psql -c 'DROP role sampleapp_3f9ef5;'"
 ```
+
+#### Vulcand support
+
+We are testing [Vulcand](https://vulcand.io/) support as a possible replacement to [hipache](https://github.com/hipache/hipache).
+
+To test this:
+
+```
+make aws DEPLOY_ENV=... ARGS='-e "vulcand=true"'
+make gce DEPLOY_ENV=... ARGS='-e "vulcand=true"'
+```
