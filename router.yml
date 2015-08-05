@@ -51,3 +51,23 @@
         sealKey: "{{ vulcand_sealkey.stdout }}"
       when: vulcand is defined
     - role: jdauphant.nginx
+  post_tasks:
+    - name: vulcand | Configure SSL host
+      shell: >
+        {{ vulcand_install_path }}/vctl \
+          --vulcan "http://{{ tsuru_router_host }}:{{ router_api_port }}" \
+          host upsert \
+          --name default \
+          --cert=/etc/nginx/wildcard.{{ domain_name }}.site.chain.crt  \
+          --privateKey=/etc/nginx/wildcard.{{ domain_name }}.key
+      when: vulcand is defined
+    - name: vulcand | Configure SSL listener in port 443
+      shell: >
+        {{ vulcand_install_path }}/vctl \
+          --vulcan "http://{{ tsuru_router_host }}:{{ router_api_port }}" \
+          listener upsert \
+          --id https443 \
+          --proto=https \
+          --net=tcp \
+          --addr=0.0.0.0:443
+      when: vulcand is defined
