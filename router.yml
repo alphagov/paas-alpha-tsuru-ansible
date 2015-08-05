@@ -2,6 +2,7 @@
   sudo: yes
   vars:
     upstream_port: "{{ router_port }}"
+    vulcand_sealkey_file: "/etc/vulcand.sealkey"
   vars_files:
     - "ssl_proxy_vars.yml"
   pre_tasks:
@@ -9,6 +10,21 @@
       # FIXME: Remove when `tsuru_repo` is deployed.
     - name: Remove upstream APT repo
       apt_repository: repo='ppa:tsuru/ppa' state=absent
+    - name: vulcand | Read or generate seal key
+      shell: >
+        [ -f {{ vulcand_sealkey_file }} ] &&
+        cat {{ vulcand_sealkey_file }} ||
+        dd if=/dev/urandom count=32 bs=1 2> /dev/null |
+          od -A n -t x1 | tr -d ' \n'
+      register: vulcand_sealkey
+      run_once: true
+      when: vulcand is defined
+    - name: vulcand | Write seal key
+      copy:
+        dest: "{{ vulcand_sealkey_file }}"
+        content: "{{ vulcand_sealkey.stdout }}"
+        mode: 0600
+      when: vulcand is defined
   roles:
     - role: hipache
       tsuru_repo: 'ppa:multicloudpaas/tsuru'
@@ -22,5 +38,6 @@
         port: "{{ router_port }}"
         apiPort: "{{ router_api_port }}"
         etcd: "http://{{ etcd_host }}:{{ etcd_port }}"
+        sealKey: "{{ vulcand_sealkey.stdout }}"
       when: vulcand is defined
     - role: jdauphant.nginx
