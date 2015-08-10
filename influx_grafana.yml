@@ -11,7 +11,7 @@
     - name: Add influx datasource to grafana
       shell: /usr/local/bin/datasource.sh {{ influxdb_database }}
 
-- hosts: "{{ hosts_prefix }}-*"
+- hosts: "{{ hosts_prefix }}-*:!{{ hosts_prefix}}-tsuru-coreos-docker-*"
   sudo: yes
   tags: telegraf
   vars:
