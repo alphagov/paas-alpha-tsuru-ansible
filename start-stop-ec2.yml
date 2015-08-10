@@ -1,15 +1,15 @@
 ---
   - hosts: localhost
     tasks:
-      - name: Get stopped instances
-        shell: "./ec2.py --stopped --refresh-cache"
+      - name: Get instances
+        shell: "./ec2.py {% if state == 'running' %}--stopped{% endif %} --refresh-cache"
         register: ec2_hosts_raw
       - set_fact:
           ec2_hosts: "{{ ec2_hosts_raw.stdout|from_json }}"
-      - name: Wake instances
+      - name: Apply desired state to instances
         ec2:
           region: "eu-west-1"
-          state: 'running'
+          state: "{{ state }}"
           instance_ids: "{{ item.value.ec2_id }}"
         when: item.value.ec2_tag_Name is defined and item.value.ec2_tag_Name | match("^{{ deploy_env }}-*")
         with_dict: ec2_hosts._meta.hostvars

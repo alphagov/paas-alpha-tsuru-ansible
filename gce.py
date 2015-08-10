@@ -113,6 +113,9 @@ class GceInventory(object):
         if self.args.start:
             sys.exit(not(self.start_instance(self.args.start)))
 
+        if self.args.stop:
+            sys.exit(not(self.stop_instance(self.args.stop)))
+
         # Just display data for specific host
         if self.args.host:
             print self.json_format_dict(self.node_to_dict(
@@ -204,6 +207,8 @@ class GceInventory(object):
                            help='Get all information about an instance')
         parser.add_argument('--start', action='store',
                            help='Start the specified instance')
+        parser.add_argument('--stop', action='store',
+                           help='Stop (suspend) the specified instance')
         parser.add_argument('--pretty', action='store_true', default=False,
                            help='Pretty format (default: False)')
         self.args = parser.parse_args()
@@ -260,6 +265,15 @@ class GceInventory(object):
             return e
 
         return self.driver.ex_start_node(instance)
+
+    def stop_instance(self, instance_name):
+        '''Stop the specified instance '''
+        try:
+            instance = self.driver.ex_get_node(instance_name)
+        except Exception, e:
+            return e
+
+        return self.driver.ex_stop_node(instance)
 
     def group_instances(self):
         '''Group all instances'''
