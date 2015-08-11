@@ -12,6 +12,9 @@
     - bennojoy.redis
     - greendayonfire.mongodb
     - { role: retr0h.etcd, when: vulcand is defined }
+  tasks:
+    - include: "firewall/redis.yml"
+    - include: "firewall/mongodb.yml"
 
 #FIXME: Remove when deployed to all environments
   post_tasks:

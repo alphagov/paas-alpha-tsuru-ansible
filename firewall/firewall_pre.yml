@@ -1,0 +1,10 @@
+---
+  - include: firewall_pre.yml
+  - name: allow everything and enable UFW
+    ufw: state=enabled policy=reject
+  - name: enable firewall logging
+    ufw: logging=on
+  - name: use reject instead of deny policy and log failed connection attempts
+    ufw: rule=reject port=auth log=yes
+  - name: allow OpenSSH
+    ufw: rule=allow name=OpenSSH

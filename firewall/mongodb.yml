@@ -1,0 +1,3 @@
+---
+  - name: allow connection to Redis
+    ufw: rule=allow port=27017 proto=tcp
