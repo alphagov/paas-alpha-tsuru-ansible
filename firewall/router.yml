@@ -1,0 +1,7 @@
+---
+  - include: firewall_pre.yml
+    name: allow connection to Nginx
+  - ufw: rule=allow port={{ item }} proto=tcp
+    with_items:
+    - 80
+    - 443
