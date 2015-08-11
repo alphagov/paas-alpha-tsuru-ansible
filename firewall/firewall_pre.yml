@@ -1,6 +1,5 @@
 ---
-  - include: firewall_pre.yml
-  - name: allow everything and enable UFW
+  - name: reject everything and enable UFW
     ufw: state=enabled policy=reject
   - name: enable firewall logging
     ufw: logging=on

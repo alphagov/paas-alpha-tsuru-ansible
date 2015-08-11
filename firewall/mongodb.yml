@@ -1,3 +1,4 @@
 ---
-  - name: allow connection to Redis
+  - include: firewall_pre.yml
+  - name: allow connection to MongoDB
     ufw: rule=allow port=27017 proto=tcp
