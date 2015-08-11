@@ -1,4 +1,4 @@
 ---
   - include: firewall_pre.yml
     name: allow connection to docker service
-  - ufw: rule=allow port=2375 proto=tcp
+  - ufw: rule=allow port=4243 proto=tcp
