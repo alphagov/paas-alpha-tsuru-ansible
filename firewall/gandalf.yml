@@ -1,2 +1,8 @@
 ---
   - include: firewall_pre.yml
+    name: allow connection to gandalf | gandalf API
+  - ufw: rule=allow port=8080 proto=tcp
+    name: allow connection to gandalf | Archive serve
+  - ufw: rule=allow port=3232 proto=tcp
+    name: allow connection to gandalf | ssh
+  - ufw: rule=allow name=OpenSSH

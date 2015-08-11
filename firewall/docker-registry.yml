@@ -1,2 +1,4 @@
 ---
   - include: firewall_pre.yml
+    name: allow connection to docker registry
+  - ufw: rule=allow port=2375 proto=tcp

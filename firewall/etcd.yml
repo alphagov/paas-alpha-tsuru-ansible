@@ -1,0 +1,4 @@
+---
+  - include: firewall_pre.yml
+    name: allow connection to etcd service
+  - ufw: rule=allow port=2379 proto=tcp
