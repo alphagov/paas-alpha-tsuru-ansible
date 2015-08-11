@@ -1,0 +1,4 @@
+---
+  - include: firewall_pre.yml
+  - name: allow connection to InfluxDB
+    ufw: rule=allow port=8086 proto=tcp
