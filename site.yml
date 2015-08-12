@@ -37,6 +37,8 @@
     - name: restart gandalf
       service: name=gandalf-server state=restarted
 
+    - include: "firewall/gandalf.yml"
+
 - hosts: "{{ hosts_prefix }}-tsuru-docker*"
   sudo: yes
   roles:
@@ -45,6 +47,8 @@
 - hosts: "{{ hosts_prefix }}-tsuru-docker*"
   serial: 1
   sudo: yes
+  tasks:
+    - include: "firewall/docker-node.yml"
   post_tasks:
     - name: Register node.
       shell: >
