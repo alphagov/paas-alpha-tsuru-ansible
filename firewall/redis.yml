@@ -1,4 +1,5 @@
 ---
   - include: firewall_pre.yml
   - name: allow connection to Redis
-    ufw: rule=allow port={{ redis_port }} proto=tcp
+    ufw: rule=allow port={{ redis_port }} proto=tcp src={{ item.ip_field_name }}
+    with_items: {{ hostvars[groups[tsuru_api_host_name] }}
