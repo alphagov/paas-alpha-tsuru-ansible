@@ -19,6 +19,9 @@
     - ANXS.postgresql
     - { role: wal_e, when: enable_postgres_log_shipping is defined and enable_postgres_log_shipping }
 
+  tasks:
+    - include: "firewall/postgres.yml"
+
   post_tasks:
     - include: postgres_master_post.yml
       when: "ansible_default_ipv4.address == postgres_master_ip"

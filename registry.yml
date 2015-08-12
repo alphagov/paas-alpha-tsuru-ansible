@@ -6,7 +6,8 @@
     use_nginx: true
     use_redis: false
     registry_ssl: false
-
+  tasks:
+    - include: "firewall/docker-registry.yml"
   pre_tasks:
     - include_vars: registry_gce_vars.yml
       when: "platform == 'gce'"
