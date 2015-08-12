@@ -110,14 +110,14 @@ diff-vault:
 		|| [ $$? -eq 1 ]'
 
 start-aws: check-env-var render-ssh-config
-	ansible-playbook -i "localhost," -c local start-stop-ec2.yml -e deploy_env=${DEPLOY_ENV} -e state=running
+	ansible-playbook -i empty_inventory start-stop-ec2.yml -e deploy_env=${DEPLOY_ENV} -e state=running
 
 start-gce: check-env-var render-ssh-config
 	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py start-stop-gce.yml \
 	-e deploy_env=${DEPLOY_ENV} -e action=start -e status=terminated
 
 suspend-aws: check-env-var render-ssh-config
-	ansible-playbook -i "localhost," -c local start-stop-ec2.yml -e deploy_env=${DEPLOY_ENV} -e state=stopped
+	ansible-playbook -i empty_inventory start-stop-ec2.yml -e deploy_env=${DEPLOY_ENV} -e state=stopped
 
 suspend-gce: check-env-var render-ssh-config
 	SSL_CERT_FILE=$(shell python -m certifi) ansible-playbook -i gce.py start-stop-gce.yml \
