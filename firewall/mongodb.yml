@@ -1,4 +1,4 @@
 ---
   - include: firewall_pre.yml
   - name: allow connection to MongoDB
-    ufw: rule=allow port=27017 proto=tcp
+    ufw: rule=allow port={{ mongodb_port }} proto=tcp

@@ -1,4 +1,4 @@
 ---
   - include: firewall_pre.yml
   - name: allow connection to Postgres
-    ufw: rule=allow port=5432 proto=tcp
+    ufw: rule=allow port={{ postgres_port }} proto=tcp

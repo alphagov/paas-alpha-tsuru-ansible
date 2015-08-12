@@ -1,4 +1,4 @@
 ---
   - include: firewall_pre.yml
   - name: allow connection to Elasticsearch
-    ufw: rule=allow port=9200 proto=tcp
+    ufw: rule=allow port={{ elasticsearch_port }} proto=tcp

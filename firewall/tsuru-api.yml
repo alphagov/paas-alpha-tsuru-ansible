@@ -1,4 +1,4 @@
 ---
   - include: firewall_pre.yml
     name: allow connection to tsuru-api
-  - ufw: rule=allow port=8080 proto=tcp
+  - ufw: rule=allow port={{ tsuru_api_port }} proto=tcp

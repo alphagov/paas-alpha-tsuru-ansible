@@ -1,6 +1,6 @@
 ---
   - include: firewall_pre.yml
   - name: allow connection to InfluxDB
-    ufw: rule=allow port=8086 proto=tcp
+    ufw: rule=allow port={{ influxdb_port }} proto=tcp
   - name: allow connection to Grafana
-    ufw: rule=allow port=3000 proto=tcp
+    ufw: rule=allow port={{ grafana_port }} proto=tcp

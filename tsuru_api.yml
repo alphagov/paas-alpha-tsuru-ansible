@@ -18,7 +18,7 @@
     router_config_hipache:
       domain: "{{ hipache_host_external_lb }}"
       redis-server: "{{ redis_host }}:{{ redis_port }}"
-    upstream_port: "{{ api_port }}"
+    upstream_port: "{{ tsuru_api_port }}"
     tsuru_api_url: "{{ tsuru_api_external_url }}"
   vars_files:
     - "ssl_proxy_vars.yml"
@@ -53,14 +53,14 @@
       uri:
         method=POST body_format=json
         body="{\"email\":\"{{ admin_user }}\",\"password\":\"{{ admin_password }}\"}"
-        url=http://127.0.0.1:{{ api_port }}/users
+        url=http://127.0.0.1:{{ tsuru_api_port }}/users
         status_code=201,409
 
     - name: login with the admin user
       uri:
         method=POST body_format=json
         body="{\"password\":\"{{ admin_password }}\"}"
-        url=http://127.0.0.1:{{ api_port }}/users/{{ admin_user }}/tokens
+        url=http://127.0.0.1:{{ tsuru_api_port }}/users/{{ admin_user }}/tokens
         return_content=yes
       register: login_response
 
