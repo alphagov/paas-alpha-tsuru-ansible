@@ -8,7 +8,7 @@ describe "TsuruEndToEnd" do
   before(:all) do
     @tsuru_api_host = RSpec.configuration.target_api_host || raise("You must set 'TARGET_API_HOST' env var")
     @tsuru_api_url = "https://#{@tsuru_api_host}"
-    @tsuru_api_url_insecure = "http://#{@tsuru_api_host}:8080"
+    @tsuru_api_url_insecure = "http://#{@tsuru_api_host}:80"
   end
 
   describe "healthchecks" do

@@ -1,4 +1,4 @@
 ---
   - include: firewall_pre.yml
-    name: allow connection to Redis
-  - ufw: rule=allow port={{ redis_port }} proto=tcp
+  - name: allow connection to Redis
+    ufw: rule=allow port={{ redis_port }} proto=tcp

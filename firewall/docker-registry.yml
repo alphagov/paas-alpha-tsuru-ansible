@@ -1,4 +1,4 @@
 ---
   - include: firewall_pre.yml
-    name: allow connection to docker registry
-  - ufw: rule=allow port={{ docker_registry_port }} proto=tcp
+  - name: allow connection to docker registry
+    ufw: rule=allow port={{ docker_registry_port }} proto=tcp

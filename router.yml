@@ -51,6 +51,8 @@
         sealKey: "{{ vulcand_sealkey.stdout }}"
       when: vulcand is defined
     - role: jdauphant.nginx
+  tasks:
+    - include: "firewall/router.yml"    
   post_tasks:
     - name: vulcand | Configure SSL host
       shell: >

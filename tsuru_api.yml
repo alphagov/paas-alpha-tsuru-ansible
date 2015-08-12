@@ -34,6 +34,7 @@
   tasks:
     - name: Install httplib2 for Ansible uri module
       apt: name=python-httplib2 state=present
+    - include: "firewall/tsuru-api.yml"      
 
 # Run these tasks explicitly on 1st API server as the rest of playbooks (post install) expect it
 - hosts: "{{ hosts_prefix }}-tsuru-api-0"

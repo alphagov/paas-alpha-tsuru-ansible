@@ -5,6 +5,8 @@
   roles:
     - role: influxdb
     - role: Stouts.grafana
+  tasks:
+    - include: "firewall/influx-grafana.yml"
   post_tasks:
     - name: Copy grafana API control script
       copy: src=files/datasource.sh dest=/usr/local/bin/datasource.sh mode=0750 owner=root group=root

@@ -1,4 +1,9 @@
 ---
   - include: firewall_pre.yml
-    name: allow connection to tsuru-api
-  - ufw: rule=allow port={{ tsuru_api_port }} proto=tcp
+  - name: reject everything and enable UFW
+    ufw: state=enabled policy=allow
+#  - name: allow connection to Tsuru API
+#    ufw: rule=allow port={{ item }} proto=tcp
+    with_items:
+    - 80
+    - 443

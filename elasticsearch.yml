@@ -17,3 +17,4 @@
       service:
         name: elasticsearch
         state: started
+    - include: "firewall/elasticsearch.yml"
