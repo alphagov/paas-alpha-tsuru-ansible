@@ -102,7 +102,7 @@
 
     - name: Post Install Tasks | Git push dashboard to gandalf
       shell: >
-        git push {{ dashboard_git_remote.stdout }} master
+        git push {{ dashboard_git_remote.stdout }} HEAD:master
       args:
         chdir: /tmp/tsuru-dashboard
 
@@ -131,7 +131,7 @@
 
     - name: Post Install Tasks | Git push postgresapi to gandalf
       shell: >
-        git push {{ postgresapi_git_remote.stdout }} master
+        git push {{ postgresapi_git_remote.stdout }} HEAD:master
       args:
         chdir: /tmp/postgresapi
       register: postgresapi_push_result
@@ -205,9 +205,9 @@
 
     - name: Post Install Tasks | Git pull elasticsearchapi
       git:
-        repo: https://github.com/alphagov/elastic-search-api.git
+        repo: https://github.com/globocom/elastic-search-api.git
         dest: /tmp/elasticsearchapi
-        version: "717c1faa36c926ec8715fc7245ad8bde0f8a30f6"
+        version: "b2e12d7e55181d29adb01f7cc397455a207de743"
 
     - name: Post Install Tasks | Get gandalf repo for elasticsearchapi
       shell: >
@@ -216,7 +216,7 @@
 
     - name: Post Install Tasks | Git push elasticsearchapi to gandalf
       shell: >
-        git push {{ elasticsearchapi_git_remote.stdout }} master
+        git push {{ elasticsearchapi_git_remote.stdout }} HEAD:master
       args:
         chdir: /tmp/elasticsearchapi
 
