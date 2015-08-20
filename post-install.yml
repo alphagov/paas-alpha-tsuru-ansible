@@ -102,7 +102,7 @@
 
     - name: Post Install Tasks | Git push dashboard to gandalf
       shell: >
-        git push {{ dashboard_git_remote.stdout }} HEAD:master
+        git push {{ dashboard_git_remote.stdout }} HEAD:refs/heads/master
       args:
         chdir: /tmp/tsuru-dashboard
 
@@ -131,7 +131,7 @@
 
     - name: Post Install Tasks | Git push postgresapi to gandalf
       shell: >
-        git push {{ postgresapi_git_remote.stdout }} HEAD:master
+        git push {{ postgresapi_git_remote.stdout }} HEAD:refs/heads/master
       args:
         chdir: /tmp/postgresapi
       register: postgresapi_push_result
@@ -216,7 +216,7 @@
 
     - name: Post Install Tasks | Git push elasticsearchapi to gandalf
       shell: >
-        git push {{ elasticsearchapi_git_remote.stdout }} HEAD:master
+        git push {{ elasticsearchapi_git_remote.stdout }} HEAD:refs/heads/master
       args:
         chdir: /tmp/elasticsearchapi
 
