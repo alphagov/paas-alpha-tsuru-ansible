@@ -2,14 +2,14 @@
   sudo: yes
   pre_tasks:
     - include: ssl_proxy_pre.yml
-    - name: Remove daily snapshots repo
+    - name: Tsuru Api | Remove daily snapshots repo
       apt_repository: repo='ppa:tsuru/snapshots' state=absent
       when: vulcand is undefined
-    - name: Remove our private repo
+    - name: Tsuru Api | Remove our private repo
       apt_repository: repo='ppa:multicloudpaas/tsuru' state=absent
       when: vulcand is defined
       # FIXME: Remove when `tsuru_repo` is deployed.
-    - name: Remove upstream APT repo
+    - name: Tsuru Api | Remove upstream APT repo
       apt_repository: repo='ppa:tsuru/ppa' state=absent
   vars:
     router_config_vulcand:
@@ -32,31 +32,31 @@
       tags: tsuru_api
     - role: jdauphant.nginx
   tasks:
-    - name: Install httplib2 for Ansible uri module
+    - name: Tsuru Api | Install httplib2 for Ansible uri module
       apt: name=python-httplib2 state=present
 
 # Run these tasks explicitly on 1st API server as the rest of playbooks (post install) expect it
 - hosts: "{{ hosts_prefix }}-tsuru-api-0"
   sudo: yes
   tasks:
-    - name: add admin team
+    - name: Tsuru Api | Add admin team
       shell: >
         mongo tsuru --eval 'db.teams.update({_id: "admin"}, {_id: "admin"}, {upsert: true})';
       delegate_to: "{{ mongodb_host }}"
 
-    - name: add admin user to admin team
+    - name: Tsuru Api | Add admin user to admin team
       shell: >
         mongo tsuru --eval "db.teams.update({_id: 'admin'}, {\$addToSet: {users: '{{admin_user}}'}})";
       delegate_to: "{{ mongodb_host }}"
 
-    - name: add admin user
+    - name: Tsuru Api | Add admin user
       uri:
         method=POST body_format=json
         body="{\"email\":\"{{ admin_user }}\",\"password\":\"{{ admin_password }}\"}"
         url=http://127.0.0.1:{{ api_port }}/users
         status_code=201,409
 
-    - name: login with the admin user
+    - name: Tsuru Api | Login with the admin user
       uri:
         method=POST body_format=json
         body="{\"password\":\"{{ admin_password }}\"}"
@@ -64,35 +64,35 @@
         return_content=yes
       register: login_response
 
-    - name: write admin token
+    - name: Tsuru Api | Write admin token
       copy: dest=~/.tsuru_token mode=0600 content="{{ (login_response.content|from_json).token }}"
 
-    - name: List docker node IPs in the default pool
+    - name: Tsuru Api | List docker node IPs in the default pool
       shell: >
         tsuru-admin docker-node-list -f pool=default | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+" | sort | uniq
       register: default_pool
 
-    - name: Get names of our environment docker nodes
+    - name: Tsuru Api | Get names of our environment docker nodes
       shell: >
         echo {{ groups.keys() | join(' ')}} | grep -o "{{ hosts_prefix }}-tsuru-coreos-docker-[0-9]\+"
       register: docker_nodes
 
-    - name: Resolve docker node names into IPs
+    - name: Tsuru Api | Resolve docker node names into IPs
       shell: >
         echo {{ hostvars[groups[item][0]][ip_field_name] }}
       with_items: docker_nodes.stdout_lines
       register: docker_ip
 
-    - name: Create list of docker node IPs
+    - name: Tsuru Api | Create list of docker node IPs
       set_fact: docker_ips="{{ docker_ip.results | map(attribute='stdout') | list }}"
 
-    - name: Register new coreos docker nodes to the default pool
+    - name: Tsuru Api | Register new coreos docker nodes to the default pool
       shell: >
         tsuru-admin docker-node-add --register address=http://{{ item }}:{{ docker_port }} pool=default </dev/null
       when: not "{{ item }}" in default_pool.stdout
       with_items: docker_ips
 
-    - name: Remove zombie nodes from the default pool
+    - name: Tsuru Api | Remove zombie nodes from the default pool
       shell: >
         tsuru-admin docker-node-remove http://{{ item }}:{{ docker_port }} -y
       when: not "{{ item }}" in docker_ips
