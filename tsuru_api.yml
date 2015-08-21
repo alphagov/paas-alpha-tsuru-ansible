@@ -67,8 +67,27 @@
     - name: write admin token
       copy: dest=~/.tsuru_token mode=0600 content="{{ (login_response.content|from_json).token }}"
 
-    - name: Register coreos docker nodes
+    - name: List docker node IPs in the default pool
       shell: >
-        tsuru-admin docker-node-add --register address=http://{{ hostvars[groups[item.key][0]][ip_field_name] }}:{{ docker_port }} pool=default </dev/null
-      when: item.key | match("{{ hosts_prefix }}-tsuru-coreos-docker-")
-      with_dict: groups
+        tsuru-admin docker-node-list -f pool=default | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+" | sort | uniq
+      register: default_pool
+
+    - name: Get names of our environment docker nodes
+      shell: >
+        echo {{ groups.keys() | join(' ')}} | grep -o "{{ hosts_prefix }}-tsuru-coreos-docker-[0-9]\+"
+      register: docker_nodes
+
+    - name: Resolve docker node names into IPs
+      shell: >
+        echo {{ hostvars[groups[item][0]][ip_field_name] }}
+      with_items: docker_nodes.stdout_lines
+      register: docker_ip
+
+    - name: Create list of docker node IPs
+      set_fact: docker_ips="{{ docker_ip.results | map(attribute='stdout') | list }}"
+
+    - name: Register new coreos docker nodes to the default pool
+      shell: >
+        tsuru-admin docker-node-add --register address=http://{{ item }}:{{ docker_port }} pool=default </dev/null
+      when: not "{{ item }}" in default_pool.stdout
+      with_items: docker_ips
