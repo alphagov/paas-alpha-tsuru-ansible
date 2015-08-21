@@ -91,3 +91,9 @@
         tsuru-admin docker-node-add --register address=http://{{ item }}:{{ docker_port }} pool=default </dev/null
       when: not "{{ item }}" in default_pool.stdout
       with_items: docker_ips
+
+    - name: Remove zombie nodes from the default pool
+      shell: >
+        tsuru-admin docker-node-remove http://{{ item }}:{{ docker_port }} -y
+      when: not "{{ item }}" in docker_ips
+      with_items: default_pool.stdout_lines
