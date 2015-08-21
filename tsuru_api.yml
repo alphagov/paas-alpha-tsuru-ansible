@@ -8,9 +8,6 @@
     - name: Tsuru Api | Remove our private repo
       apt_repository: repo='ppa:multicloudpaas/tsuru' state=absent
       when: vulcand is defined
-      # FIXME: Remove when `tsuru_repo` is deployed.
-    - name: Tsuru Api | Remove upstream APT repo
-      apt_repository: repo='ppa:tsuru/ppa' state=absent
   vars:
     router_config_vulcand:
       domain: "{{ hipache_host_external_lb }}"
