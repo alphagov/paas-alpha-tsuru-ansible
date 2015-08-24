@@ -66,7 +66,7 @@
 
     - name: Tsuru Api | List docker node IPs in the default pool
       shell: >
-        tsuru-admin docker-node-list -f pool=default | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+" | sort | uniq
+        tsuru-admin docker-node-list -f pool=default | awk '$2 ~ /^http/ {print $2}'
       register: default_pool
 
     - name: Tsuru Api | Get names of our environment docker nodes
@@ -74,23 +74,23 @@
         echo {{ groups.keys() | join(' ')}} | grep -o "{{ hosts_prefix }}-tsuru-coreos-docker-[0-9]\+"
       register: docker_nodes
 
-    - name: Tsuru Api | Resolve docker node names into IPs
+    - name: Tsuru Api | Resolve docker node names into URLs
       shell: >
-        echo {{ hostvars[groups[item][0]][ip_field_name] }}
+        echo http://{{ hostvars[groups[item][0]][ip_field_name] }}:{{ docker_port }}
       with_items: docker_nodes.stdout_lines
-      register: docker_ip
+      register: docker_url
 
-    - name: Tsuru Api | Create list of docker node IPs
-      set_fact: docker_ips="{{ docker_ip.results | map(attribute='stdout') | list }}"
+    - name: Tsuru Api | Create list of docker node URLs
+      set_fact: docker_urls="{{ docker_url.results | map(attribute='stdout') | list }}"
 
     - name: Tsuru Api | Register new coreos docker nodes to the default pool
       shell: >
-        tsuru-admin docker-node-add --register address=http://{{ item }}:{{ docker_port }} pool=default </dev/null
+        tsuru-admin docker-node-add --register address={{ item }} pool=default </dev/null
       when: not "{{ item }}" in default_pool.stdout
-      with_items: docker_ips
+      with_items: docker_urls
 
     - name: Tsuru Api | Remove zombie nodes from the default pool
       shell: >
-        tsuru-admin docker-node-remove http://{{ item }}:{{ docker_port }} -y
-      when: not "{{ item }}" in docker_ips
+        tsuru-admin docker-node-remove {{ item }} -y
+      when: not "{{ item }}" in docker_urls
       with_items: default_pool.stdout_lines
