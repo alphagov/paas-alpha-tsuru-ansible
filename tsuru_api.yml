@@ -23,7 +23,7 @@
     - role: tsuru_api
       tsuru_package_latest: true
       tsuru_api_listen_addr: 127.0.0.1
-      tsuru_repo: "{% if vulcand is defined %}ppa:tsuru/snapshots{% else %}ppa:multicloudpaas/tsuru{% endif %}"
+      tsuru_repo: 'ppa:tsuru/ppa'
       tsuru_router_type: "{% if vulcand is defined %}vulcand{% else %}hipache{% endif %}"
       tsuru_router_config: "{% if vulcand is defined %}{{ router_config_vulcand }}{% else %}{{ router_config_hipache }}{% endif %}"
       tags: tsuru_api
