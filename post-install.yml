@@ -122,7 +122,7 @@
       git:
         repo: https://github.com/tsuru/postgres-api
         dest: /tmp/postgresapi
-        version: "f25564ed29fc204d0207a54a28011e33789f89ca"
+        version: "7d9657e6ea28a4e980048ed159aabd99e13bfeba"
 
     - name: Post Install Tasks | Get gandalf repo for postgresapi
       shell: >
