@@ -14,7 +14,7 @@
   version: v1.2.2
 - name: Stouts.grafana
   src: https://github.com/Stouts/Stouts.grafana.git
-  version: 2.0.1
+  version: 2.1.0
 - name: retr0h.etcd
   src: https://github.com/retr0h/ansible-etcd.git
   version: 9a612f2ab2dfd52a9be329030bb2227c4d582423
@@ -34,10 +34,10 @@
   version: v0.0.4
 - name: influxdb
   src: https://github.com/alphagov/ansible-playbook-influxdb.git
-  version: v0.0.2
+  version: v0.0.3
 - name: telegraf
   src: https://github.com/alphagov/ansible-playbook-telegraf.git
-  version: v0.1.0
+  version: v0.2.0
 - name: vulcand
   src: https://github.com/alphagov/ansible-playbook-vulcand.git
   #version: not pinned because under development
