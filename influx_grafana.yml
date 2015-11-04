@@ -1,7 +1,7 @@
 - hosts: "{{ hosts_prefix }}-influx-grafana*"
   sudo: yes
   vars:
-    influxdb_version: 0.9.1
+    influxdb_version: 0.9.4.2
   roles:
     - role: influxdb
     - role: Stouts.grafana
@@ -11,10 +11,11 @@
     - name: Add influx datasource to grafana
       shell: /usr/local/bin/datasource.sh {{ influxdb_database }}
 
+
 - hosts: "{{ hosts_prefix }}-*:!{{ hosts_prefix}}-tsuru-coreos-docker-*"
   sudo: yes
   tags: telegraf
   vars:
-    telegraf_version: 0.1.4
+    telegraf_version: 0.2.0
   roles:
     - telegraf

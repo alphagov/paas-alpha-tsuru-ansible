@@ -30,6 +30,8 @@ influxdb_user: influxdb
 influxdb_pass: influxdb
 influxdb_retention_period: 2w
 
+grafana_version: 2.5.0
+
 gandalf_host_name: "{{ hosts_prefix }}-tsuru-gandalf"
 gandalf_host_internal: "{{ hostvars[groups[gandalf_host_name][0]][ip_field_name] }}"
 gandalf_host_external: "{{ deploy_env }}-gandalf.{{ domain_name }}"
