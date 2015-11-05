@@ -11,11 +11,19 @@
     - name: Add influx datasource to grafana
       shell: /usr/local/bin/datasource.sh {{ influxdb_database }}
 
-
 - hosts: "{{ hosts_prefix }}-*:!{{ hosts_prefix}}-tsuru-coreos-docker-*"
   sudo: yes
   tags: telegraf
   vars:
-    telegraf_version: 0.2.0
+  pre_tasks:
+    - set_fact: host_tag_name="{{ ec2_tag_Name }}"
+      when: "platform == 'aws'"
+    - set_fact: host_tag_name="{{ gce_name }}"
+      when: "platform == 'gce'"
   roles:
-    - telegraf
+    - role: telegraf
+      telegraf_version: 0.2.0
+      influxdb_tags:
+        job: "{{ host_tag_name }}"
+        host_ip: "{{ ansible_default_ipv4.address }}"
+
