@@ -65,6 +65,10 @@
       shell: >
         tsuru-admin platform-add static -d https://raw.github.com/tsuru/basebuilder/master/static/Dockerfile
       when: "not 'static' in tsuru_platforms.stdout"
+    - name: Post Install Tasks | Tsuru platform add nodejs
+      shell: >
+        tsuru-admin platform-add nodejs -d https://raw.github.com/tsuru/basebuilder/master/nodejs/Dockerfile
+      when: "not 'nodejs' in tsuru_platforms.stdout"
 
     - name: Post Install Tasks | Tsuru list tsuru_deployer key
       shell: >
