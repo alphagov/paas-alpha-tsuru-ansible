@@ -16,14 +16,15 @@
   tags: telegraf
   vars:
   pre_tasks:
-    - set_fact: host_tag_name="{{ ec2_tag_Name }}"
+    - set_fact: instance_name="{{ ec2_tag_Name }}"
       when: "platform == 'aws'"
-    - set_fact: host_tag_name="{{ gce_name }}"
+    - set_fact: instance_name="{{ gce_name }}"
       when: "platform == 'gce'"
   roles:
     - role: telegraf
       telegraf_version: 0.2.0
       influxdb_tags:
-        job: "{{ host_tag_name }}"
+        instance_name: "{{ instance_name }}"
+        type: "{{ instance_name | regex_replace('.*-tsuru-(.*[^0-9])(-[0-9]+)$', '\\1')  }}"
         host_ip: "{{ ansible_default_ipv4.address }}"
 
