@@ -1,5 +1,6 @@
-- hosts: "{{ hosts_prefix }}-influx-grafana*"
+- hosts: "{{ hosts_prefix }}-tsuru-influx-grafana*"
   sudo: yes
+  tags: influx
   vars:
     influxdb_version: 0.9.4.2
   roles:
