@@ -23,12 +23,14 @@ tsuru_router_host_name: "{{ hosts_prefix }}-tsuru-router-0"
 tsuru_router_host: "{{ hostvars[groups[tsuru_router_host_name][0]][ip_field_name] }}"
 hipache_host_external_lb: "{{ deploy_env }}-hipache.{{ domain_name }}"
 
-influxdb_host_name: "{{ hosts_prefix }}-influx-grafana"
+influxdb_host_name: "{{ hosts_prefix }}-tsuru-influx-grafana"
 influxdb_url: "http://{{ hostvars[groups[influxdb_host_name][0]][ip_field_name] }}:8086"
 influxdb_database: influxdb
 influxdb_user: influxdb
-influx_pass: influxdb
+influxdb_pass: influxdb
 influxdb_retention_period: 2w
+
+grafana_version: 2.5.0
 
 gandalf_host_name: "{{ hosts_prefix }}-tsuru-gandalf"
 gandalf_host_internal: "{{ hostvars[groups[gandalf_host_name][0]][ip_field_name] }}"

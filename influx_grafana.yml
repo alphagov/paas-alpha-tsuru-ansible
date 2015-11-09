@@ -1,7 +1,8 @@
-- hosts: "{{ hosts_prefix }}-influx-grafana*"
+- hosts: "{{ hosts_prefix }}-tsuru-influx-grafana*"
   sudo: yes
+  tags: influx
   vars:
-    influxdb_version: 0.9.1
+    influxdb_version: 0.9.4.2
   roles:
     - role: influxdb
     - role: Stouts.grafana
@@ -15,6 +16,19 @@
   sudo: yes
   tags: telegraf
   vars:
-    telegraf_version: 0.1.4
+  pre_tasks:
+    - set_fact: instance_name="{{ ec2_tag_Name }}"
+      when: "platform == 'aws'"
+    - set_fact: instance_name="{{ gce_name }}"
+      when: "platform == 'gce'"
+    # Note: instance_type must be set as a fact. Using this expression directly in
+    # the role variable resulted in a weird character not parseable by telegraf (???)
+    - set_fact: instance_type="{{ instance_name | regex_replace('.*-tsuru-(.*[^0-9])(-[0-9]+)?$', '\\1') }}"
   roles:
-    - telegraf
+    - role: telegraf
+      telegraf_version: 0.2.0
+      influxdb_tags:
+        instance_name: "{{ instance_name }}"
+        type: "{{ instance_type }}"
+        host_ip: "{{ ansible_default_ipv4.address }}"
+

@@ -35,11 +35,11 @@ function setup_grafana_session {
 function grafana_create_data_source {
   setup_grafana_session
   curl --cookie "$COOKIEJAR" \
-       -X PUT \
+       -X POST \
        --silent \
        -H 'Content-Type: application/json;charset=UTF-8' \
        --data-binary "{\"name\":\"${1}\",\"type\":\"influxdb\",\"url\":\"$(influxfb_remote_url)\",\"access\":\"proxy\",\"IsDefault\":true,\"database\":\"${1}\",\"user\":\"${1}\",\"password\":\"${1}\"}" \
-       "$(grafana_url)datasources" 2>&1 | grep 'Datasource added' --silent;
+       "$(grafana_url)datasources/" 2>&1 | grep 'Datasource added' --silent;
 }
 
 function setup_grafana {
