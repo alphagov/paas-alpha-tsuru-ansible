@@ -249,6 +249,66 @@
         crane create ~/elasticsearchapi.yml
       when: "not 'elasticsearch' in service_list.stdout"
 
+    # Redisapi
+
+    - name: Post Install Tasks | Tsuru app-create redisapi
+      shell: >
+        tsuru app-create redisapi python -t admin
+      when: "not 'redisapi' in tsuru_apps.stdout"
+
+    - name: Post Install Tasks | Get env variables of redisapi
+      shell: >
+        tsuru env-get -a redisapi
+      register: redisapi_env
+
+    - name: Post Install Tasks | Tsuru set environment variables for redisapi
+      shell: >
+        tsuru env-set -a redisapi REDIS_SERVER_HOST={{ redis_host }};
+      when: "not \"{{ redis_host }}\" in redisapi_env.stdout"
+
+    - name: Post Install Tasks | Git pull redisapi
+      git:
+        repo: https://github.com/tsuru/redisapi.git
+        dest: /tmp/redisapi
+        version: "4d4ce192e5bc1a41081187a17b8278f67a35aca9"
+
+    - name: Post Install Tasks | Get gandalf repo for redisapi
+      shell: >
+        tsuru app-info -a redisapi | grep -o 'git@.\+'
+      register: redisapi_git_remote
+
+    - name: Post Install Tasks | Git push redisapi to gandalf
+      shell: >
+        git push {{ redisapi_git_remote.stdout }} HEAD:refs/heads/master
+      args:
+        chdir: /tmp/redisapi
+
+    - name: Post Install Tasks | Tsuru app-info redisapi
+      shell: >
+        tsuru app-info -a redisapi
+      register: redisapi_app_info
+
+    - name: Post Install Tasks | Add <deploy_env>-redisapi.<domain_name> cname to redisapi app
+      shell: >
+        tsuru cname-add {{ redis_api }} -a redisapi
+      when: "not \"{{ redis_api }}\" in redisapi_app_info.stdout"
+
+    - name: Post Install Tasks | Generate redisapi.yml
+      copy:
+        content: |
+          id: redis
+          username: admin
+          password: password
+          endpoint:
+            production: https://{{ redis_api }}
+        dest: ~/redisapi.yml
+
+    - name: Post Install Tasks | Register redis service
+      shell: >
+        crane create ~/redisapi.yml
+      when: "not 'redis' in service_list.stdout"
+
     - debug: var=dashboard_app_info.stdout_lines
     - debug: var=postgresapi_app_info.stdout_lines
     - debug: var=elasticsearchapi_app_info.stdout_lines
+    - debug: var=redisapi_app_info.stdout_lines

@@ -7,6 +7,7 @@ etcd_port: 2379
 redis_host_name: "{{ hosts_prefix }}-tsuru-db"
 redis_host: "{{ hostvars[groups[redis_host_name][0]][ip_field_name] }}"
 redis_port: 6379
+redis_api: "{{ deploy_env }}-redisapi.{{ domain_name }}"
 
 tsuru_api_host_name: "{{ hosts_prefix }}-tsuru-api-0"
 tsuru_api_host: "{{ hostvars[groups[tsuru_api_host_name][0]][ip_field_name] }}"
