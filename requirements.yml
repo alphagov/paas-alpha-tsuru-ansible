@@ -34,7 +34,7 @@
   version: v0.0.4
 - name: influxdb
   src: https://github.com/alphagov/ansible-playbook-influxdb.git
-  version: v0.0.3
+  version: v0.0.4
 - name: telegraf
   src: https://github.com/alphagov/ansible-playbook-telegraf.git
   version: v0.2.0
