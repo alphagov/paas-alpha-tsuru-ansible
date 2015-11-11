@@ -11,6 +11,16 @@
       copy: src=files/datasource.sh dest=/usr/local/bin/datasource.sh mode=0750 owner=root group=root
     - name: Add influx datasource to grafana
       shell: /usr/local/bin/datasource.sh {{ influxdb_database }}
+    - name: Copy grafana API dashboard files
+      copy: src=files/{{ item }} dest=/root/{{ item }} mode=0750 owner=root group=root
+      with_items:
+         - grafana-lib.sh
+         - grafana-upload-dashboard.sh
+         - tsuru-dashboard.json
+    - name: Upload Tsuru dashboard
+      shell: /bin/bash grafana-upload-dashboard.sh tsuru-dashboard.json
+      args:
+        chdir: /root/
 
 - hosts: "{{ hosts_prefix }}-*:!{{ hosts_prefix}}-tsuru-coreos-docker-*"
   sudo: yes
